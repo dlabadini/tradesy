@@ -1,0 +1,39 @@
+<?php require_once("../includes/session.php"); ?>
+<?php require_once("../includes/connection.php");?>
+<?php require_once("../includes/functions.php");?>
+
+<h2 class="content_heading">Suggestions</h2>
+
+
+<ul>
+<li><a href='javascript:void' onClick='document.getElementById("suggestionbox").value =
+"";'>General Suggestion</a>
+</li>
+<li><a href='javascript:void' onClick='document.getElementById("suggestionbox").value =
+"Title: \nAuthor: \nClass: \nPrice (new): $\nURL:";'>Suggest a book</a>
+</li>
+<li><a href='javascript:void' onClick='document.getElementById("suggestionbox").value =
+"School: \nDepartment: \nClass: ";'>Suggest a class</a>
+</li>
+</ul>
+
+<form action='suggestions.php' method='POST'>
+<!--<input type='hidden' name='username' value="<?php echo $_SESSION['username'] ?>" />-->
+<textarea id='suggestionbox' name='suggestionbox' cols='50' rows='8'>
+Enter suggestion or click on the type of suggestion above for a format
+</textarea><br/>
+<input type='submit' value='Submit'>
+
+<h3>Note:</h3>
+<ul>
+<li>Suggestions are not anonymous</li>
+<li>If suggesting a book to be added, please provide the title, author,
+the cost of a new copy (if known), the class and preferrably a url to the source of your
+information on the book.
+</li>
+<li>If suggesting a class, provide the school name, department and class.
+</li>
+</ul>
+<span id='subscript'>Please note that suggestions are reviewed before taken into consideration. This process could take a while.</span>
+</div>
+
