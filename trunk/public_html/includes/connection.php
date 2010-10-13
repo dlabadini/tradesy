@@ -2,7 +2,7 @@
  if (strpos($_SERVER['DOCUMENT_ROOT'], "xampp") == false){
     require($_SERVER["DOCUMENT_ROOT"] . "/../constants.php");
  }else{
-    require($_SERVER['DOCUMENT_ROOT'] . "\cbe\constants.php");
+    require($_SERVER['DOCUMENT_ROOT'] . "\cbevolution\\trunk\\constants.php");
 }
 
     //1. Create a database connectivity
