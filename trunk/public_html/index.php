@@ -12,13 +12,13 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>College Book Evolution</title>
+<title>The College Book Evolution</title>
 
 <meta name="google-site-verification" content="J-VCE_Hejym4_YvJdOQ9hkSAhhTtd4tbnvOCIxTqB3Y" />
 <meta name="google-site-verification" content="w3A1bHot0VG3TpSoIAusrK1kMs1Rcpil3NN0_FiZAi8" />
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<meta name="DESCRIPTION" content="Buy, sell, trade college textbooks with classmates." />
-<meta name="KEYWORDS" content="CollegeBookEvolution, college book evolution, collegebookevolution.com, college textbooks, barter trade, college, college students, book, evolution, college book evolution" />
+<meta name="DESCRIPTION" content="Buy, sell, and trade college textbooks with your classmates and students across the nation." />
+<meta name="KEYWORDS" content="CollegeBookEvolution.com, collegebookevolution.com, collegebookevolution, college book evolution, the college book evolution, college books, college textbooks, barter trade, swap,  college, college students, book, textbooks, cheap, used, new, optimal pricing, optimal, price, textbook rental, book rental, rental, used textbooks, evolution" />
 <meta name="ROBOTS" content="ALL, INDEX, FOLLOW" />
 
 <link rel="stylesheet" type="text/css" href="css/master.css" />
@@ -80,7 +80,7 @@ if(isset($_POST['submit'])){
 <td width="300" class="main-font" align='left'>
     <img src="images/txt.gif" alt="collegebook" />
     <p>
-        Buy, Sell, and Trade<br/> with students from your school
+        Buy, sell, and trade college textbooks with your classmates</br> and students across the nation.
     </p>
 </td>
 
