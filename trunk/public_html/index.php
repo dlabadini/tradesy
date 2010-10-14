@@ -182,23 +182,31 @@ if(isset($_POST['submit'])){
 </p>
 </div>
 
-<div id='footer_bar'>
-<span style='float:left;'>
-	 &copy; CollegeBookEvolution.com, LLC.
-</span>
-<span style='float:right'>
-	 <a href='/about'>About Us</a> &nbsp;
-	 <a href='/about/?ref=contact'>Contact</a> &nbsp;
-     <a href='/mailinglist/'>Mailing List</a> &nbsp;
-	 <a href='/blog'>Blog</a> &nbsp;
-	 <a href='/help'>Help</a> &nbsp;
-     <a href='/learnmore'>Learn More</a> &nbsp;
-	 <a href='/careers'>Careers</a> &nbsp;
-	 <a href='/legal'>Terms</a> &nbsp;
-	 <a href='/legal/?ref=privacy'>Privacy</a> &nbsp;
-</span>
-</div>
-</div>
+<style type="text/css">
+div.footer-wrapper{clear:both;background:#eee url("images/bg-ftr-top.gif") repeat-x 0 0;width:100%;}#footer ul{margin:0;padding:10px 0;zoom:1;padding-left:40px;overflow:hidden;color:#666;font-size:11px;}#footer .footer-nav li.first{margin-right:130px;float:left;}#footer.wide{font-size:11px;width:940px;background:none;margin:0 auto;} #footer{font-size:.8em;white-space: nowrap;}.offscreen{position:absolute;left:-9999px;overflow:hidden;white-space: nowrap;} #footer{text-align:center;padding:8px 0;margin-top:.7em;line-height:1;background:#fff;white-space:nowrap;}#footer li{display:inline;padding:0 4px;}#footer li.first:before{content:'';padding-right:0;}
+</style>
+<br/>
+
+<div class="footer-wrapper main-font">
+  <div id="footer" class="round wide">
+      <h3 class="offscreen">Footer</h3>
+       <div align="center">
+      <ul class="footer-nav">
+          <li class="first">&copy; CollegeBookEvolution.com, LLC. </li>
+
+          <li><a href='/about'>About Us</a></li>
+          <li><a href='/about/?ref=contact'>Contact</a></li>
+          <li><a href='/blog'>Blog</a></li>
+          <li><a href='/learnmore'>Learn More</a></li>
+          <li><a href='/mailinglist/'>Mailing List</a></li>
+          <li><a href='/help'>Help</a></li>
+          <li><a href='/careers'>Careers</a></li>
+          <li><a href='/legal'>Terms</a></li>
+          <li><a href='/legal/?ref=privacy'>Privacy</a></li>
+      </ul>
+  </div>
+  </div>
+   </div>
 
 </body>
 </html>
