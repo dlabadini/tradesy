@@ -1,0 +1,7 @@
+# Begin password protection #
+AuthName "Jin's Business Tools"
+Require valid-user
+AuthUserFile "/home/users/web/b2287/sl.devinlab77/public_html/wjin/.htpasswd"
+AuthType basic
+# End password protection #
+
