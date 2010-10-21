@@ -1,0 +1,166 @@
+/* CSS Document for the "Styler Base" CoffeeCup Software E-Commerce Template
+   Copyright 2008 CoffeeCup Software - coffeecup.com */
+
+/*##############################################################
+  Eric Meyer's Latest version of Reset.css (includes Baseline)
+##############################################################*/ 
+
+html, body, div, span,
+applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, font, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+dd, dl, dt, li, ol, ul,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-weight: inherit;
+	font-style: inherit;
+	font-size: 100%;
+	line-height: normal; /*1;*/
+	font-family: inherit;
+	text-align: left;
+	vertical-align: baseline;
+}
+a img, :link img, :visited img {border: 0}
+table {border-collapse: collapse; border-spacing: 0}
+ol, ul {list-style: none}
+q:before, q:after,
+blockquote:before, blockquote:after {content: ""}
+
+/*#######################
+  Layout Base Styles 
+#######################*/
+
+a:hover {color:red;}
+
+.scs_cleardiv {float:none; clear:both;}
+.scs_sdkworkaround {display:none;}
+
+#scs_productdetails > .scs_cleardiv {clear:left;}
+
+/* Main layout width */
+#scs_header_area_wrapper, #scs_footer_area_wrapper {min-width:960px; width:960px; margin:0 auto;}
+#scs_header_wrapper, #scs_central_area_wrapper, #scs_footer_wrapper {width:960px; margin:0 auto;}
+
+	#scs_header_wrapper { float:none;}
+		#scs_header {float:none;}
+			#scs_shoplogo {width:auto; height:128px; float:left;}
+			#scs_header_title {float:left;}
+
+	#scs_navbar_wrapper {float:left;}
+		.scs_navbar_adjustable {width:26%;}		
+		#scs_navbar {float:none;}
+			#scs_navmenu_wrapper {float:none;}
+				#scs_navmenu {float:none;}
+					#scs_navmenu .scs_navmenu_item_with_submenu {position:relative;}					
+						#scs_navmenu a {display:block;}
+						/*#scs_navmenu .scs_navsubmenu_wrapper {float:none; position:absolute; display:none; width: 100%; top:100%;}*/
+					/*#scs_navmenu  li:hover .scs_navsubmenu_wrapper {display:block;}*/
+			#scs_cartsummary_title {text-align:center;}
+			#scs_cartsummary .scs_viewyourcart_link {display:block; text-align:center;}
+
+	#scs_footer {float:none;}
+		#scs_footer #scs_footercontent_content {text-align: center;}	
+		#scs_footer .scs_flat_navmenu {text-align: center;}
+		#scs_footer .scs_branding {text-align: center;}
+
+	#scs_content_area_wrapper {float: left;}
+		.scs_navbar_adjustable_opposite {width:74%;}
+		#scs_subheader_wrapper {float:none;}
+			#scs_subheader {float: none;}
+				#scs_subheader_title {float:none;}
+	
+		#scs_content_wrapper {float:none;}
+			#scs_content {float:none;}
+
+				#scs_productlist {float:none; }
+					#scs_productlist #scs_productlist_withcategories_wrapper {float:none;}					
+						/* 210px is appropriate with thumbnails of 100px  */
+						#scs_productlist .scs_productlist_item  {float:none; display:inline-block; vertical-align:text-top; width:210px;} 
+							#scs_productlist .scs_productlist_item  .scs_thumbnail_wrapper {float:none; display:inline-block; vertical-align:text-top;}
+								/* Assuming thumbnails of 100px */
+								#scs_productlist .scs_productlist_item .scs_thumbnail_image{width:100px;}			
+							#scs_productlist .scs_productlist_item .scs_buy_info_wrapper {float:none; display:inline-block; vertical-align:text-top;}
+								#scs_productlist .scs_productlist_item .scs_buy_info_wrapper .scs_price,
+								#scs_productlist .scs_productlist_item .scs_buy_info_wrapper .scs_price_discounted {min-width: 80px;}
+							#scs_productlist .scs_productlist_item .scs_product_text_wrapper {float:none;}
+						 
+				#scs_cart_form_wrapper { width:100%;}						 
+					.scs_cart_updatebutton_wrapper {float:right; padding-top: 1em; padding-bottom: 1.5em;}				
+					#scs_cart {width:100%; border-collapse: separate;}
+						#scs_cart .scs_cart_contents td {vertical-align:top;}
+							#scs_cart .scs_cart_product_image_wrapper {float:left; width:60px;}
+								#scs_cart .scs_cart_product_image_container {vertical-align:top;}
+									#scs_cart .scs_cart_product_image {width:100%; display:block;}
+									#scs_cart .scs_cart_contents .scs_cart_product_deletebutton_wrapper  {display:block; margin-top: 0.5em;}
+							#scs_cart .scs_cart_product_info_container {float:none; margin-left: 68px; }
+						#scs_cart .scs_cart_headline_qty {text-align:right;}
+						#scs_cart .scs_cart_headline_price {text-align:right;}				
+						#scs_cart .scs_cart_headline_subtotal {text-align:right;}
+						#scs_cart .scs_cart_quantity {text-align:right;}						
+							#scs_cart .scs_cart_quantity .scs_cart_quantity_input_wrapper {text-align:right;}
+								#scs_cart .scs_cart_quantity .scs_cart_quantity_input_wrapper input {width:4em; text-align:right;}
+							#scs_cart .scs_cart_quantity .scs_cart_quantity_static_value {text-align:right;}
+						#scs_cart .scs_cart_price {text-align:right;}
+						#scs_cart .scs_cart_product_subtotal {text-align:right;}
+						#scs_cart .scs_cart_subtotals_label {text-align:left;}				
+						#scs_cart .scs_cart_subtotals_value {text-align:right;}
+						#scs_cart .scs_cart_subtotals_option_label {text-align:left;}
+						#scs_cart .scs_cart_subtotals_option_value {text-align:left;}
+						#scs_cart .scs_cart_total_label {text-align:left; vertical-align:middle;}
+						#scs_cart .scs_cart_total_value {text-align:right; vertical-align:middle;}	
+						#scs_cart .scs_cart_subtotals_label {white-space:nowrap;}						
+						#scs_cart .scs_cart_subtotals_option_label {width:25%;}
+						#scs_cart .scs_cart_subtotals_option_value {min-width: 150px;}
+							#scs_cart .scs_creditcard_image {display: inline-block; vertical-align:text-top;} 
+						
+				.scs_printthispage_link_wrapper {float:right;}
+					
+				.scs_checkout_buttons_container_wrapper {float:none;}
+					.scs_checkout_buttons_container {float:none; text-align:right; }				
+						.scs_checkout_buttons_container .scs_checkout_button {display: inline-block; vertical-align:text-top; padding-left: 4px;}
+				
+				#scs_productdetails_info_wrapper {float: none; margin-left:218px;}
+				#scs_productdetails_images {float:left; width:218px;}					
+					#scs_productdetails_imagefull_link{display:block; padding: 0; margin:0;}				
+						#scs_productdetails_imagefull {width:100%; display:block;}
+					#scs_productdetails_thumbnails {display: block;}
+						#scs_productdetails_thumbnails .scs_thumbnail_wrapper {float:left; display: inline-block; width:50%;}
+							#scs_productdetails_thumbnails .scs_thumbnail_wrapper  a {display: block; margin-top: 4px;}				
+							#scs_productdetails_thumbnails .scs_thumbnail_wrapper:first-child  a {margin-right: 2px;}
+							#scs_productdetails_thumbnails .scs_thumbnail_wrapper:first-child  + .scs_thumbnail_wrapper a {margin-left: 2px;}
+							#scs_productdetails_thumbnails .scs_thumbnail_wrapper:first-child  + .scs_thumbnail_wrapper  + .scs_thumbnail_wrapper a {margin-right: 2px;}
+							#scs_productdetails_thumbnails .scs_thumbnail_wrapper:first-child  + .scs_thumbnail_wrapper  + .scs_thumbnail_wrapper + .scs_thumbnail_wrapper a {margin-left: 2px;}
+								#scs_productdetails_thumbnails .scs_thumbnail_wrapper .scs_thumbnail {width:100%; display:block;}
+				
+/*#######################
+  Layout Adjustment Styles 
+  ( margins & paddings which are not editable in Styler )
+#######################*/
+
+#scs_cartsummary_title {margin-bottom: 8px;}
+#scs_cartsummary_list li {margin-bottom: 0.5em;}
+
+#scs_footer #scs_footercontent_wrapper {margin-top: 1em;}
+#scs_footer .scs_branding {margin-top: 1em;}
+	
+#scs_productlist .scs_productlist_item .scs_product_text_wrapper  {padding-top:0.5em;}
+
+
+#scs_productdetails_info form {margin-top: 1em;}
+	#scs_productdetails_info .scs_label {padding-right:16px;}
+	#scs_productdetails_info .scs_option select option {padding-right: 8px;}
+	#scs_productdetails_info .scs_quantity input {width: 2em; text-align:right; margin-left: 0.5em;}
+
+		
+			
+			
+
+
+
+
+

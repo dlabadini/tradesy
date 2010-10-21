@@ -1,0 +1,9 @@
+ErrorDocument 401 /errors/unauthorizedaccess.html
+ErrorDocument 500 /errors/internalserver.html
+                 
+RewriteEngine on
+RewriteCond %{HTTP_HOST} ^collegebookevolution.com [NC]
+RewriteRule ^(.*)$ http://www.collegebookevolution.com/$1 [R=301]
+
+
+

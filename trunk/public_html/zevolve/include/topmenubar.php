@@ -1,0 +1,2 @@
+     <div class="nav_menu content main_font"><a href="http://www.collegebookevolution.com">HOME</a> &#160; <a href="http://www.collegebookevolution.com/mailinglist" target="_blank">NEWSLETTER</a> &#160; <!--<a href="http://www.collegebookevolution.com/gallery" target="_blank">GALLERY</a> &nbsp; --><a href="http://www.collegebookevolution.com/blog" target="_blank">BLOG</a> &#160; <a href="http://www.collegebookevolution.com/about/?ref=contact" target="_blank">CONTACT</a> &#160; <a href="http://www.collegebookevolution.com/about" target="_blank">ABOUT US</a> &#160;</div>
+

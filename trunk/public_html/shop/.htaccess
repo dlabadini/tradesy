@@ -1,0 +1,6 @@
+# Begin password protection #
+AuthName "eVOLVE Shop"
+Require valid-user
+AuthUserFile "/home/users/web/b2287/sl.devinlab77/public_html/shop/.htpasswd"
+AuthType basic
+# End password protection #
