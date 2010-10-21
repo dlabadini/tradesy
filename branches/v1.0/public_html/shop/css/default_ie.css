@@ -1,0 +1,48 @@
+/* IE fixes - CSS Document for the "Styler Base" CoffeeCup Software E-Commerce Template
+   Copyright 2008 CoffeeCup Software - coffeecup.com  */
+   
+/* Header fixes for IE7 */   
+#scs_header_area_wrapper, #scs_header_area_inner_wrapper, #scs_header_area, #scs_header_wrapper, #scs_header_inner_wrapper, #scs_header {zoom:1;}
+   
+/* Static content fixes for IE7 */
+#scs_staticcontent_wrapper {zoom:1;}
+   
+/* Navmenu fixes for IE  */
+#scs_navmenu {zoom:1;}
+#scs_navmenu a {height:100%;}
+/*#scs_navmenu .scs_navsubmenu_wrapper {left:0px; top: 100%; background-color:white;}*/
+#scs_navmenu .scs_navsubmenu  {zoom: 1;}
+#scs_navmenu .scs_navmenu_item_icon_wrapper { zoom: 1;}
+
+/* Productlist fixes for IE */
+#scs_productlist .scs_productlist_item  {display:inline-block;} 
+#scs_productlist .scs_productlist_item  {display:inline;} 
+
+#scs_productlist .scs_productlist_item  .scs_thumbnail_wrapper {display:inline-block;}
+#scs_productlist .scs_productlist_item  .scs_thumbnail_wrapper {display:inline;}
+
+#scs_productlist .scs_productlist_item .scs_buy_info_wrapper {display:inline-block;}
+#scs_productlist .scs_productlist_item .scs_buy_info_wrapper {display:inline;}
+
+/* Product details fixes for IE */
+#scs_productdetails > .scs_cleardiv {height:1px;}
+
+#scs_productdetails_thumbnails .scs_thumbnail_wrapper {display: inline-block;}				
+#scs_productdetails_thumbnails .scs_thumbnail_wrapper {display: inline;}				
+#scs_productdetails_info form {zoom:1;}
+
+/* Cart fixes for IE */
+#scs_cart {border-collapse:collapse;}
+
+#scs_cart .scs_creditcard_image {display: inline-block;}
+#scs_cart .scs_creditcard_image {display: inline;}
+
+.scs_checkout_buttons_container .scs_checkout_button {display: inline-block;}
+.scs_checkout_buttons_container .scs_checkout_button {display: inline;}
+
+/* Areas fixes for IE */
+#scs_header_area {zoom:1;}
+#scs_central_area {zoom:1;}
+
+/* Print this page link fixes for IE */
+.scs_printthispage_link_area  {zoom:1;}
