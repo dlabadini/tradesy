@@ -301,7 +301,7 @@ function send_validation_code($who, $code)
 	Returns:
 		- 1 (int): mail sent successfully
 	*/
-	
+
 	$to = $who;
 
     $headers = "From: noreply@collegebookevolution.com\r\n";
@@ -405,14 +405,14 @@ function generate_memberid(){
 	  return false;
 }
 
-function setup_user_account($regcode, $name, $username, $psswd, $schstate, $schname, $email, $location, $subscr, $ccode, $salt){
+function setup_user_account($valcode, $name, $username, $psswd, $schstate, $schname, $email, $location, $salt){
 	/* 
 		Sets up a user account by
 		- Placing the account information in the pending registration table if it's a paid account
 		- Placing the account information in the members table and other relevant tables directly if it's a free trial account
 		
 		Parameters:
-			- $regcode: The registration code
+			- $valcode: The validation code
 			- $name: User's full name
 			- $username: User's username
 			- $psswd: User's password
@@ -420,8 +420,6 @@ function setup_user_account($regcode, $name, $username, $psswd, $schstate, $schn
 			- $schname: Name of school User is attending
 			- $email: User's email address
 			- $location: Where User resides
-			- $subscr: Type of subscription (paid or free)
-			- $ccode: Coupon code if any was used
 			- $salt: hash for the User's password
 	*/
 	
@@ -441,48 +439,26 @@ function setup_user_account($regcode, $name, $username, $psswd, $schstate, $schn
     return false;
     }
 
-    // free account, add member directly
-    if ($subscr == -1){
-        // add member information to members table
-        $sql = "INSERT INTO members(member_id, name, username, password, school_id, email, location, salt) values (" . $member_id . ", '" . $name . "', '" . $username . "', '" . $psswd . "', " .  $school_id . ", '" . $email . "', '" . $location . "', '" . $salt . "')";
-        mysql_query($sql) or die("ERROR 120: Unable to activate account. Please contact us with the code: (120" . $member_id . ")");
+    // add member information to members table
+    $sql = "INSERT INTO members(member_id, name, username, password, school_id, email, location, salt, valcode) values (" . $member_id . ", '" . $name . "', '" . $username . "', '" . $psswd . "', " .  $school_id . ", '" . $email . "', '" . $location . "', '" . $salt . "', '" . $valcode . "')";
+    mysql_query($sql) or die("ERROR 120: Unable to activate account. Please contact us with the code: (120" . $member_id . ")");
 
-        // add subscription information
-    	$sql = "INSERT INTO member_subscriptions(subscription_id, member_id, start_date, account_status, amount_paid) values (" . $subscr . ", " . $member_id . ", '" . date("Y-m-d") . "', 1, 0.00)";
-	    mysql_query($sql) or die("ERROR 121: Unable to activate account. Please contact us with the code: (121" . $member_id . ")");
+    // add subscription information
+	$sql = "INSERT INTO member_subscriptions(subscription_id, member_id, start_date, account_status, amount_paid) values (" . -1 . ", " . $member_id . ", '" . date("Y-m-d") . "', 1, 0.00)";
+    mysql_query($sql) or die("ERROR 121: Unable to activate account. Please contact us with the code: (121" . $member_id . ")");
 
-        // add member to members_prefs table
-        $sql = "INSERT INTO members_prefs(member_id) VALUES (" . $member_id . ")";
-        mysql_query($sql) or die("ERROR 122: Unable to activate account. Please contact us with the code: (122" . $member_id . ")");
+    // add member to members_prefs table
+    $sql = "INSERT INTO members_prefs(member_id) VALUES (" . $member_id . ")";
+    mysql_query($sql) or die("ERROR 122: Unable to activate account. Please contact us with the code: (122" . $member_id . ")");
 
-        $page_title = "Registration";
-        include 'layout/startlayout.php';
-        echo "<div class='nav'><br>Registration Complete</div><div class='page_info'><div align='center'>" .
-             "<img src='images/tick.png'><br /><br />Thank you <b>" . ucwords($name) . "</b>, your account has been activated!<br /><br />Click <a href='http://www.collegebookevolution.com'>here</a> to login</div></div>";
-        include 'layout/endlayout.php';
-    } else {
-      	// get subscription id
-    	$query = "select subscription_id from subscriptions where duration = " . $subscr;
-    	$subscr = (int)(mysql_result(mysql_query($query), 0, 0));
+/*    $page_title = "Registration";
+    include 'layout/startlayout.php';
+    echo "<div class='nav'><br>Registration Complete</div><div class='page_info'><div align='center'>" .
+         "<img src='images/tick.png'><br /><br />Thank you <b>" . ucwords($name) . "</b>, your account has been activated!<br /><br />Click <a href='http://www.collegebookevolution.com'>here</a> to login</div></div>";
+    include 'layout/endlayout.php';
+  */
 
-        if (!empty($ccode)){
-          //if alias was used, replace $ccode with the actual coupon code
-          $sql = "SELECT coupon FROM mk_coupons WHERE BINARY alias = '" . $ccode . "'";
-          $res = mysql_result(mysql_query($sql), 0, 0);
-          if (!empty($res)){
-            $ccode = $res;
-          }
-        }
-
-        // paid account so add to pending subscriptions table.
-    	$query = "insert into pending_subscriptions(member_id, reg_id, reg_date, name, username, school_id, email, location, password, salt, subscription_id, coupon) values (" . $member_id . ", " . $regcode . ", '" . $time_of_subscr . "', '" . $name . "', '" . $username . "', " . $school_id . ", '" . $email . "', '" . $location . "', '" . $psswd . "', '" . $salt . "', " . $subscr . ", '" . $ccode . "');";
-    	$res = mysql_query($query) or die($query . "<br><br>" . mysql_error());
-
-        $msg = "\n" . $regcode . ", " . $time_of_subscr . ", " . $name . ", " . $username . ", " . $schstate . ", " . $schname . ", " . $email . ", " . $location . ", " . $subscr . ", " . $ccode;
-        write_to_log("pending_registrations", $msg);
-    	return $res;
-    }
-	
+    return true;
 }
 
 function user_login($username, $password)
@@ -1228,83 +1204,58 @@ function chkstr($str){
 
 
 
-function validate_registration($name, $email, $username, $password, $confpassword, $schstate, $schname, $location, $subscr, $coupon){
+function validate_registration($name, $email, $username, $password, $confpassword, $schstate, $schname, $location){
 
 		$reg_error = "";
      // Check if any of the fields are missing
-    if (empty($name) || empty($email) || empty($username) || empty($password) || empty($confpassword) || $schstate == "-- Select --" || $schname == "-- Select --" || empty($location) || empty($subscr)){
+    if (empty($name) || empty($email) || empty($username) || empty($password) || empty($confpassword) || $schstate == "-- Select --" || $schname == "-- Select --" || empty($location)){
 		 	 return 'One or more fields missing';
 			 }
 
 			 if (!isValidEmail($email)){
 		 return 'Invalid email address, must be your school email.';
 		 }
-	
-	 
+
+
 	 // Check if email has already been registered
-	 $query = "select 1 from pending_subscriptions where email='" . $email . "' LIMIT 1";
-	 $res1 = mysql_num_rows(mysql_query($query));
 	 $query = "select 1 from members where email='" . $email . "' LIMIT 1";
-	 $res2 = mysql_num_rows(mysql_query($query));
-	 if ($res1 > 0 or $res2 > 0){
-			return "An account already exists (or is pending activation) under the email address '<b>" . $email . "</b>'";
+	 $res = mysql_num_rows(mysql_query($query));
+	 if ($res > 0){
+			return "An account already exists under the email address '<b>" . $email . "</b>'";
 			}
-	 	 
+
 	 if (ctype_punct($name)){
 	 		return "Your name '<b>" . $name . "</b>' cannot contain any punctuations or special characters";
 			}
-			
+
 	 if (!ctype_alnum($username)){
 	 		return "Invalid username '<b>" . $username . "</b>'. Make sure it doesn't contain any spaces or special characters";
 			}
-	 
-	 
+
+
     // check for unique username
     $query = "select count(*) from members where username='" . $username . "'";
     $unames = mysql_result(mysql_query($query), 0, 0);
-    	 
-    	 if ($unames == 0){
-      	 $query = "select count(*) from pending_subscriptions where username='" . $username . "'";
-      	 $unames = mysql_result(mysql_query($query), 0, 0);
-    		 }
-    	 
-    	 if ($unames > 0){
-    	 		return "The username '<b>" . $username . "</b>' is not available";
-					}
-    	 
-    	 
-			 if (strlen($username) < 6){
-    	 		return "The username '<b>" . $username . "</b>' is less than 6 characters long";
-					}
-					
+    if ($unames > 0){
+        return "The username '<b>" . $username . "</b>' is not available";
+    }
 
-        // check if password conforms to rules
-        if (!preg_match("/^.*(?=.{6,})(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).*$/", $password)){
-          return 'Password must be at least 6 characters long, alpha numeric and a mix of upper and lower case letters';
-        }
+    if (strlen($username) < 6){
+        return "The username '<b>" . $username . "</b>' is less than 6 characters long";
+    }
 
-        // Check if the passwords match
-        if ($password != $confpassword){        
-             return 'Your passwords do not match';
-		}
-        
-		
-		 
-		 //check coupon code
-		if (!empty($coupon)){
-			 $query = "SELECT member_id FROM mk_coupons WHERE coupon = '" . $coupon . "' or BINARY alias = '" . $coupon . "' LIMIT 1";
-			 $mkid = mysql_result(mysql_query($query), 0, 0);
-			 if (empty($mkid)){
-			 		return 'Invalid coupon code';
-					} else {
-					//coupon code is valid but make sure it's for the right school
-					if (!couponValidSchool($schstate, $schname, $mkid)){
-						 return "Coupon is not valid for the selected school '<b>" . $schname . ", " . $schstate . "</b>'";
-					}
-				}
-		}
-		return $reg_error;
-	 
+
+    // check if password conforms to rules
+    if (!preg_match("/^.*(?=.{6,})(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).*$/", $password)){
+        return 'Password must be at least 6 characters long, alpha numeric and a mix of upper and lower case letters';
+    }
+
+    // Check if the passwords match
+    if ($password != $confpassword){
+        return 'Your passwords do not match';
+	}
+
+	return $reg_error;
 }
 
 function write_to_log($file, $msg){ 
