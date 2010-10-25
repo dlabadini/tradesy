@@ -1,17 +1,38 @@
-<?php require_once("includes/session.php");?>
-<?php require_once("includes/connection.php");?>
-<?php require_once("includes/functions.php");?>
-<?php	
+<?php
 if (isset($_POST['submit'])){
-		$reg_error = validate_registration($_POST['name'], $_POST['email'], $_POST['username'], $_POST['password'], $_POST['confpassword'], $_POST['schstate'], $_POST['schname'], $_POST['location'], $_POST['subscription'], $_POST['couponcode']);
-		
+
+if (isset($_POST['email'])){
+// get the post data into the session
+	$_SESSION['name'] = $_POST['name'];
+	$_SESSION['username'] = $_POST['username'];
+    $_SESSION['password'] =  md5($_POST['password']);
+	$_SESSION['schstate'] =  $_POST['schstate'];
+	$_SESSION['schname'] =  $_POST['schname'];
+	$_SESSION['email'] =  $_POST['email'];
+	$_SESSION['location'] = $_POST['location'];
+}
+
+		$reg_error = validate_registration($_POST['name'], $_POST['email'], $_POST['username'], $_POST['password'], $_POST['confpassword'], $_POST['schstate'], $_POST['schname'], $_POST['location']);
+
     // Everything is ok, register
 	  if ($reg_error == ""){
-  		include 'validate.php';
-  		echo '</div></div>';
-  		include 'layout/endlayout.php';
+        // generate validation code
+        $valcode = rand(10000, 99999);
+
+        // create account
+        $salt = generate_salt();
+		$psswd = md5(md5($_POST['password']) . $salt);
+		$res = setup_user_account($valcode, $_POST['name'], $_POST['username'], $psswd, $_POST['schstate'], $_POST['schname'], $_POST['email'], $_POST['location'], $salt);
+
+        // send email
+        $mail = $_POST['email'];
+        send_validation_code($mail, $valcode);
+
+        // display the validation page
+        include 'validate.php';
+
   		exit;
-		}
+	  }
 }
 ?>
 <!--
@@ -88,28 +109,8 @@ if (isset($_POST['submit'])){
     <td align="left"><input class="textbox" id="location" name="location" maxlength="30" type="text"
     <?php if (isset($_POST['location'])) { ?> value="<?php echo $_POST['location']; ?>" <?php } ?> /><br><span id="subscript">Where you live (eg. College Park)</span></td>
   </tr>
-  <tr>
-    <td align="right" valign="top">Membership:<!--<br><span id="subscript">State Sales Tax not included</span>--></td>
-    <td align="left">
-		<?php
-		$sql = "SELECT duration, price, comment FROM subscriptions";
-		$subs = mysql_query($sql);
-		while ($row = mysql_fetch_array($subs)){
-                    if ($row['duration'] > 0){
-					    echo '<input class="nodec" name="subscription" type="radio" value="' . $row['duration'] . '" />' . $row['duration'] . ' Year - <b>$' . $row['price'] . '</b> <i>' . $row['comment'] . '</i><br />';
-                    }else{
-                        echo '<input class="nodec" name="subscription" type="radio" value="' . $row['duration'] . '" /><b><a href="help/?ref=faqs#freeaccounts" target="_blank">Trial Account</a> - Free</b><i>' . $row['comment'] . '</i><br />';
-                     }
-		}
-		?>
-    </td>
-  </tr>
-  <tr>
-    <td align="right">Coupon Code:</td>
-    <td align="left"><input class="textbox" name="couponcode" type="text" />
-    <br/><span id='subscript'>Save 5% or more on any subscription. <a href='http://www.collegebookevolution.com/help/?ref=faqs#coupons' target='_blank'>More info</a></span></td>
-  </tr>
 </table><br/>
+ <input type="hidden" name="subscription" value="defunct" />
  <input type="submit" name="submit" value="Register" />
 </form>
 </div>
