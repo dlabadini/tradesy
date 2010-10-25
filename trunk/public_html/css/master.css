@@ -1,0 +1,101 @@
+@charset "utf-8";
+/* CSS Document */
+
+#Table_01 {
+	position:relative;
+	width:900px;
+	height:600px;
+}
+
+body{
+  background-color:#ffffff;
+  margin:0px;
+}
+
+.bgblackbanner{
+    background-color:#181515;
+    height:350px;
+}
+
+#title {
+	position:absolute;
+	left:235px;
+	top:9px;
+	width:430px;
+	height:34px;
+}
+
+#intro-about {
+	position:absolute;
+	left:3px;
+	top:182px;
+	width:210px;
+	height:65px;
+}
+
+#intro-text {
+	position: absolute;
+	left: 3px;
+	top: 260px;
+	width: 210px;
+	text-align: left;
+	color:#FFF;
+}
+
+.main-font {
+	font-family: Verdana; 
+	font-size: 11px;
+}
+
+
+/* navigation */
+#navigation {
+	z-index:0px;
+	font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+	font-size: 0.8em;
+	text-decoration:none;
+}
+
+.wob-font{
+	color:white;
+}
+
+/* Larger Side Border */
+.textbox {
+	width: 150px;
+	border: 1px solid #000;
+	border-left: 4px solid #000;
+}
+
+#footer_bar {
+	position: relative;
+	bottom: 0;
+	/*background-color: #F0F0F0 ;*/
+	width: 70%; /* See note below */
+	text-align: center;
+	padding: 0 15%;
+	font-family: Tahoma, Geneva, sans-serif;
+	font-size: x-small;
+	font-style: normal;
+}
+
+/* SBMH -- see http://css-discuss.incutio.com/?page=BoxModelHack 
+ * Stupid hack lets IE see 100%, others see 70%. 
+ */
+#footer_bar {
+	\width: 100%;
+	w\idth: 70%;
+}
+
+.linkonblack { text-decoration: none; color:#58ACFA; }
+.linkonwhite { text-decoration: none; color:#0080FF; }
+
+A:link {text-decoration: none}
+A:visited {text-decoration: none}
+A:active {text-decoration: none}
+A:hover {text-decoration:underline;}
+
+/* Remodeled Footer */
+
+div.footer-wrapper{clear:both;background:#eee url("images/bg-ftr-top.gif") repeat-x 0 0;width:100%;}#footer ul{margin:0;padding:10px 0;zoom:1;padding-left:40px;overflow:hidden;color:#666;font-size:11px;}#footer .footer-nav li.first{margin-right:130px;float:left;}#footer.wide{font-size:11px;width:940px;background:none;margin:0 auto;} #footer{font-size:.8em;white-space: nowrap;}.offscreen{position:absolute;left:-9999px;overflow:hidden;white-space: nowrap;} #footer{text-align:center;padding:8px 0;margin-top:.7em;line-height:1;background:#fff;white-space:nowrap;}#footer li{display:inline;padding:0 4px;}#footer li.first:before{content:'';padding-right:0;}
+
