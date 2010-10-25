@@ -94,3 +94,8 @@ A:link {text-decoration: none}
 A:visited {text-decoration: none}
 A:active {text-decoration: none}
 A:hover {text-decoration:underline;}
+
+/* Remodeled Footer */
+
+div.footer-wrapper{clear:both;background:#eee url("images/bg-ftr-top.gif") repeat-x 0 0;width:100%;}#footer ul{margin:0;padding:10px 0;zoom:1;padding-left:40px;overflow:hidden;color:#666;font-size:11px;}#footer .footer-nav li.first{margin-right:130px;float:left;}#footer.wide{font-size:11px;width:940px;background:none;margin:0 auto;} #footer{font-size:.8em;white-space: nowrap;}.offscreen{position:absolute;left:-9999px;overflow:hidden;white-space: nowrap;} #footer{text-align:center;padding:8px 0;margin-top:.7em;line-height:1;background:#fff;white-space:nowrap;}#footer li{display:inline;padding:0 4px;}#footer li.first:before{content:'';padding-right:0;}
+
