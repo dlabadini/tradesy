@@ -6,8 +6,10 @@ if (strpos($root, "xampp") == false){
   require_once($root . "/includes/functions.php");
 }else{
   //require_once("C:\\xampp\htdocs\cbe\public_html\includes/session.php");
-  require_once("C:\\xampp\htdocs\cbe\public_html\includes/connection.php");
-  require_once("C:\\xampp\htdocs\cbe\public_html\includes/functions.php");
+//  require_once("G:\Program Files\xampp\htdocs\cbe\public_html\includes/connection.php");
+//  require_once("G:\Program Files\xampp\htdocs\cbe\public_html\includes/functions.php");
+  require_once("/includes/connection.php");
+  require_once("/includes/functions.php");
 }
 ?>
 
