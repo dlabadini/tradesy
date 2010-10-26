@@ -479,7 +479,7 @@ function user_login($username, $password)
      $encrypted_pass = md5(md5($password).$user['salt']);
 
      // Try and get the user using the username & encrypted pass
-     $query = "select member_id, name, school_id from members where " . $loginID . "='$username' and password='$encrypted_pass'";
+     $query = "select member_id, name, school_id, email, location from members where " . $loginID . "='$username' and password='$encrypted_pass'";
      $result = mysql_query($query);
      $user = mysql_fetch_array($result);
 
@@ -493,13 +493,23 @@ function user_login($username, $password)
 		$sql = "SELECT name FROM account_types WHERE tid = (SELECT account_type FROM member_subscriptions WHERE member_id = " . $userid . " LIMIT 1)";
 		$acctype = mysql_result(mysql_query($sql), 0, 0);
 
+        // get the school name and state
+        $school_info = get_school($user['school_id']);
+        $schstate = $school_info['State'];
+        $schname = $school_info['School_Name'];
+
 		// Store the data in the session
 		$_SESSION['username'] = $username;
 		$_SESSION['userid'] = $userid;
 		$_SESSION['acctype'] = $acctype;
 		$_SESSION['encrypted_id'] = $encrypted_id;
-        $_SESSION['fullname'] =  $user['name'];
+        $_SESSION['fullname'] = $user['name'];
+        $_SESSION['name'] = $user['name'];
         $_SESSION['schoolID'] = $user['school_id'];
+        $_SESSION['schstate'] = $schstate;
+        $_SESSION['schname'] = $schname;
+        $_SESSION['email'] = $user['email'];
+        $_SESSION['location'] = $user['location'];
         return true;
     }
     else
@@ -527,6 +537,13 @@ function is_authed()
      {
           return false;
      }
+}
+
+function is_validated() {
+    // Check if current user is validated
+    $valcode = mysql_result(mysql_query("SELECT valcode FROM members WHERE username='" . $_SESSION['username'] . "'"), 0);
+    if($valcode == 0) return true;
+    return false;
 }
 
 function format_date($date){
