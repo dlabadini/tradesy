@@ -19,7 +19,7 @@ Functionalilty:
 	- 	Makes a connection with the backend database by calling connection.php
 	- 	Loads all functions needed to run the site by calling functions.php
 	- 	session_start() is called to check for user authentication
-	- 	Whether localhost is being used or not determines what the path to 
+	- 	Whether localhost is being used or not determines what the path to
 		connection.php and functions.php should be
 	
 Function Calls:
@@ -47,5 +47,18 @@ if (!is_authed()){
             </p>
         </div>";
     exit;
+}
+// redirect to validation page if user is logged in but not validated
+if(is_authed()) {
+    if(!is_validated()) {
+        echo "<meta http-equiv='refresh' content='0;validate.php'>" .
+             "<div align='center' style='font-family:Arial, Helvetica, sans-serif; font-size:0.8em;'>" .
+             "<img src='images/cbe_logo.gif' />" .
+             "<p>" .
+             "You must <a href='validate.php'>validate</a> to view this page." .
+             "</p>" .
+             "</div>";
+        exit;
+    }
 }
 ?>
