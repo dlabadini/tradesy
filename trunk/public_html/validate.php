@@ -51,9 +51,9 @@ if (isset($_POST['valcode'])) {
          "<input type='Submit' name='s1' id='s1' value='submit' disabled/>".
          "</form>";
     echo "<br/><br/>";
-    echo "Didn't get the validation email? Click below to send again.<br/>";
     echo "<form name='resend_form' action='validate.php' method='post' target='_self'>" .
-         "<input type='Submit' name='resend' value='resend'/>" .
+         "Didn't get the validation email? Click <a href='javascript:document.resend_form.submit();'>here</a> to send again.<br/>" .
+         "<input type='hidden' name='resend' value='resend'/>" .
          "</form>";
     if($_POST['resend'] == "resend") {
         echo "<p style='color: red;'>";
@@ -64,6 +64,7 @@ if (isset($_POST['valcode'])) {
         }
         echo "</p>";
     }
+    echo "If you think you've reached this page in error, <a href='logout.php'>logout</a> or <a href='support@collegebookevolution.com'>contact</a> an administrator.<br/>";
 }
 ?>
 
