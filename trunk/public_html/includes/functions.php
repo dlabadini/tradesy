@@ -1151,6 +1151,12 @@ function welcome_info(){
   			}
    }
 
+    // available credits
+    $sql = "select bought, used from members_credits where member_id = " . $_SESSION['userid'];
+    $res = mysql_fetch_array(mysql_query($sql));
+    if($res['bought'] == $res['used'])
+        echo "<li>You don't have any book credits available. Click <a href='add_credits.php'>here</a> to add some.</li>";
+
     // recent contacts
    if ($subscr_type > 0){ //show only for paid accounts cos if not, date would be null
          $sql = "SELECT * FROM members_contacts WHERE member_id = " . $_SESSION['userid']. " ORDER BY contact_date DESC LIMIT 4";
@@ -1205,11 +1211,6 @@ function welcome_info(){
    <li><a href='javascript:void;' onClick='togglediv("invite"); document.getElementById("invite_email").value="Enter email address"; document.getElementById("invite_email").select();'>Invite</a> your friends to join College Book Evolution</li>
    <div id='invite' name='invite' style='display:none;'><p><input type='text' id='invite_email' />&nbsp;<a href='javascript:void;' onClick='sendInvitation(document.getElementById("invite_email").value, "<? echo $name ?>", "invite");'>Send</a></p></div>
    <?
-
-   // upgrade
-   if ($subscr_type < 0){
-        echo "<li><a href='upgrade.php'>Upgrade</a> your <a href='help/?ref=faqs#freeaccounts'>Free Trial</a> account</li>";
-   }
 }
 
 function chkstr($str){

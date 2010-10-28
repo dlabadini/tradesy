@@ -189,32 +189,17 @@ echo "</td></tr></table>";
 echo "<p><input type='submit' name='personal' value='Save Changes' /></p>";
 echo "</form></div>";
 
-//subscription information
-echo "<h2>Subscription Information</h2>";
+//book credit information
+echo "<h2>Book Credits</h2>";
 echo "<div style='margin-left:40px'>";
 echo "<table border='0' cellpadding='3px' style='font-size:1em;'>";
-$sql = "SELECT * FROM member_subscriptions WHERE member_id = " . $_SESSION['userid'] . " LIMIT 1";
+$sql = "SELECT * FROM members_credits WHERE member_id = " . $_SESSION['userid'] . " LIMIT 1";
 $info = mysql_fetch_array(mysql_query($sql));
-
-if ($info['subscription_id'] == -1){
-	echo "<tr><td>Start Date:</td><td align='left'>" .  date('m/d/Y', strtotime($info['start_date'])) . "</td></tr>";
-	echo "<tr><td>Subscription:</td><td>Free Trial (<a href='upgrade.php'>Upgrade</a>)</td></tr></table>";
-}else{
-	echo "<tr><td>Start Date:</td><td>" . date('m/d/Y', strtotime($info['start_date'])) . "</td></tr>";
-
-	$subscr = get_subscription_info($info['subscription_id']);
-	echo "<tr><td>End Date:</td><td>" . date('m/d/Y', strtotime(addDate($info['start_date'], $subscr[3]))) . "</td></tr>";
-
-	echo "<tr><td>Plan:</td><td>" . $subscr[1] . "</td></tr>";
-	echo "<tr><td>Price:</td><td>$" . $subscr[2] . "</td></tr>";
-	echo "<tr><td>Amount Paid:</td><td>$" . $info['amount_paid'] . "</td></tr>"; //subtract coupon value from this
-
-	$acctype = mysql_result(mysql_query("SELECT name FROM account_types WHERE tid = " . $info['account_type']), 0, 0);
-	echo "<tr><td>Type:</td><td>" . $acctype . "</td></tr>";
-
-	echo "</table>";
-}
-echo "</div>";
+echo "<tr><td>Credits purchased:</td><td>" . $info['bought'] . "</td></tr>";
+echo "<tr><td>Credits spent:</td><td>" . $info['used'] . "</td></tr>";
+echo "<tr><td>Credits available:</td><td>" . ((int)$info['bought'] - (int)$info['used']) . "</td></tr>";
+echo "<tr><td><a href='add_credits.php'>Add credits</a></td></tr>";
+echo "</table></div>";
 
 //Preferences
 $checked = "";
