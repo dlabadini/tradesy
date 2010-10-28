@@ -74,7 +74,8 @@ function limitText(limitField, limitCount, limitNum) {
 <table width='100%'><tr><td>
 <div style="margin-left:10px;">
 <li><a onclick="togglediv('add_book');" href="javascript:;">Add Book</a> .
-<a href="findbook.php">Find Book</a></a></li> 
+<a href="findbook.php">Find Book</a> .
+<a href="add_credits.php">Add Credits</a></li>
 
 
 <div id="add_book" style="display:none; ">
