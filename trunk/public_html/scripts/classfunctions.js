@@ -186,7 +186,7 @@ function addBook(bookid, newused, covertype, bknew, bkused, askprice, desc, id, 
 	var bkused = parseFloat(bkused);
 	var buyback = bknew * 0.40;
 	var optimalprice = ((buyback + bkused) / 2) * 1.1;
-	
+
 	var condition;
     (newused.checked)? condition = "New" : condition = "Used";
 
@@ -209,6 +209,10 @@ function addBook(bookid, newused, covertype, bknew, bkused, askprice, desc, id, 
 				+ "\n(5% more than the optimal price)");
 		return;
 	}
+    var answer2 = confirm("Are you sure you want to list this book? This will use 1 credit from your account.");
+    if(!answer2) {
+      return;
+    }
 
 	document.getElementById(id).innerHTML = '<img src="images/loading.gif" />';
 	url = url   + "bid=" + bookid
