@@ -772,7 +772,7 @@ function showBooks($user){
 
 	$books = get_books_owned($_SESSION['userid']);
 	echo "<form name='booksform' method='post' action='' />";
-	echo "<h2>Your Books <span id='subscript'>(" . mysql_num_rows($books) . "/15)</span></h2>";
+	echo "<h2>Your Books <span id='subscript'>(" . mysql_num_rows($books) . ")</span></h2>";
 	echo "<table border='0' cellpadding='3px'>";
 	$count = 0;
 	echo "<input type='checkbox' name='check_list' id='-1' style='visibility:hidden;' />";

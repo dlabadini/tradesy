@@ -11,9 +11,7 @@
 
 <font size="5px"><strong>Classes</strong></font><br>
 <div style=" margin-left:10px;">
-<?php
-if (!class_lock_due()){
-?>
+
 	<li>
 	<a href="javascript:;" onclick="togglediv('add_class');">Add Class</a>
 	</li>
@@ -34,20 +32,18 @@ if (!class_lock_due()){
 	?>
 	</select>
 	</td><td>
-	Class: 
+	Class:
 	</td><td width='60px'>
 	<div id='nums'>
 	<select><option>--</option></select>
 	</div>
 	</td><td>
-	
+
 	<input name="button" type="button" onclick="addclass(document.getElementById('classname'), document.getElementById('classnum'), 'listclasses')" value="Add Class"/>
 	</td></tr></table>
 	</form>
 	</div>
-<?php 
-}
-?>
+
 </div>
 <br />
 <div class='hrline'></div>
