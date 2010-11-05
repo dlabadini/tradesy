@@ -1,5 +1,5 @@
 <?php
-require_once("/includes/connection.php");
+require_once("../includes/connection.php");
 
 $page_title = "Populating members_credits table";
 
@@ -29,5 +29,18 @@ CREATE TABLE IF NOT EXISTS `members_credits` (
   `total_spent` decimal(10,2) NOT NULL COMMENT 'total cash spent on credits',
   PRIMARY KEY (`member_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+Here is the SQL to create the members_transactions table:
+
+CREATE TABLE `members_transactions` (
+`member_id` INT( 10 ) NOT NULL ,
+`transaction_id` VARCHAR( 20 ) NOT NULL ,
+`item_id` INT( 20 ) NULL ,
+`gross` DECIMAL( 10, 2 ) NOT NULL ,
+`fee` DECIMAL( 10, 2 ) NOT NULL ,
+`date` DATE NOT NULL ,
+PRIMARY KEY ( `transaction_id` )
+) ENGINE = MYISAM ;
+
 */
 ?>

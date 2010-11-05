@@ -1,5 +1,6 @@
 <?php
 $page_title = "Confirm purchase | " . ucwords($_SESSION['fullname']);
+include 'init_utils.php';
 include 'layout/startlayout.php';
 nav_menu($_SESSION['username'], '');
 ?>
@@ -16,9 +17,9 @@ $req = 'cmd=_notify-synch';
 
 $tx_token = $_GET['tx'];
 
-echo "tx token: " . $tx_token . "<br/><br/>";
+//echo "tx token: " . $tx_token . "<br/><br/>";
 
-$auth_token = "1x_kUQcpWUeRQ_GVPEexYHeylOK2DkGXzwJ7jlsDrX_3gQBTbvsGQIYTq6i";
+$auth_token = "5nVjhF2kHnu0XZS9NkSIct01zBcdJpeR7ch-qjb9xYzc5h3qx1RmjAabdNy";
 
 $req .= "&tx=$tx_token&at=$auth_token";
 
@@ -27,7 +28,7 @@ $req .= "&tx=$tx_token&at=$auth_token";
 $header .= "POST /cgi-bin/webscr HTTP/1.0\r\n";
 $header .= "Content-Type: application/x-www-form-urlencoded\r\n";
 $header .= "Content-Length: " . strlen($req) . "\r\n\r\n";
-$fp = fsockopen ('www.sandbox.paypal.com', 80, $errno, $errstr, 30);
+$fp = fsockopen ('www.paypal.com', 80, $errno, $errstr, 30);
 // If possible, securely post back to paypal using HTTPS
 // Your PHP server will need to be SSL enabled
 // $fp = fsockopen ('ssl://www.sandbox.paypal.com', 443, $errno, $errstr, 30);
@@ -62,6 +63,18 @@ if (!$fp) {
             }
         // check the payment_status is Completed
         // check that txn_id has not been previously processed
+        $trans = mysql_query("select transaction_id from members_transactions where transaction_id=$tx_token");
+        $trow = mysql_fetch_array($trans);
+        echo $trow['transaction_id'] . '<br/>';
+        if($trow['transaction_id'] == $tx_token) {
+          $tinsert = mysql_query("insert into members_transactions (member_id, transaction_id, gross, fee, date) values ('" . $_SESSION['userid'] . "', '$tx_token', '" . $keyarray['mc_gross'] . "', '" . $keyarray['mc_fee'] . "', '" . date("Y-m-d H:i:s") . "')");
+          if(!$tinsert) {
+            echo "error: " . mysql_error();
+          }
+        } else {
+          echo "This transaction has already been processed.";
+          exit();
+        }
         // check that receiver_email is your Primary PayPal email
         // check that payment_amount/payment_currency are correct
         // process payment
@@ -69,12 +82,13 @@ if (!$fp) {
         $lastname = $keyarray['last_name'];
         $itemname = $keyarray['item_name'];
         $amount = $keyarray['mc_gross'];
-        $credits = $keyarray['option_selection1'];
+        $credits = strtok($keyarray['option_selection1'],' ');
+//        echo $credits . "<--- credits keyy array ->>" . $keyarray['option_selection1'];
 
         // update the credits and total spent in the database
-        mysql_query("update members_credits set bought = bought + $credits" .
-                    ", total_spent = total_spent + $amount" .
-                    "where member_id = '" . $_SESSION['userid'] . "'");
+        mysql_query("update members_credits set bought=bought+$credits" .
+                    ", total_spent=total_spent+$amount" .
+                    "where member_id='" . $_SESSION['userid'] . "'");
 
         // get the new total credits
         $res = mysql_fetch_array(mysql_query("select bought, used from " .
@@ -99,7 +113,7 @@ if (!$fp) {
         foreach($lines as $line) {
             echo $line . '<br/>';
         }
-        echo "</pre>";*/
+        echo "</pre>"; */
     }
 
 
