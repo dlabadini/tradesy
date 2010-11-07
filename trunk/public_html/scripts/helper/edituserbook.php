@@ -35,8 +35,8 @@ $number=$_GET["number"];
            "<tr><td><b>New:</b></td><td> $" . $book['bkstoreprice_new'] . "</td></tr>" . 
            "<tr><td><b>Used:</b><td> $" . $book['bkstoreprice_used'] . "</td></tr>" . 
 					 "<tr><td><b>Buy Back:</b><td> $" . number_format($buyback, 2, '.', ',') .  "</td></tr>" . 
-					 "<tr><td><b>Optimal:</b><td> $" . number_format($optimalprice, 2, '.', ',') .  "</td></tr>" . 
-					 "</table><a href='help/?ref=faqs#optimalprice' target='_blank'>more information</a>..." .
+					 "<tr><td><b>Optimal:</b><td> $" . number_format($optimalprice, 2, '.', ',') .
+					 "<a href='help/?ref=faqs#optimalprice' target='_blank'> [?]</a></td></tr></table>" .
 			 		 "</td>";
   		  echo '<td width="30%"><b>Condition:</b><br><input type="radio" id="newused" name="newused" value="new"';
   			if ($condition == "New"){

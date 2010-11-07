@@ -30,7 +30,7 @@ nav_menu($_SESSION['username'], null);
 <?php
 $cid = $_GET['cid'][0];
 $bookid = $_GET['bkid'];
-echo "<h2>Search Results</h2>";
+echo "<h2><font color='#0000A0'>&nbsp;&nbsp;Search Results</font></h2>";
 
 $sql = "SELECT class_name, class_number FROM classes" . $_SESSION['schoolID'] . " WHERE class_id = " . $cid;
 $class = mysql_fetch_array(mysql_query($sql));
@@ -135,16 +135,17 @@ if ($bkimg == ""){
 	 $bkimg = "images/noimage.png";
 	 }
 //class & book information
-echo "<tr valign='top'><td width='500px'><b>" . $class['class_name'] . " " . $class['class_number'] . "</b>" .
-	"<br><table cellpadding='10px'>" .
-	"<tr><td><a href='" . $bkimg . "' rel='lightbox' title='" . $book['title'] . "'><img src='" . $bkimg . "' width='80' height='90' alt='required book'></a></td><td valign='top'>" . 
+echo "<tr valign='top'><td width='600px'>" .
+	"<table cellpadding='10px'>" .
+	"<tr><td><a href='" . $bkimg . "' rel='lightbox' title='" . $book['title'] . "'><img src='" . $bkimg . "' width='80' height='90' alt='required book'></a></td><td valign='top'>" .
 	"<table cellpadding=0 border=0>" . 
-	"<tr valign='top'><td width='80px'><b>Book:</b></td><td> " . $book['title'] . "</td></tr>" . 
+	"<tr valign='top'><td width='80px'><b>Book:</b></td><td width=''> " . $book['title'] . "</td></tr>" .
 	"<tr valign='top'><td><b>Author:</b></td><td> " . $book['author'] . "</td></tr>" .
 	"<tr valign='top'><td><b>New:</b></td><td> $" . $book['bkstoreprice_new'] . "</td></tr>" .
 	"<tr valign='top'><td><b>Used:</b></td><td> $" . $book['bkstoreprice_used'] . "</td></tr>" .
 	"<tr valign='top'><td><b>Buy Back:  &nbsp; </b></td><td> $" . number_format($buyback, 2, '.', ',') .
-	" (<a href='help/?ref=faqs#optimalprice' target='_blank'>more info</a>)</td></tr></table>" .
+    "<tr valign='top'><td><b>Optimal:  &nbsp; </b></td><td> $" . number_format($optimal, 2, '.', ',') .
+	" <a href='help/?ref=faqs#optimalprice' target='_blank'>[?]</a></td></tr></table>" .
 	"</td></tr></table>";
 
 $tt = "SELECT count(*) FROM members_books WHERE book_id =" . $bookid . " AND member_id != " . $_SESSION['userid'];
@@ -170,7 +171,7 @@ if ($subscr_type > 0){
     echo "<input type='hidden' name='rng_max' value='" . $rng_max . "' />";
     echo "<input type='hidden' name='viceversa' value='" . $vv . "' />";
 
-    echo "Sort by:<select name='sort' size=1 onChange='sortform.submit();'>";
+    echo "Sort: <select name='sort' size=1 onChange='sortform.submit();'>";
     echo "<option value='plh' ";
     if ($sort == 'plh')echo "SELECTED";
     echo ">Price: Lowest To Highest</option>";
@@ -210,21 +211,21 @@ if ($subscr_type > 0){
     echo "</select></form>";
 
 
-    echo "<form id='prsearch' method='get' action='search.php'>";
-    echo "<br>Price range:";
-    echo "<input type='hidden' name='cid[]' value='" . $cid . "' />";
-    echo "<input type='hidden' name='bkid' value='" . $bookid . "' />";
-    echo "<input type='hidden' name='sort' value='" . $sort . "' />";
-    echo "$ <input type='text' name='rng_min' size='3' value='" . $rng_min . "'/> to $ <input type='text' name='rng_max' size='3' value='" . $rng_max . "'/> ";
-    echo "<input type='submit' value='Go' />";
+    //echo "<form id='prsearch' method='get' action='search.php'>";
+    //echo "<br>Price range:";
+    //echo "<input type='hidden' name='cid[]' value='" . $cid . "' />";
+    //echo "<input type='hidden' name='bkid' value='" . $bookid . "' />";
+    //echo "<input type='hidden' name='sort' value='" . $sort . "' />";
+    //echo "$ <input type='text' name='rng_min' size='3' value='" . $rng_min . "'/> to $ <input type='text' name='rng_max' size='3' value='" . $rng_max . "'/> ";
+    //echo "<input type='submit' value='Go' />";
 }
 
 //vice versa (or barter trade) check box, onclick, submit the form
-echo "<br><br><input id='viceversa' name='viceversa'onClick='submit();' type='checkbox'";
+echo "<br><input id='viceversa' name='viceversa'onClick='submit();' type='checkbox'";
 if ($_GET['viceversa'] == 'on'){
     echo "checked";
 }
-echo ">Barter Trade (<a href='help/?ref=faqs#bartertrade' target='_blank'>what's this?</a>)";
+echo ">Barter Trade <a href='help/?ref=faqs#bartertrade' target='_blank'>[?]</a>";
 
 echo "</td></tr></table>";
 
@@ -306,7 +307,7 @@ if ($indices > 1){
     }
 }
 echo "<br><br>";
-echo "<input type='submit' name='member_sel' id='contactbtn' value='Contact Seller' disabled /> ";
+echo "&nbsp;&nbsp;<input type='submit' name='member_sel' id='contactbtn' value='Contact Seller' disabled /> ";
 
 // only paid accounts can rank sellers
 if ($subscr_type > 0){
