@@ -175,7 +175,7 @@ div#listclasses{
   margin-left: 40px;
 }
 
-div#add_class, div#add_book{
+div#add_class, div#add_credits, div#add_book{
   background-color: #F5FBEF;
   border: 1px solid #E3F6CE;
   padding: 3px;

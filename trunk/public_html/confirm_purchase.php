@@ -1,5 +1,5 @@
 <?php
-$page_title = "Confirm purchase | " . ucwords($_SESSION['fullname']);
+$page_title = "Confirm Purchase | " . ucwords($_SESSION['fullname']);
 include 'init_utils.php';
 include 'layout/startlayout.php';
 nav_menu($_SESSION['username'], '');
