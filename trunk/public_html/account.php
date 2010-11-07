@@ -180,7 +180,7 @@ echo "<tr><td valign='top'><a onclick='togglediv(\"currLoc\");' href='javascript
 		 "<br><div class='editinfo' id='currLoc' style='display:none;'>Change To: <input type='text' maxlength=30 name='location' /></div></td></tr>";
 
 echo "<tr valign='top'><td>";
-echo "<a onclick='togglediv(\"changepsswd\");' href='javascript:;'>Change Password</a>" .
+echo "<a onclick='togglediv(\"changepsswd\");' href='javascript:;'>Password</a>" .
 	"</td><td><div id='changepsswd' class='editinfo' style='display:none;'>Current Password:<br><input type='password' name='oldpsswd' />" .
 	"<br/>New Password:<br><input type='password' name='newpsswd' />" .
 	"<br/>Confirm New Password:<br><input type='password' name='confnewpsswd' /></div><br/>";
