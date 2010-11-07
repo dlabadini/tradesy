@@ -211,11 +211,11 @@ if ($subscr_type > 0){
     echo "</select></form>";
 
 
-    //echo "<form id='prsearch' method='get' action='search.php'>";
+    echo "<form id='prsearch' method='get' action='search.php'>";
     //echo "<br>Price range:";
-    //echo "<input type='hidden' name='cid[]' value='" . $cid . "' />";
-    //echo "<input type='hidden' name='bkid' value='" . $bookid . "' />";
-    //echo "<input type='hidden' name='sort' value='" . $sort . "' />";
+    echo "<input type='hidden' name='cid[]' value='" . $cid . "' />";
+    echo "<input type='hidden' name='bkid' value='" . $bookid . "' />";
+    echo "<input type='hidden' name='sort' value='" . $sort . "' />";
     //echo "$ <input type='text' name='rng_min' size='3' value='" . $rng_min . "'/> to $ <input type='text' name='rng_max' size='3' value='" . $rng_max . "'/> ";
     //echo "<input type='submit' value='Go' />";
 }
