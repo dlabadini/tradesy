@@ -1,7 +1,7 @@
 <?php
 include 'init_utils.php';
 
-$page_title = "Add credits | " . ucwords($_SESSION['fullname']);
+$page_title = "Add Credits | " . ucwords($_SESSION['fullname']);
 include 'layout/startlayout.php';
 nav_menu($_SESSION['username'], '');
 ?>
@@ -25,12 +25,11 @@ nav_menu($_SESSION['username'], '');
 </form>
 */
 ?>
-
 <form action="https://www.paypal.com/cgi-bin/webscr" method="post">
 <input type="hidden" name="cmd" value="_s-xclick">
 <input type="hidden" name="hosted_button_id" value="CRWXL494AZHFS">
 <table>
-<tr><td><input type="hidden" name="on0" value="Credits">Credits</td></tr><tr><td><select name="os0">
+<tr><td><input type="hidden" name="on0" value="Credits"><font color="#0000A0"><h2>Credits<h2/><font/></td></tr><tr><td><select name="os0">
 	<option value="1 Credit">1 Credit $1.50</option>
 	<option value="2 Credits">2 Credits $3.00</option>
 	<option value="3 Credits">3 Credits $4.50</option>
@@ -38,12 +37,12 @@ nav_menu($_SESSION['username'], '');
 	<option value="5 Credits">5 Credits $6.25</option>
 	<option value="10 Credits">10 Credits $10.00</option>
 </select> </td></tr>
-</table>
+</table><br/>
 <input type="hidden" name="currency_code" value="USD">
 <input type="image" src="https://www.paypal.com/en_US/i/btn/btn_buynowCC_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
 <img alt="" border="0" src="https://www.paypal.com/en_US/i/scr/pixel.gif" width="1" height="1">
 </form>
-
+<br/><br/>
 </div>
 
 <?php
