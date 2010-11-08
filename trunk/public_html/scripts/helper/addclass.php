@@ -11,10 +11,6 @@ $number=$_GET["number"];
 
          $maxclasses = MAXIMUM_CLASSES;
          $clslock = WEEKS_TILL_CLASS_LOCK; //# of weeks till classes are locked
-         if (subscription_type($_SESSION['userid']) < 0){
-           $maxclasses = FA_MAXIMUM_CLASSES;
-           $clslock = FA_WEEKS_TILL_CLASS_LOCK;
-         }
 
          // make sure user hasn't added more than max classes
 		 $sql = "SELECT count(*) FROM members_classes WHERE member_id = " . $_SESSION['userid'];

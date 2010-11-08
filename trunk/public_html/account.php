@@ -7,7 +7,7 @@ Date Created: 12/2009
 Last Modified: 07/2010
 
 Purpose:
-	- Displays current user's account information such personal and subscription information
+	- Displays current user's account information
 	- Allows current user to make changes to account information such as change password, alternate email address etc
 	
 Requires:
@@ -206,15 +206,11 @@ $checked = "";
 echo "<h2>Preferences</h2>";
 echo "<div style='margin-left:40px;'>";
 echo "<form method=\"post\" action=\"{$_SERVER['php_self']}\">";
-if ($info['subscription_id']> 0){
-  $sql = "SELECT auto_search_notification FROM members_prefs WHERE member_id = " . $_SESSION['userid'];
-  if (mysql_result(mysql_query($sql), 0, 0) == 1){
-	$checked = "checked";
+$sql = "SELECT auto_search_notification FROM members_prefs WHERE member_id = " . $_SESSION['userid'];
+if (mysql_result(mysql_query($sql), 0, 0) == 1){
+    $checked = "checked";
   }
-}
-echo "<input type='checkbox' name='auto_search' $checked";
-if ($info['subscription_id'] < 0) echo " disabled ";
-echo "  />Subscribe to Auto-Search Notifications (<a href='help/?ref=faqs#autosearch'>What's this?</a>)";
+echo "<input type='checkbox' name='auto_search' $checked />Subscribe to Auto-Search Notifications (<a href='help/?ref=faqs#autosearch'>What's this?</a>)";
 echo "<p><input type='submit' name='prefs' value='Save Changes' /></p>";
 echo "</form></div>";
 ?>

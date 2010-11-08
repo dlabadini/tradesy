@@ -494,8 +494,9 @@ function user_login($username, $password)
 		$encrypted_id = md5($userid);
 		
 		//get account type
-		$sql = "SELECT name FROM account_types WHERE tid = (SELECT account_type FROM member_subscriptions WHERE member_id = " . $userid . " LIMIT 1)";
-		$acctype = mysql_result(mysql_query($sql), 0, 0);
+		//$sql = "SELECT name FROM account_types WHERE tid = (SELECT account_type FROM member_subscriptions WHERE member_id = " . $userid . " LIMIT 1)";
+        // no more subscriptions; everyone is a 5
+		$acctype = 5;
 
         // get the school name and state
         $school_info = get_school($user['school_id']);
@@ -684,7 +685,7 @@ function showClasses(){
 $USER = new User($_SESSION['userid']);
 $classes = $USER->GetClasses();
 $classlock = $USER->LockDateDue();
-$cap = ($USER->SubscriptionType() > 0)? MAXIMUM_CLASSES : FA_MAXIMUM_CLASSES;
+$cap = MAXIMUM_CLASSES;
 $class_count = 0;
 
 echo "<form name='classform' method='post' action='' />
@@ -862,29 +863,12 @@ function sendBookRequestEmail($seller, $class, $bkid, $bk_author, $bk_title){
 if no preferred email address is set */
 
 list ($seller, $trade) = split(":", $seller);
-$subscr_type = subscription_type($_SESSION['userid']);
 
 // check if this seller has already been contacted this month
-    if ($subscr_type > 0){
-        $sql = "SELECT 1 FROM members_contacts WHERE member_id = " . $_SESSION['userid'] . " AND seller_id = " . $seller .
-    	       " AND book_id = " . $bkid . " AND (contact_date is NULL or DATEDIFF(CURDATE(), contact_date) <= 28)";
-
-    	if (mysql_num_rows(mysql_query($sql))){
-    		 return "Sorry, this seller has already been contacted in the last 4 weeks regarding this book.";
-    	}
-    }else { // free account
-        // check if max number of sellers have been contacted
-        $sql = "SELECT count(*) FROM members_contacts WHERE member_id = " . $_SESSION['userid'];
-        if (mysql_result(mysql_query($sql), 0,0) >= FA_MAXIMUM_CONTACTS){
-            return "Sorry, you can only contact a total of <b>" . FA_MAXIMUM_CONTACTS . "</b> sellers per semester. To contact more sellers, please <a href='upgrade.php'>upgrade</a> your account.";
-        }
-
-        $sql = "SELECT member_id FROM members_contacts WHERE member_id = " . $_SESSION['userid'] .
-               " AND book_id = " . $bkid;
-        $res = mysql_fetch_array(mysql_query($sql));
-    	if (!empty($res['member_id'])){
-    		 return "Sorry, you have already contacted a seller regarding this book. To contact more sellers, please <a href='upgrade.php'>upgrade</a> your account.";
-    	}
+    $sql = "SELECT 1 FROM members_contacts WHERE member_id = " . $_SESSION['userid'] . " AND seller_id = " . $seller .
+           " AND book_id = " . $bkid . " AND (contact_date is NULL or DATEDIFF(CURDATE(), contact_date) <= 28)";
+    if (mysql_num_rows(mysql_query($sql))){
+    	 return "Sorry, this seller has already been contacted in the last 4 weeks regarding this book.";
     }
 
 	$sql = "SELECT preferred_email, email FROM members WHERE member_id = " . $seller;
@@ -929,8 +913,7 @@ $subscr_type = subscription_type($_SESSION['userid']);
   	if (@mail($to, $subject, $body, $headers)) {
 			 // add record to member_contacts
 			 $sql = "INSERT INTO members_contacts(member_id, seller_id, book_id, contact_date) VALUES " .
-			 			"(" . $_SESSION['userid'] . ", " . $seller . ", " . $bkid;
-             $sql .= ($subscr_type > 0)? ", '" . date("Y-m-d") . "')" : ", NULL)";
+			 			"(" . $_SESSION['userid'] . ", " . $seller . ", " . $bkid . ", '" . date("Y-m-d") . "')";
 			 mysql_query($sql);
 			 return "Request has been sent to seller.";
     } else {
@@ -1086,8 +1069,6 @@ function nav_menu($loginid, $page){
 
 
 function welcome_info(){
-    $subscr_type = subscription_type($_SESSION['userid']);
-
     // announcement
     $sql = "SELECT value FROM misc WHERE attribute = 'announcement'";
     $ann = mysql_result(mysql_query($sql), 0, 0);
@@ -1162,8 +1143,8 @@ function welcome_info(){
         echo "<li>You don't have any book credits available. Click <a href='add_credits.php'>here</a> to add some.</li>";
 
     // recent contacts
-   if ($subscr_type > 0){ //show only for paid accounts cos if not, date would be null
-         $sql = "SELECT * FROM members_contacts WHERE member_id = " . $_SESSION['userid']. " ORDER BY contact_date DESC LIMIT 4";
+         // filter out null contact dates left over from subscription pricing model
+         $sql = "SELECT * FROM members_contacts WHERE member_id = " . $_SESSION['userid']. " AND contact_date IS NOT NULL ORDER BY contact_date DESC LIMIT 4";
          $res = mysql_query($sql);
          if (mysql_num_rows($res) > 0){
               ?>
@@ -1205,7 +1186,6 @@ function welcome_info(){
              }
              echo "</ul></div>";
          }
-   }
 
    // invitation
    $sql = "SELECT name FROM members WHERE member_id = " . $_SESSION['userid'];

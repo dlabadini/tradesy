@@ -36,12 +36,10 @@ $sql = "SELECT class_name, class_number FROM classes" . $_SESSION['schoolID'] . 
 $class = mysql_fetch_array(mysql_query($sql));
 $book = get_book($bookid);
 $count = 0;
-$subscr_type = subscription_type($_SESSION['userid']);
 
 $orderby = "";
 
 //set sort order
-if ($subscr_type > 0){
     $sort = $_GET['sort'];
     $orderby = "ORDER BY";
     if ($sort == 'plh'){
@@ -71,7 +69,6 @@ if ($subscr_type > 0){
     }else{
     $orderby .= " ask_price ASC";
     }
-}
 
 
 //set index for results page display
@@ -88,7 +85,6 @@ $vv = $_GET['viceversa'];
 
 // PRICE BOUNDS
 $pricequery = "";
-if ($subscr_type > 0){
     $rng_min = $_GET['rng_min'];
     $rng_max = $_GET['rng_max'];
 
@@ -101,7 +97,6 @@ if ($subscr_type > 0){
     else if (empty($rng_min) and !empty($rng_max)){
     $pricequery = " AND ask_price <= " . $rng_max;
     }
-}
 
 /* this query dynamically creates a rownum inside the query, and looks for records between 2 rownums */
 $sql = "select * FROM (SELECT @rownum := @rownum + 1 as rownum, t.member_id, username, location, ask_price, rank, newused, cover, date_added, comment " .
@@ -109,20 +104,12 @@ $sql = "select * FROM (SELECT @rownum := @rownum + 1 as rownum, t.member_id, use
 	"WHERE school_id =" . $_SESSION['schoolID'] . " AND book_id =" . $bookid . " AND ask_price != -1.00 AND t.member_id != " . $_SESSION['userid'] . $pricequery . ") x " . 
 	"WHERE rownum BETWEEN " . $min . " AND " . $max . " " .  $orderby;
 
-if ($subscr_type <= 0){
-  $sql .= " LIMIT 1";
-}
-
 $bookowners = mysql_query($sql);
 
 if (mysql_num_rows($bookowners) == 0){
 echo "<font color='red'>Sorry, no sellers have been found.</font> <br/><br/><font color='green'>CollegeBookEvolution.com is still gaining popularity, to increase the chance of <br/> finding a match, encourage you friends and classmates to join the eVOLUTION.</font><br/><br/>Reminder, keep your textbooks, list them on CollegeBookEvolution.com :<br/><br/><img src=http://www.collegebookevolution.com/about/compare888.jpg alt='2010 Textbook Price Comparsion'/>
 ";
 } else {
-
-if ($subscr_type <= 0){
-  echo "<div align='center'><b>Want to find more sellers? Consider <a href='upgrade.php'>upgrading</a> your account...</b></div>";
-}
 
 echo "<table border='0' cellpadding='3px'>";
 
@@ -165,7 +152,6 @@ echo "<form name='sortform' method='get' action='search.php'>";
 echo "<input type='hidden' name='cid[]' value='" . $cid . "' />";
 echo "<input type='hidden' name='bkid' value='" . $bookid . "' />";
 
-if ($subscr_type > 0){
     echo "<input type='hidden' name='sort' value='" . !$sort . "' />";
     echo "<input type='hidden' name='rng_min' value='" . $rng_min . "' />";
     echo "<input type='hidden' name='rng_max' value='" . $rng_max . "' />";
@@ -218,7 +204,6 @@ if ($subscr_type > 0){
     echo "<input type='hidden' name='sort' value='" . $sort . "' />";
     //echo "$ <input type='text' name='rng_min' size='3' value='" . $rng_min . "'/> to $ <input type='text' name='rng_max' size='3' value='" . $rng_max . "'/> ";
     //echo "<input type='submit' value='Go' />";
-}
 
 //vice versa (or barter trade) check box, onclick, submit the form
 echo "<br><input id='viceversa' name='viceversa'onClick='submit();' type='checkbox'";
@@ -309,10 +294,7 @@ if ($indices > 1){
 echo "<br><br>";
 echo "&nbsp;&nbsp;<input type='submit' name='member_sel' id='contactbtn' value='Contact Seller' disabled /> ";
 
-// only paid accounts can rank sellers
-if ($subscr_type > 0){
     echo "<input type='button' name='like' value='Like' disabled onClick='rankSeller(1, document.contact.selected_member, \"rankresult\")'/> <input type='button' name='dislike' value='Dislike' disabled onClick='rankSeller(0, document.contact.selected_member, \"rankresult\")'/>";
-}
 
 echo "</form></td></tr>";
 echo "</table></p>";
