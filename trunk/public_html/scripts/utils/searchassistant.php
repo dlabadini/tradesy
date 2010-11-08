@@ -70,10 +70,7 @@ function sendMail($to, $message, $count){
 }
 
 while ($member = mysql_fetch_array($allmembers)){
-    // for each member, see if member has a paid account and has subscribed to automated notifications
-    if (subscription_type($member['member_id']) < 0){ // free account
-      break;
-    }
+    // for each member, see if member has subscribed to automated notifications
     
     $sql = "SELECT auto_search_notification FROM members_prefs WHERE member_id = " . $member['member_id'];
     if (!mysql_num_rows(mysql_query($sql))){
