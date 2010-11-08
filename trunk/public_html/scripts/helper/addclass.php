@@ -20,21 +20,6 @@ $number=$_GET["number"];
     		mysql_query($sql);
     		if (mysql_error() == ""){  // insertion was successful
     			echo $class . " " . $number . " has been added to your list of classes " . $result;
-
-    			$sql = "SELECT lock_date FROM class_locks WHERE member_id = " . $_SESSION['userid'];
-                $res = mysql_fetch_array(mysql_query($sql));
-    			$lockdate = $res['lock_date'];
-
-    			if (empty($lockdate)){
-    					//add entry to the class locks table - primary key is member_id so if record already exists it can be duplicated.
-    					$newdate = strtotime('+' . $clslock . ' week' , strtotime(date("Y-m-d")));
-    					$newdate = date('Y-m-d' , $newdate);
-    					$sql = "INSERT INTO class_locks VALUES (" . $_SESSION['userid'] . ", '" . $newdate . "')";
-    					mysql_query($sql);
-    				$lockdate = $newdate;
-    			}
-    			echo "<br /><span style='background-color:yellow;'>Note: You have until <b>" . date('m/d/Y', strtotime($lockdate)) .
-    			    "</b> to add/drop classes</span>";
     		}else{
     			if (strpos(mysql_error(), "Duplicate") >= 0){
     				echo "Class has already been added";

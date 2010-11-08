@@ -1112,13 +1112,7 @@ function welcome_info(){
   				}else{
    				 echo "<li>You have <b><a href='classes.php'>" . $numclasses . " classes</a></b> listed.<br>";
   			}
-  		$sql = "SELECT lock_date FROM class_locks WHERE member_id = " . $_SESSION['userid'];
-  		$dropdate = mysql_result(mysql_query($sql), 0, 0);
-  		echo "<span id='subscript'>Last day to add/drop classes";
-  		if (class_lock_due()){
-  			echo " was";
-  		}
-  		echo ": <b>" . date("m/d/Y", strtotime($dropdate)) . "</b></span></li>";
+  		echo "</li>";
    }
 
    // point out total books listed
