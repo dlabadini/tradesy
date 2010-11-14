@@ -494,9 +494,8 @@ function user_login($username, $password)
 		$encrypted_id = md5($userid);
 		
 		//get account type
-		//$sql = "SELECT name FROM account_types WHERE tid = (SELECT account_type FROM member_subscriptions WHERE member_id = " . $userid . " LIMIT 1)";
-        // no more subscriptions; everyone is a 5
-		$acctype = 5;
+		$sql = "SELECT name FROM account_types WHERE tid = (SELECT account_type FROM member_subscriptions WHERE member_id = " . $userid . " LIMIT 1)";
+        $acctype = mysql_result(mysql_query($sql), 0, 0);
 
         // get the school name and state
         $school_info = get_school($user['school_id']);
