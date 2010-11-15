@@ -139,7 +139,7 @@ $sql .= " AND ask_price != -1.00 AND t.member_id != " . $_SESSION['userid'] . $p
 $bookowners = mysql_query($sql);
 
 if (mysql_num_rows($bookowners) == 0){
-echo "<font color='red'>Sorry, no sellers have been found.</font> <br/><br/><font color='green'>CollegeBookEvolution.com is still gaining popularity, to increase the chance of <br/> finding a match, encourage you friends and classmates to join the eVOLUTION.</font><br/><br/>Reminder, keep your textbooks, list them on CollegeBookEvolution.com :<br/><br/><img src=http://www.collegebookevolution.com/about/compare888.jpg alt='2010 Textbook Price Comparsion'/>
+echo "<center><font color='red'>Sorry, no sellers have been found.</font> <br/><br/><font color='green'>CollegeBookEvolution.com is still gaining popularity, to increase the chance of <br/> finding a match, encourage you friends and classmates to join the eVOLUTION.</font><br/><br/>Reminder, keep your textbooks, list them on CollegeBookEvolution.com :<br/><br/><img src=http://www.collegebookevolution.com/about/compare888.jpg alt='2010 Textbook Price Comparsion'/></center>
 ";
 } else {
 
