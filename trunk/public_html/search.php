@@ -82,6 +82,8 @@ $min = $max - 20;
 }
 
 $vv = $_GET['viceversa'];
+if($_GET['outersearch'] == "on") $outer = 1;
+else $outer = 0;
 
 // PRICE BOUNDS
 $pricequery = "";
@@ -275,7 +277,7 @@ echo "<input type='hidden' name='selected_member' value='-1'>";
 while ($row = mysql_fetch_array($bookowners)){
       $count++;
       if ($_GET['viceversa'] == "on"){
-        $trade = viceVersaSearch($_SESSION['userid'], $row['member_id']);
+        $trade = viceVersaSearch($_SESSION['userid'], $row['member_id'], $outer);
       }
       echo "<tr ";
       if (($count % 2) == 0){
@@ -291,10 +293,9 @@ while ($row = mysql_fetch_array($bookowners)){
       	echo "' onclick='this.form.contactbtn.disabled=!this.checked; this.form.like.disabled=!this.checked; this.form.dislike.disabled=!this.checked;' /></td>" .
       		"<td>";
 
-      // if user has a book the seller wants, a 'trade' icon shows up displaying the books both parties could trade
-      if (sizeof($trade) > 0){
+      if (sizeof($trade) > 0){ // if user has a book the seller wants, a 'trade' icon shows up displaying the books both parties could trade
         echo "<span style='color:#339966;'><b>" . ucfirst($row['username']) . "</b></span> <img align=absmiddle src='images/needed.png' title='needs: " . get_title_strings($trade) . "'/>";
-      } else if ($_SESSION['schoolID'] != $row['school_id']) {
+      } else if ($_SESSION['schoolID'] != $row['school_id']) { // display outer search results in orange
         echo "<span style='color:#cc6600;'><b>" . ucfirst($row['username']) . "</b></span>";
       } else {
         echo ucfirst($row['username']);

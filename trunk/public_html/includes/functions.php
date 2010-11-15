@@ -966,22 +966,51 @@ function generate_coupon(){
 
 /* ----------------------------- VICE VERSA SEARCH (BARTER TRADE) ----------------------------------*/
 
-function viceVersaSearch($userid, $sellerid){
+function viceVersaSearch($userid, $sellerid, $outer){
 	 //get users books
 	 $urbooks = get_books_owned($userid);
 
 	 //get books seller needs
-	 $sellerneeds =  get_books_still_needed($sellerid);
+     $sellerneeds =  get_books_still_needed($sellerid);
 
 	 $trade = array(); //tradable books
      $sb = array();
 
+     //get the buyer's and seller's school ids
+        $buyer_sid = "select school_id from members where member_id = $userid";
+        $buyer_sid = mysql_result(mysql_query($buyer_sid), 0, 0);
+        $seller_sid = "select school_id from members where member_id = $sellerid";
+        $seller_sid = mysql_result(mysql_query($seller_sid), 0, 0);
+
      // store the seller's books needed in an array so we don't
      // mysql_fetch_array every time we loop through the buyers books
      // to find a match.
-     while ($row = mysql_fetch_array($sellerneeds)){
-        $sb[] = $row['book_id'];
-       }
+     if($outer and $buyer_sid != $seller_sid) {
+        //in an outer search we need to convert seller's book ids to buyer's
+        //loop through book ids and convert
+        while($bookid = mysql_fetch_array($sellerneeds)) {
+          // for each book id...
+          // get the isbn
+          $sql = "select isbn from books" . $seller_sid . " where book_id = '" .
+                 $bookid['book_id'] . "'";
+          $isbn = mysql_query($sql);
+          if(mysql_num_rows($isbn) == 0) continue;
+          $isbn = mysql_result($isbn, 0, 0);
+          if(is_null($isbn)) continue;
+          // look up the bookid from the isbn in the buyer school
+          $sql = "select book_id from books" . $buyer_sid . " where isbn like '" .
+                 $isbn . "'";
+          $bid = mysql_query($sql);
+          if(mysql_num_rows($bid) == 0) continue;
+          $bid = mysql_result($bid, 0, 0);
+          // add the bookid to the array
+          $sb[] = $bid;
+        }
+     } else {
+        while ($row = mysql_fetch_array($sellerneeds)){
+            $sb[] = $row['book_id'];
+        }
+     }
 
      // loop through buyers books, and for each book_id, see if it's needed
      // by the seller.
