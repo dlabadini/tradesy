@@ -1,0 +1,7 @@
+# Begin password protection #
+AuthName "Converge Timetable"
+Require valid-user
+AuthUserFile "/home/users/web/b2287/sl.devinlab77/public_html/workshop2/.htpasswd"
+AuthType basic
+# End password protection #
+
