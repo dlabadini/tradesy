@@ -294,6 +294,8 @@ while ($row = mysql_fetch_array($bookowners)){
       // if user has a book the seller wants, a 'trade' icon shows up displaying the books both parties could trade
       if (sizeof($trade) > 0){
         echo "<span style='color:#339966;'><b>" . ucfirst($row['username']) . "</b></span> <img align=absmiddle src='images/needed.png' title='needs: " . get_title_strings($trade) . "'/>";
+      } else if ($_SESSION['schoolID'] != $row['school_id']) {
+        echo "<span style='color:#cc6600;'><b>" . ucfirst($row['username']) . "</b></span>";
       } else {
         echo ucfirst($row['username']);
       }
