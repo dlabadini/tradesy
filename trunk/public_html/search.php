@@ -98,11 +98,43 @@ $pricequery = "";
     $pricequery = " AND ask_price <= " . $rng_max;
     }
 
+if($_GET['outersearch'] != 'on' or is_null($book['isbn'])) { // dont outer search if the isbn is null either
 /* this query dynamically creates a rownum inside the query, and looks for records between 2 rownums */
 $sql = "select * FROM (SELECT @rownum := @rownum + 1 as rownum, t.member_id, username, location, ask_price, rank, newused, cover, date_added, comment " .
 	"FROM members t INNER JOIN members_books a ON a.member_id = t.member_id, (SELECT @rownum := 0) r " .
-	"WHERE school_id =" . $_SESSION['schoolID'] . " AND book_id =" . $bookid . " AND ask_price != -1.00 AND t.member_id != " . $_SESSION['userid'] . $pricequery . ") x " . 
+	"WHERE school_id =" . $_SESSION['schoolID'] . " AND book_id =" . $bookid . " AND ask_price != -1.00 AND t.member_id != " . $_SESSION['userid'] . $pricequery . ") x " .
 	"WHERE rownum BETWEEN " . $min . " AND " . $max . " " .  $orderby;
+} else {
+/* this is the outer search version of the same query, searching on isbn instead of book_id */
+$sql = "SELECT * FROM (SELECT @rownum := @rownum + 1 as rownum, t.member_id, username, location, ask_price, rank, newused, cover, date_added, comment " .
+	"FROM members t INNER JOIN members_books a ON a.member_id = t.member_id, (SELECT @rownum := 0) r WHERE ";
+
+// the book_id is different in every school, so look up the isbns and do the query that way
+$schoolnum = 1;
+$first_school = 1;
+$schools = mysql_query("select school_id from schools"); // get all the schools
+// for each school
+while($school = mysql_fetch_row($schools)) {
+  // find the book in that school by isbn
+  $sbidq = mysql_query("select book_id from books" . $schoolnum . " where ISBN like '" . $book['isbn'] . "'");
+  // skip this school if the book doesn't exist here
+  if(is_null($sbidq) or mysql_num_rows($sbidq) == 0) {
+    $schoolnum++;
+    continue;
+  }
+  // throw in an OR if needed
+  if($first_school) $first_school = 0;
+  else $sql .= " OR ";
+  // include the school/book combo in the query
+  $sbid = mysql_result($sbidq, 0, 0);
+  $sql .= "(school_id = $schoolnum AND book_id = $sbid)";
+  // incriment counter
+  $schoolnum++;
+}
+
+$sql .= " AND ask_price != -1.00 AND t.member_id != " . $_SESSION['userid'] . $pricequery . ") x " .
+        "WHERE rownum BETWEEN " . $min . " AND " . $max . " " .  $orderby;
+}
 
 $bookowners = mysql_query($sql);
 
@@ -207,10 +239,13 @@ echo "<input type='hidden' name='bkid' value='" . $bookid . "' />";
 
 //vice versa (or barter trade) check box, onclick, submit the form
 echo "<br><input id='viceversa' name='viceversa'onClick='submit();' type='checkbox'";
-if ($_GET['viceversa'] == 'on'){
-    echo "checked";
-}
-echo ">Barter Trade <a href='help/?ref=faqs#bartertrade' target='_blank'>[?]</a>";
+if ($_GET['viceversa'] == 'on') echo "checked";
+echo "/>Barter Trade <a href='help/?ref=faqs#bartertrade' target='_blank'>[?]</a>";
+
+//outer search (other schools) check box, onclick, reveal other school div
+echo "<br><input type='checkbox' id='outersearch' name='outersearch' onClick='submit();'";
+if ($_GET['outersearch'] == 'on') echo "checked";
+echo "/>Outer Search <a href='help/?ref=faqs#outersearch' target='_blank'>[?]</a>";
 
 echo "</td></tr></table>";
 
