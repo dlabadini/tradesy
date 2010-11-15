@@ -100,13 +100,13 @@ $pricequery = "";
 
 if($_GET['outersearch'] != 'on' or is_null($book['isbn'])) { // dont outer search if the isbn is null either
 /* this query dynamically creates a rownum inside the query, and looks for records between 2 rownums */
-$sql = "select * FROM (SELECT @rownum := @rownum + 1 as rownum, t.member_id, username, location, ask_price, rank, newused, cover, date_added, comment " .
+$sql = "select * FROM (SELECT @rownum := @rownum + 1 as rownum, t.member_id, username, location, ask_price, rank, newused, cover, date_added, comment, school_id " .
 	"FROM members t INNER JOIN members_books a ON a.member_id = t.member_id, (SELECT @rownum := 0) r " .
 	"WHERE school_id =" . $_SESSION['schoolID'] . " AND book_id =" . $bookid . " AND ask_price != -1.00 AND t.member_id != " . $_SESSION['userid'] . $pricequery . ") x " .
 	"WHERE rownum BETWEEN " . $min . " AND " . $max . " " .  $orderby;
 } else {
 /* this is the outer search version of the same query, searching on isbn instead of book_id */
-$sql = "SELECT * FROM (SELECT @rownum := @rownum + 1 as rownum, t.member_id, username, location, ask_price, rank, newused, cover, date_added, comment " .
+$sql = "SELECT * FROM (SELECT @rownum := @rownum + 1 as rownum, t.member_id, username, location, ask_price, rank, newused, cover, date_added, comment, school_id " .
 	"FROM members t INNER JOIN members_books a ON a.member_id = t.member_id, (SELECT @rownum := 0) r WHERE ";
 
 // the book_id is different in every school, so look up the isbns and do the query that way
