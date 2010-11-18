@@ -135,7 +135,7 @@ while($school = mysql_fetch_row($schools)) {
   else $sql .= " OR ";
   // include the school/book combo in the query
   $sbid = mysql_result($sbidq, 0, 0);
-  $sql .= "(school_id = $schoolnum AND book_id = $sbid)";
+  $sql .= "(school_id = $schoolnum AND book_id = $sbid AND t.member_id != " . $_SESSION['userid'] . ")";
   // incriment counter
   $schoolnum++;
 }
