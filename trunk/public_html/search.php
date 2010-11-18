@@ -66,6 +66,10 @@ $orderby = "";
     $orderby .= " date_added DESC";
     }else if ($sort == 'dad'){
     $orderby .= " date_added ASC";
+    }else if ($sort == 'sca'){
+    $orderby .= " school_name ASC";
+    }else if ($sort == 'scd'){
+    $orderby .= " school_name DESC";
     }else{
     $orderby .= " ask_price ASC";
     }
@@ -100,7 +104,8 @@ $pricequery = "";
     $pricequery = " AND ask_price <= " . $rng_max;
     }
 
-if($_GET['outersearch'] != 'on' or is_null($book['isbn'])) { // dont outer search if the isbn is null either
+if(!$outer or is_null($book['isbn'])) { // dont outer search if the isbn is null either
+$outer=0; // if we arent outer searching, make sure the rest of the page dont think we are
 /* this query dynamically creates a rownum inside the query, and looks for records between 2 rownums */
 $sql = "select * FROM (SELECT @rownum := @rownum + 1 as rownum, t.member_id, username, location, ask_price, rank, newused, cover, date_added, comment, school_id " .
 	"FROM members t INNER JOIN members_books a ON a.member_id = t.member_id, (SELECT @rownum := 0) r " .
@@ -109,6 +114,7 @@ $sql = "select * FROM (SELECT @rownum := @rownum + 1 as rownum, t.member_id, use
 } else {
 /* this is the outer search version of the same query, searching on isbn instead of book_id */
 $sql = "SELECT * FROM (SELECT @rownum := @rownum + 1 as rownum, t.member_id, username, location, ask_price, rank, newused, cover, date_added, comment, school_id " .
+    ", school_id sid, (select school_name from schools where school_id = sid) as school_name " .
 	"FROM members t INNER JOIN members_books a ON a.member_id = t.member_id, (SELECT @rownum := 0) r WHERE ";
 
 // the book_id is different in every school, so look up the isbns and do the query that way
@@ -190,6 +196,7 @@ echo "<input type='hidden' name='bkid' value='" . $bookid . "' />";
     echo "<input type='hidden' name='rng_min' value='" . $rng_min . "' />";
     echo "<input type='hidden' name='rng_max' value='" . $rng_max . "' />";
     echo "<input type='hidden' name='viceversa' value='" . $vv . "' />";
+    echo "<input type='hidden' name='outersearch' value='" . $_GET['outersearch'] . "' />";
 
     echo "Sort: <select name='sort' size=1 onChange='sortform.submit();'>";
     echo "<option value='plh' ";
@@ -228,6 +235,14 @@ echo "<input type='hidden' name='bkid' value='" . $bookid . "' />";
     echo "<option value='dad'";
     if ($sort == 'dad')echo "SELECTED";
     echo ">Posted: Distant Date</option>";
+    if($outer) {
+      echo "<option value='sca'";
+      if ($sort == 'sca')echo "SELECTED";
+      echo ">School: Ascending</option>";
+      echo "<option value='scd'";
+      if ($sort == 'scd')echo "SELECTED";
+      echo ">School: Descending</option>";
+    }
     echo "</select></form>";
 
 
@@ -256,8 +271,9 @@ echo "</form></table><p>";
 echo "<div class='hrline'></div>";
 print "<form name='contact' method='post' action='{$_SERVER['php_SELF']}' onsubmit='return confirmSubmit()' >";
 echo "<table class='resultsTable' cellpadding='5px' width='100%'><th></th>
-     <th align='left'>Seller</th>
-     <th align='left'>Location</th>
+     <th align='left'>Seller</th>";
+if($outer) echo "<th align='left'>School</th>";
+echo "<th align='left'>Location</th>
      <th align='left'>Condition</th>
      <th align='left'>Cover Type</th>
      <th align='left'>Date Added</th>
@@ -302,8 +318,9 @@ while ($row = mysql_fetch_array($bookowners)){
       }
       if (!empty($row['comment']))
         echo " <img align=absmiddle src='images/descr.png' alt='description' title='" . $row['comment'] . "' />";
-        echo "</td>" .
-        		"<td>" . $row['location'] . "</td>" .
+        echo "</td>";
+        if($outer) echo "<td>" . $row['school_name'] . "</td>";
+        echo	"<td>" . $row['location'] . "</td>" .
         		"<td>" . $row['newused'] . "</td>" .
         		"<td>" . $row['cover'] . "</td>" .
         		"<td>" . format_date($row['date_added']) . "</td>" .
