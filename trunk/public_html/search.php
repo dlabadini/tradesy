@@ -86,6 +86,13 @@ $min = $max - 20;
 }
 
 $vv = $_GET['viceversa'];
+// the outer variable is used by the rest of the doc to determine whether outer
+// search is being used, except for the search failed link which still uses the
+// _GET variable. this is because we set outer=0 during THE BIG QUERY if the
+// book being searched has no isbn (and thus cant be outer searched) so that the
+// rest of the page doesnt try to use data that isnt there. but since the search
+// failed link relies on the big query it has to come after it and thus needs to
+// know the original outer search value, not the modified one based on isbn
 if($_GET['outersearch'] == "on") $outer = 1;
 else $outer = 0;
 
@@ -104,6 +111,7 @@ $pricequery = "";
     $pricequery = " AND ask_price <= " . $rng_max;
     }
 
+// THE BIG QUERY THAT MAKES EVERYTHING WORK
 if(!$outer or is_null($book['isbn'])) { // dont outer search if the isbn is null either
 $outer=0; // if we arent outer searching, make sure the rest of the page dont think we are
 /* this query dynamically creates a rownum inside the query, and looks for records between 2 rownums */
