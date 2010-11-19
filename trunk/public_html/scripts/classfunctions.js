@@ -371,7 +371,7 @@ function loadBookInfo(books, id){
 	xmlhttp_request(xmlhttp, url, id);
 }
 
-function saveBookInfo(cname, cnumber, title, authors, bknew, bkused_obj, picurl, id, a) {
+function saveBookInfo(cname, cnumber, title, authors, isbn, bknew, bkused_obj, picurl, id, a) {
     xmlhttp = get_xmlHttp();
     var url = "scripts/helper/savebookinfo.php?";
 
@@ -400,7 +400,8 @@ function saveBookInfo(cname, cnumber, title, authors, bknew, bkused_obj, picurl,
                 + "&number=" + classnumber
                 + "&title=" + title
                 + "&authors=" + authors
-		        + "&bknew=" + bknew
+                + "&isbn=" + isbn
+                + "&bknew=" + bknew
                 + "&picurl=" + picurl
                 + "&act=" + action
                 + "&sid=" + Math.random(); 

@@ -8,6 +8,7 @@ $sql = "SELECT class_id FROM classes" . $_SESSION['schoolID'] . " WHERE abrev = 
 $classid = mysql_result(mysql_query($sql), 0, 0);
 $title = $_GET['title'];
 $authors = $_GET['authors'];
+$isbn = $_GET['isbn'];
 $bknew = $_GET['bknew'];
 $bkused = $bknew * 0.75;
 $picurl = $_GET['picurl'];
@@ -20,7 +21,7 @@ $todo = $_GET['act'];
 if ($todo > 0){
  //book exists so update information, in this case the value of todo is the bookid
  $bkid = $todo;
- $sql = "UPDATE books" . $_SESSION['schoolID'] . " SET title='" . $title . "', author='" . $authors . "', picture_url='" . $picurl . "' WHERE book_id=" . $bkid;
+ $sql = "UPDATE books" . $_SESSION['schoolID'] . " SET title='" . $title . "', author='" . $authors . "', isbn='" . $isbn . "', picture_url='" . $picurl . "' WHERE book_id=" . $bkid;
  mysql_query($sql);
  echo "<span id='notification'>Book ";
 
@@ -37,7 +38,7 @@ echo " information has been updated. Please refresh the list of books by clickin
 
 } else if ($todo == -1){ //adding new book
 
-$sql = "INSERT INTO books" . $_SESSION['schoolID'] . "(title, author, picture_url) VALUES ('" . $title . "', '" . $authors . "', '" . $picurl . "')";
+$sql = "INSERT INTO books" . $_SESSION['schoolID'] . "(title, author, isbn, picture_url) VALUES ('" . $title . "', '" . $authors . "', '" . $isbn . "', '" . $picurl . "')";
 mysql_query($sql);
 echo "<span id='notification'>Book ";
 if (strpos(mysql_error(), "Duplicate") != false){
@@ -46,7 +47,7 @@ if (strpos(mysql_error(), "Duplicate") != false){
       // assign the book to the current class
       if (isset($_SESSION['schoolID'])){
       	 // get the book id again - there has to be an easier way to do this
-      	 $sql = "SELECT book_id FROM books" . $_SESSION['schoolID'] . " WHERE title='{$title}' AND author='{$authors}' AND picture_url='{$picurl}'";
+      	 $sql = "SELECT book_id FROM books" . $_SESSION['schoolID'] . " WHERE title='{$title}' AND author='{$authors}' AND isbn='{$isbn}' AND picture_url='{$picurl}'";
       	 $bkid = mysql_result(mysql_query($sql), 0, 0);
       		$sql = "INSERT INTO schools_classes VALUES (" . $_SESSION['schoolID'] . ", {$classid}, {$bkid}, '{$bknew}', '{$bkused}')";
             mysql_query($sql);
