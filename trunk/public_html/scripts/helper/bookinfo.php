@@ -14,7 +14,7 @@ if ($bookid == -2){
           <div style="margin-left:10px;">
 		  <h3>Select a class:</h3>
 		  <span id='subscript'>Pick a class the book is currently assigned to</span>
-          
+
           <FORM NAME="myform" ACTION="" METHOD="GET">
 			<table><tr><td >
            Department:
@@ -67,6 +67,7 @@ if ($bookid == -2){
 		  	<tr valign='top'><td>
       		 <b>Title<sup style='color:red;'>*</sup></b><br><input type='text' size=80 id='title' value='<? echo $book['title'] ?>' /></td></tr><tr><td>
       		 <b>Authors<sup style='color:red;'>*</sup></b><br><input type='text' size=80 id='authors' value='<? echo $book['author'] ?>' /></td></tr><tr><td>
+             <b>ISBN</b><br><input type='text' size=80 id='isbn' value='<? echo $book['isbn'] ?>' /></td></tr><tr><td>
       		 Price (New)<sup style='color:red;'>*</sup><br>$ <input type='text' size=20 id='bknew' value='<? echo $book['bkstoreprice_new'] ?>' /></td></tr><tr><td>
       		 Price (Used)<br>$ <input type='text' readonly size=20 id='bkused' value='<? echo $book['bkstoreprice_used'] ?>' /><br><span id='subscript'><i>(automatically updated)</i></span></td></tr><tr><td>
       		 Picture URL<br><input type='text' size=80 id='pic_url' value='<? echo $book['picture_url'] ?>' /></td></tr>
@@ -76,6 +77,7 @@ if ($bookid == -2){
              document.getElementById("classnum"),
              document.getElementById("title").value,
              document.getElementById("authors").value,
+             document.getElementById("isbn").value,
              document.getElementById("bknew").value,
              document.getElementById("bkused"),
              document.getElementById("pic_url").value, "result",
