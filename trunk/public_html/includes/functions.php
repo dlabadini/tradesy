@@ -1072,7 +1072,9 @@ function nav_menu($loginid, $page){
            if ($page == 'classes'){ echo 'style="color:blue;"';} else { echo 'class="linkonwhite"';}
            echo '>Classes</a> | <a href="books.php"';
            if ($page == 'books'){ echo 'style="color:blue;"';} else { echo 'class="linkonwhite"'; }
-           echo '>Books</a> | <a href="chat.php"';
+           echo '>Books</a> | <a href="messages.php"';
+           if ($page == 'messages'){ echo 'style="color:blue;"';} else { echo 'class="linkonwhite"'; }
+           echo '>Messages</a> | <a href="chat.php"';
            if ($page == 'chat'){ echo 'style="color:blue;"';} else { echo 'class="linkonwhite"'; }
            echo '>Chat</a> | <a href="findbook.php"';
            if ($page == 'search'){ echo 'style="color:blue;"';} else { echo 'class="linkonwhite"'; }
@@ -1308,6 +1310,81 @@ function curPageURL() {
  return $pageURL;
 }
 
+// ============ MESSAGING FUNCTIONS =============
+function thread_access($thread_id) {
+    // check if the current user has access to a thread
+    $thread_id = mysql_real_escape_string($thread_id);
+    $r = mysql_query("select * from messages_access where thread_id = $thread_id and member_id = " . $_SESSION['userid'] . ")");
+    if($r) return 1;
+    return 0;
+}
+
+function thread_visible($thread_id) {
+    // check if the current user has not deleted a thread
+    $thread_id = mysql_real_escape_string($thread_id);
+    $r = mysql_query("select * from messages_access where thread_id = $thread_id and member_id = " . $_SESSION['userid'] . " and hidden = 0)");
+    if($r) return 1;
+    return 0;
+}
+
+function create_thread($to, $subject, $message) {
+    // create a new thread and return the thread id
+    $subject = mysql_real_escape_string($subject);
+    mysql_query("insert into messages_threads (op, subject) values (" . $_SESSION['userid'] . ", $subject)");
+    $tid = mysql_insert_id();
+    reply_to_thread($tid, $message);
+    return $tid;
+}
+
+function reply_to_thread($thread_id, $message) {
+    // post a reply to a thread and return the post id
+    $thread_id = mysql_real_escape_string($thread_id);
+    if(!thread_access($thread_id)) return -1;
+    $message = mysql_real_escape_string($message);
+    mysql_query("insert into messages_posts (thread_id, member_id, data) values ($thread_id, " . $_SESSION['userid'] . ", $message)");
+    $pid = mysql_insert_id();
+    return $pid;
+}
+
+function hide_thread($thread_id) {
+    // "delete" a thread, removing it from a user's inbox/outbox
+    $thread_id = mysql_real_escape_string($thread_id);
+    if(!thread_access($thread_id)) return -1;
+    mysql_query("update messages_access set hidden = 0 where thread_id = $thread_id and member_id = " . $_SESSION['userid']);
+    return 1;
+}
+
+function display_thread($thread_id) {
+    // output html for a thread
+    $thread_id = mysql_real_escape_string($thread_id);
+    if(!thread_access($thread_id)) {
+        echo "You do not have access to this thread.";
+        return -1;
+    }
+
+}
+
+function display_post($post_id) {
+    // output html for a thread post
+    $post_id = mysql_real_escape_string($post_id);
+    $tid = mysql_query("select thread_id from messages_posts where post_id = $post_id");
+    $tid = mysql_result($tid, 0, 0);
+    if(!thread_access($tid)) {
+        echo "You do not have access to this thread.";
+        return -1;
+    }
+
+}
+
+function show_inbox() {
+    // output html for user's inbox list
+}
+
+function show_outbox() {
+    // output html for user's outbox list
+}
+
+function show_drafts() {
+    // output html for user's drafts list
+}
 ?>
-
-
