@@ -1361,7 +1361,14 @@ function display_thread($thread_id) {
         echo "You do not have access to this thread.";
         return -1;
     }
+    echo "<div id='thread-header'>";
+    echo "<p id='thread-subject'>" . "</p>";
+    echo "<p id='thread-members'>" . "</p>";
+    echo "</div>";
+    echo "<div id='thread-body'>";
+    // display posts in thread
 
+    echo "</div>";
 }
 
 function display_post($post_id) {
@@ -1373,7 +1380,16 @@ function display_post($post_id) {
         echo "You do not have access to this thread.";
         return -1;
     }
-
+    echo "<div class='post'>";
+    echo "<hr/>";
+    echo "<p id='post-header'>";
+    echo "<span id='post-poster'>" . "</span>";
+    echo " at ";
+    echo "<span id='post-time'>" . "</span>";
+    echo "</p>";
+    echo "<p id='post-content'>";
+    echo "</p>";
+    echo "</div>";
 }
 
 function show_inbox() {
