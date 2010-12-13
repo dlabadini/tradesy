@@ -43,14 +43,6 @@ CREATE TABLE  `cbe_db`.`messages_posts` (
 
 ?>
 
-<script type="text/javascript">
-function nav_select(page) {
-  // navigate to the appropriate messages page
-  document.navform.nav.value = page;
-  document.navform.submit();
-}
-</script>
-
 <style>
 #navlist li {
   list-style-type:none;
@@ -60,31 +52,36 @@ function nav_select(page) {
 li.selected {
   font-weight: bold;
 }
+
+p#box-name {
+  font-weight: bold;
+}
+
+#boxlist li {
+  list-style-type:none;
+  list-style-image:none;
+}
 </style>
 
 <div class="page_info" >
 
 <div class="mail_nav">
-<form action="messages.php" name="navform" id="navform" method="GET">
-<input type=hidden id="nav" name="nav" value="
-<?
-echo $_GET['nav'];
-?>
-"/>
 <?
 echo "<ul id='navlist'><li";
 if($_GET['nav'] == "inbox" or !isset($_GET['nav'])) echo " class='selected'";
-echo "><a href='javascript:nav_select(\"inbox\")'>Inbox</a></li><li";
+echo "><a href='messages.php?nav=inbox'>Inbox</a></li><li";
 if($_GET['nav'] == "drafts") echo " class='selected'";
-echo "><a href='javascript:nav_select(\"drafts\")'>Drafts</a></li><li";
+echo "><a href='messages.php?nav=drafts'>Drafts</a></li><li";
 if($_GET['nav'] == "outbox") echo " class='selected'";
-echo "><a href='javascript:nav_select(\"outbox\")'>Outbox</a></li></ul>";
+echo "><a href='messages.php?nav=trash'>Trash</a></li></ul>";
 ?>
-</form>
 </div>
 
 <div class="mail_main">
-
+<?
+if($_GET['nav'] == "inbox" or !isset($_GET['nav'])) show_inbox();
+if($_GET['nav'] == "thread") display_thread($_GET['t']);
+?>
 </div>
 
 </div>
