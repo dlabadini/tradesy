@@ -1,11 +1,5 @@
 <?php
-    require_once('init_utils.php');
-
-    $page_title = "CBE Classes | " . ucwords($_SESSION['fullname']);
-    include 'layout/startlayout.php';
-    nav_menu($_SESSION['username'], 'messages');
-
-    /*
+/*
     The messages system uses 3 database tables:
         * messages_threads has a row for every thread
         * messages_access tracks who has visibility of a given thread
@@ -39,8 +33,26 @@ CREATE TABLE  `cbe_db`.`messages_posts` (
 `post_date` TIMESTAMP NOT NULL ,
 `data` TEXT NOT NULL COMMENT  'contents of the post'
 ) ENGINE = MYISAM ;
-    */
+*/
+    require_once('init_utils.php');
 
+    // first handle any POST situations
+    if(isset($_POST['action'])) {
+        if($_POST['action'] == "reply") {
+            $postid = reply_to_thread($_POST['thread'], $_POST['data']);
+            if(!$postid) {
+                echo "You do not have access to this thread";
+            } else {
+                echo "<meta http-equiv='refresh' content='0;messages.php?nav=thread&t=".$_POST['thread']."'>";
+                echo "Message posted!";
+            }
+            exit;
+        }
+    }
+
+    $page_title = "CBE Classes | " . ucwords($_SESSION['fullname']);
+    include 'layout/startlayout.php';
+    nav_menu($_SESSION['username'], 'messages');
 ?>
 
 <style>
@@ -72,15 +84,27 @@ if($_GET['nav'] == "inbox" or !isset($_GET['nav'])) echo " class='selected'";
 echo "><a href='messages.php?nav=inbox'>Inbox</a></li><li";
 if($_GET['nav'] == "drafts") echo " class='selected'";
 echo "><a href='messages.php?nav=drafts'>Drafts</a></li><li";
-if($_GET['nav'] == "outbox") echo " class='selected'";
+if($_GET['nav'] == "trash") echo " class='selected'";
 echo "><a href='messages.php?nav=trash'>Trash</a></li></ul>";
 ?>
 </div>
 
 <div class="mail_main">
 <?
-if($_GET['nav'] == "inbox" or !isset($_GET['nav'])) show_inbox();
-if($_GET['nav'] == "thread") display_thread($_GET['t']);
+if($_GET['nav'] == "inbox" or !isset($_GET['nav']))
+    show_inbox();
+if($_GET['nav'] == "thread") {
+    if(display_thread($_GET['t'])) {
+        ?>
+<form id="reply" action="messages.php" method="POST">
+<textarea name="data" rows=5 cols=80></textarea>
+<input type="hidden" name="action" value="reply"/>
+<input type="hidden" name="thread" value="<? echo $_GET['t'] ?>"/>
+<input type="submit" value="Reply"/>
+</form>
+        <?
+    }
+}
 ?>
 </div>
 
