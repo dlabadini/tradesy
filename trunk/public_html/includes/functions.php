@@ -1080,9 +1080,9 @@ function nav_menu($loginid, $page){
            if ($page == 'classes'){ echo 'style="color:blue;"';} else { echo 'class="linkonwhite"';}
            echo '>Classes</a> | <a href="books.php"';
            if ($page == 'books'){ echo 'style="color:blue;"';} else { echo 'class="linkonwhite"'; }
-           echo '>Books</a> | <a href="messages.php"';
-           if ($page == 'messages'){ echo 'style="color:blue;"';} else { echo 'class="linkonwhite"'; }
-           echo '>Messages</a> | <a href="chat.php"';
+           echo '>Books</a> | <a href="chat.php"';
+//           if ($page == 'messages'){ echo 'style="color:blue;"';} else { echo 'class="linkonwhite"'; }
+//           echo '>Messages</a> | <a href="chat.php"';
            if ($page == 'chat'){ echo 'style="color:blue;"';} else { echo 'class="linkonwhite"'; }
            echo '>Chat</a> | <a href="findbook.php"';
            if ($page == 'search'){ echo 'style="color:blue;"';} else { echo 'class="linkonwhite"'; }
@@ -1408,7 +1408,7 @@ function show_box_item($item_type, $item_id) {
     // output html for an entry in one of the user's folders, e.g. inbox
     // $item_type is "thread" or "post"
     // $item_id is a thread or a post id
-    
+
 }
 
 function show_inbox() {
