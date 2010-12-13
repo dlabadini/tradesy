@@ -1408,7 +1408,29 @@ function show_box_item($item_type, $item_id) {
     // output html for an entry in one of the user's folders, e.g. inbox
     // $item_type is "thread" or "post"
     // $item_id is a thread or a post id
+    if($item_type == "thread") {
+        $thread = "select * from messages_threads where thread_id = $item_id";
+        $thread = mysql_query($thread);
+        echo "<div class='box-item'>";
+        echo "<span id='item-poster'>" . get_name($thread['op']) . "</span>";
+        echo "<span id='item-subject'>" . $thread_['subject'] . "</span>";
+        echo "</div>";
+    }
+    if($item_type == "post") {
+        echo "<div class='box-item'>";
+        echo "U MAD A POST LOL"; //todo: make this useful
+        echo "</div>";
+    }
+}
 
+function get_thread_subject($thread_id) {
+    // return the title of a given thread
+    if(!thread_access($thread_id)) {
+        return "You do not have access to this thread.";
+    }
+    $s = "select subject from messages_threads where thread_id = $thread_id";
+    $s = mysql_query($s);
+    return mysql_result($s, 0, 0);
 }
 
 function show_inbox() {
