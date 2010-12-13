@@ -584,9 +584,9 @@ function account_exists($email){
 function get_name($userid) {
   $query = "select name from members where member_id = $userid";
   $query = mysql_query($query);
+  if(!$query) return "No such user";
   $name = mysql_result($query, 0, 0);
-  if($name) return name;
-  return "No such user";
+  return $name;
 }
 
 function add_class($userid, $classid){
@@ -1322,7 +1322,7 @@ function curPageURL() {
 function thread_access($thread_id) {
     // check if the current user has access to a thread
     $thread_id = mysql_real_escape_string($thread_id);
-    $r = mysql_query("select * from messages_access where thread_id = $thread_id and member_id = " . $_SESSION['userid'] . ")");
+    $r = mysql_query("select * from messages_access where thread_id = $thread_id and member_id = " . $_SESSION['userid']);
     if($r) return 1;
     return 0;
 }
@@ -1340,6 +1340,8 @@ function create_thread($to, $subject, $message) {
     $subject = mysql_real_escape_string($subject);
     mysql_query("insert into messages_threads (op, subject) values (" . $_SESSION['userid'] . ", $subject)");
     $tid = mysql_insert_id();
+    mysql_query("insert into messages_access (thread_id, member_id) values ($tid, " . $_SESSION['userid'] . ")");
+    // TODO: parse the To: field and grant access
     reply_to_thread($tid, $message);
     return $tid;
 }
@@ -1369,8 +1371,10 @@ function display_thread($thread_id) {
         echo "You do not have access to this thread.";
         return -1;
     }
+    $thread = mysql_query("select * from messages_threads where thread_id = $thread_id");
+    $thread = mysql_fetch_array($thread);
     echo "<div id='thread-header'>";
-    echo "<p id='thread-subject'>" . "</p>";
+    echo "<p id='thread-subject'>" . $thread['subject'] . "</p>";
     echo "<p id='thread-members'>" . "</p>";
     echo "</div>";
     echo "<div id='thread-body'>";
@@ -1385,7 +1389,7 @@ function display_thread($thread_id) {
 function display_post($post_id) {
     // output html for a thread post
     $post_id = mysql_real_escape_string($post_id);
-    $post = mysql_query("select *, from_unixtime(postdate) as nicedate from messages_posts where post_id = $post_id");
+    $post = mysql_query("select * from messages_posts where post_id = $post_id");
     $post = mysql_fetch_array($post);
     if(!thread_access($post['thread_id'])) {
         echo "You do not have access to this thread.";
@@ -1396,7 +1400,7 @@ function display_post($post_id) {
     echo "<p id='post-header'>";
     echo "<span id='post-poster'>" . get_name($post['member_id']) . "</span>";
     echo " at ";
-    echo "<span id='post-time'>" . $post['nicedate'] . "</span>";
+    echo "<span id='post-time'>" . $post['post_date'] . "</span>";
     echo "</p>";
     echo "<p id='post-content'>";
     echo $post['data'];
@@ -1404,23 +1408,17 @@ function display_post($post_id) {
     echo "</div>";
 }
 
-function show_box_item($item_type, $item_id) {
+function show_box_item($thread_id) {
     // output html for an entry in one of the user's folders, e.g. inbox
-    // $item_type is "thread" or "post"
-    // $item_id is a thread or a post id
-    if($item_type == "thread") {
-        $thread = "select * from messages_threads where thread_id = $item_id";
-        $thread = mysql_query($thread);
-        echo "<div class='box-item'>";
-        echo "<span id='item-poster'>" . get_name($thread['op']) . "</span>";
-        echo "<span id='item-subject'>" . $thread_['subject'] . "</span>";
-        echo "</div>";
-    }
-    if($item_type == "post") {
-        echo "<div class='box-item'>";
-        echo "U MAD A POST LOL"; //todo: make this useful
-        echo "</div>";
-    }
+    $thread = "select * from messages_threads where thread_id = $thread_id";
+    $thread = mysql_query($thread);
+    $thread = mysql_fetch_array($thread);
+    echo "<li class='box-item'>";
+    echo "<span id='item-poster'>" . get_name($thread['op']) . "</span>";
+    echo "<a href='messages.php?nav=thread&t=$thread_id'>";
+    echo "<span id='item-subject'>" . $thread['subject'] . "</span>";
+    echo "</a>";
+    echo "</li>";
 }
 
 function get_thread_subject($thread_id) {
@@ -1438,15 +1436,19 @@ function show_inbox() {
     // this is all threads the user has access to that aren't hidden
     $inbox = "select thread_id, member_id from messages_access where member_id = " . $_SESSION['userid'] . " and hidden = 0";
     $inbox = mysql_query($inbox);
-
-}
-
-function show_outbox() {
-    // output html for user's outbox list
-    // this is all posts a user has made
+    echo "<p id='box-name'>Inbox</p>";
+    echo "<ul id='boxlist'>";
+    while($thread = mysql_fetch_array($inbox))
+        show_box_item($thread['thread_id']);
+    echo "</ul>";
 }
 
 function show_drafts() {
     // output html for user's drafts list
 }
+
+function show_trash() {
+    // output html for user's trash list
+}
+
 ?>
