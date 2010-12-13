@@ -1080,9 +1080,9 @@ function nav_menu($loginid, $page){
            if ($page == 'classes'){ echo 'style="color:blue;"';} else { echo 'class="linkonwhite"';}
            echo '>Classes</a> | <a href="books.php"';
            if ($page == 'books'){ echo 'style="color:blue;"';} else { echo 'class="linkonwhite"'; }
-           echo '>Books</a> | <a href="chat.php"';
-//           if ($page == 'messages'){ echo 'style="color:blue;"';} else { echo 'class="linkonwhite"'; }
-//           echo '>Messages</a> | <a href="chat.php"';
+           echo '>Books</a> | <a href="messages.php"';
+           if ($page == 'messages'){ echo 'style="color:blue;"';} else { echo 'class="linkonwhite"'; }
+           echo '>Messages</a> | <a href="chat.php"';
            if ($page == 'chat'){ echo 'style="color:blue;"';} else { echo 'class="linkonwhite"'; }
            echo '>Chat</a> | <a href="findbook.php"';
            if ($page == 'search'){ echo 'style="color:blue;"';} else { echo 'class="linkonwhite"'; }
