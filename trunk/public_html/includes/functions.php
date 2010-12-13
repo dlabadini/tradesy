@@ -1323,8 +1323,7 @@ function thread_access($thread_id) {
     // check if the current user has access to a thread
     $thread_id = mysql_real_escape_string($thread_id);
     $r = mysql_query("select * from messages_access where thread_id = $thread_id and member_id = " . $_SESSION['userid']);
-    if($r) return 1;
-    return 0;
+    return ($r and mysql_num_rows($r) > 0);
 }
 
 function thread_visible($thread_id) {
@@ -1349,9 +1348,9 @@ function create_thread($to, $subject, $message) {
 function reply_to_thread($thread_id, $message) {
     // post a reply to a thread and return the post id
     $thread_id = mysql_real_escape_string($thread_id);
-    if(!thread_access($thread_id)) return -1;
+    if(!thread_access($thread_id)) return 0;
     $message = mysql_real_escape_string($message);
-    mysql_query("insert into messages_posts (thread_id, member_id, data) values ($thread_id, " . $_SESSION['userid'] . ", $message)");
+    mysql_query("insert into messages_posts (thread_id, member_id, data) values ($thread_id, " . $_SESSION['userid'] . ", '$message')");
     $pid = mysql_insert_id();
     return $pid;
 }
@@ -1359,7 +1358,7 @@ function reply_to_thread($thread_id, $message) {
 function hide_thread($thread_id) {
     // "delete" a thread, removing it from a user's inbox/outbox
     $thread_id = mysql_real_escape_string($thread_id);
-    if(!thread_access($thread_id)) return -1;
+    if(!thread_access($thread_id)) return 0;
     mysql_query("update messages_access set hidden = 0 where thread_id = $thread_id and member_id = " . $_SESSION['userid']);
     return 1;
 }
@@ -1369,7 +1368,7 @@ function display_thread($thread_id) {
     $thread_id = mysql_real_escape_string($thread_id);
     if(!thread_access($thread_id)) {
         echo "You do not have access to this thread.";
-        return -1;
+        return 0;
     }
     $thread = mysql_query("select * from messages_threads where thread_id = $thread_id");
     $thread = mysql_fetch_array($thread);
@@ -1384,6 +1383,7 @@ function display_thread($thread_id) {
     while($post = mysql_fetch_array($posts))
         display_post($post['post_id']);
     echo "</div>";
+    return 1;
 }
 
 function display_post($post_id) {
@@ -1393,7 +1393,7 @@ function display_post($post_id) {
     $post = mysql_fetch_array($post);
     if(!thread_access($post['thread_id'])) {
         echo "You do not have access to this thread.";
-        return -1;
+        return 0;
     }
     echo "<div class='post'>";
     echo "<hr/>";
@@ -1406,6 +1406,7 @@ function display_post($post_id) {
     echo $post['data'];
     echo "</p>";
     echo "</div>";
+    return 1;
 }
 
 function show_box_item($thread_id) {
