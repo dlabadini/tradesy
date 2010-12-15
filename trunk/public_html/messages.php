@@ -48,6 +48,36 @@ CREATE TABLE  `cbe_db`.`messages_posts` (
             }
             exit;
         }
+        if($_POST['action'] == "hide") {
+            $hidden = hide_thread($_POST['thread']);
+            if(!$hidden) {
+                echo "You do not have access to this thread";
+            } else {
+                echo "<meta http-equiv='refresh' content='0;messages.php?nav=inbox&msg=Thread%20moved%20to%20trash'>";
+                echo "Thread moved to trash!";
+            }
+            exit;
+        }
+        if($_POST['action'] == "unhide") {
+            $unhidden = unhide_thread($_POST['thread']);
+            if(!$unhidden) {
+                echo "You do not have access to this thread";
+            } else {
+                echo "<meta http-equiv='refresh' content='0;messages.php?nav=trash&msg=Thread%20moved%20to%20inbox'>";
+                echo "Thread moved to trash!";
+            }
+            exit;
+        }
+        if($_POST['action'] == "delete") {
+            $deleted = delete_thread($_POST['thread']);
+            if(!$deleted) {
+                echo "You do not have access to this thread";
+            } else {
+                echo "<meta http-equiv='refresh' content='0;messages.php?nav=trash&msg=Thread%20deleted'>";
+                echo "Thread deleted!";
+            }
+            exit;
+        }
     }
 
     $page_title = "CBE Classes | " . ucwords($_SESSION['fullname']);
@@ -96,15 +126,30 @@ if($_GET['nav'] == "inbox" or !isset($_GET['nav']))
 if($_GET['nav'] == "thread") {
     if(display_thread($_GET['t'])) {
         ?>
-<form id="reply" action="messages.php" method="POST">
+<form name="threadform" action="messages.php" method="POST">
 <textarea name="data" rows=5 cols=80></textarea>
 <input type="hidden" name="action" value="reply"/>
 <input type="hidden" name="thread" value="<? echo $_GET['t'] ?>"/>
-<input type="submit" value="Reply"/>
+<input type="submit" value="Reply" onclick="document.threadform.action.value='reply'"/>
+        <?
+        if(thread_visible($_GET['t'])) {
+            ?>
+<input type="submit" value="Trash" onclick="document.threadform.action.value='hide'"/>
+            <?
+        } else {
+            ?>
+<input type="submit" value="Unhide" onclick="document.threadform.action.value='unhide'"/>
+<input type="submit" value="Delete" onclick="document.threadform.action.value='delete'"/>
+            <?
+        }
+        ?>
+
 </form>
         <?
     }
 }
+if($_GET['nav'] == "trash")
+    show_trash();
 ?>
 </div>
 
