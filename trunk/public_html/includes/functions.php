@@ -1412,12 +1412,12 @@ function display_post($post_id) {
     }
     echo "<div class='post'>";
     echo "<hr/>";
-    echo "<p id='post-header'>";
-    echo "<span id='post-poster'>" . get_name($post['member_id']) . "</span>";
+    echo "<p class='post-header'>";
+    echo "<span class='post-poster'>" . get_name($post['member_id']) . "</span>";
     echo " at ";
-    echo "<span id='post-time'>" . $post['post_date'] . "</span>";
+    echo "<span class='post-time'>" . $post['post_date'] . "</span>";
     echo "</p>";
-    echo "<p id='post-content'>";
+    echo "<p class='post-content'>";
     echo $post['data'];
     echo "</p>";
     echo "</div>";
@@ -1430,9 +1430,9 @@ function show_box_item($thread_id) {
     $thread = mysql_query($thread);
     $thread = mysql_fetch_array($thread);
     echo "<li class='box-item'>";
-    echo "<span id='item-poster'>" . get_name($thread['op']) . "</span>";
+    echo "<span class='item-poster'>" . get_name($thread['op']) . "</span>";
     echo "<a href='messages.php?nav=thread&t=$thread_id'>";
-    echo "<span id='item-subject'>" . $thread['subject'] . "</span>";
+    echo "<span class='item-subject'>" . $thread['subject'] . "</span>";
     echo "</a>";
     echo "</li>";
 }
