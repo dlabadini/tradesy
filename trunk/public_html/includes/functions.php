@@ -1327,11 +1327,10 @@ function thread_access($thread_id) {
 }
 
 function thread_visible($thread_id) {
-    // check if the current user has not deleted a thread
+    // check if the current user has not trashed a thread
     $thread_id = mysql_real_escape_string($thread_id);
-    $r = mysql_query("select * from messages_access where thread_id = $thread_id and member_id = " . $_SESSION['userid'] . " and hidden = 0)");
-    if($r) return 1;
-    return 0;
+    $r = mysql_query("select * from messages_access where thread_id = $thread_id and member_id = " . $_SESSION['userid'] . " and hidden = 0");
+    return ($r and mysql_num_rows($r) > 0);
 }
 
 function create_thread($to, $subject, $message) {
@@ -1356,10 +1355,26 @@ function reply_to_thread($thread_id, $message) {
 }
 
 function hide_thread($thread_id) {
-    // "delete" a thread, removing it from a user's inbox/outbox
+    // "trash" a thread, removing it from a user's inbox/outbox
+    $thread_id = mysql_real_escape_string($thread_id);
+    if(!thread_access($thread_id)) return 0;
+    mysql_query("update messages_access set hidden = 1 where thread_id = $thread_id and member_id = " . $_SESSION['userid']);
+    return 1;
+}
+
+function unhide_thread($thread_id) {
+    // "untrash" a thread, returning it to a user's inbox/outbox
     $thread_id = mysql_real_escape_string($thread_id);
     if(!thread_access($thread_id)) return 0;
     mysql_query("update messages_access set hidden = 0 where thread_id = $thread_id and member_id = " . $_SESSION['userid']);
+    return 1;
+}
+
+function delete_thread($thread_id) {
+    // "delete" a thread, removing a user's access to it
+    $thread_id = mysql_real_escape_string($thread_id);
+    if(!thread_access($thread_id)) return 0;
+    mysql_query("delete from messages_access where thread_id = $thread_id and member_id = " . $_SESSION['userid']);
     return 1;
 }
 
@@ -1450,6 +1465,14 @@ function show_drafts() {
 
 function show_trash() {
     // output html for user's trash list
+    // this is all threads the user has access to that are hidden
+    $trash = "select thread_id, member_id from messages_access where member_id = " . $_SESSION['userid'] . " and hidden = 1";
+    $trash = mysql_query($trash);
+    echo "<p id='box-name'>Trash</p>";
+    echo "<ul id='boxlist'>";
+    while($thread = mysql_fetch_array($trash))
+        show_box_item($thread['thread_id']);
+    echo "</ul>";
 }
 
 ?>
