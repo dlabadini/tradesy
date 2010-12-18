@@ -191,7 +191,7 @@ class User{
   public function GetBooks(){
     /* 
 		Returns an array of UserBook instances representing books currently
-		owned by this user 
+		owned by this user
 	*/
 
     $userbooks = array();
@@ -444,7 +444,7 @@ function setup_user_account($valcode, $name, $username, $psswd, $schstate, $schn
     mysql_query($sql) or die("ERROR 120: Unable to activate account. Please contact us with the code: (120" . $member_id . ")");
 
     // add credits information
-    $sql = "INSERT INTO members_credits (member_id, bought, used, total_spent) values ($member_id, 0, 0, 0)";
+    $sql = "INSERT INTO members_credits (member_id, bought, used, total_spent) values ($member_id, 1, 0, 0)";
     mysql_query($sql) or die("ERROR 123: Unable to activate account. Please contact us with the code: (123" . $member_id . ")");
 
     // add subscription information
