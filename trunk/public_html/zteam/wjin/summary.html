@@ -1,0 +1,17 @@
+<h2 class='content_heading'>Jin's Business Tools</h2>
+<html>
+<body>
+<br />
+
+<?php
+$userinfo = file("data.txt");
+
+foreach($userinfo as $key => $val) 
+{
+   $data[$key] = explode("||", $val);
+}
+?>
+
+</body>
+</html>
+
