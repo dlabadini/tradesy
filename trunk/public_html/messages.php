@@ -38,19 +38,6 @@ CREATE TABLE  `cbe_db`.`messages_posts` (
 
     // first handle any POST situations
     if(isset($_POST['action'])) {
-        /*if($_POST['action'] == "create") {
-            // check the list of memberids
-
-            // convert the memberids into an array
-            $threadid = create_thread($to, $subj, $message);
-            if(!$threadid) {
-                echo "Error creating message";
-            } else {
-                echo "<meta http-equiv='refresh' content='0;messages.php?nav=thread&t=$threadid'>";
-                echo "Message posted!";
-            }
-            exit;
-        }*/
         if($_POST['action'] == "reply") {
             $postid = reply_to_thread($_POST['thread'], $_POST['data']);
             if(!$postid) {

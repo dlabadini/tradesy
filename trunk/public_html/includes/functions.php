@@ -191,7 +191,7 @@ class User{
   public function GetBooks(){
     /* 
 		Returns an array of UserBook instances representing books currently
-		owned by this user 
+		owned by this user
 	*/
 
     $userbooks = array();
@@ -444,7 +444,7 @@ function setup_user_account($valcode, $name, $username, $psswd, $schstate, $schn
     mysql_query($sql) or die("ERROR 120: Unable to activate account. Please contact us with the code: (120" . $member_id . ")");
 
     // add credits information
-    $sql = "INSERT INTO members_credits (member_id, bought, used, total_spent) values ($member_id, 0, 0, 0)";
+    $sql = "INSERT INTO members_credits (member_id, bought, used, total_spent) values ($member_id, 1, 0, 0)";
     mysql_query($sql) or die("ERROR 123: Unable to activate account. Please contact us with the code: (123" . $member_id . ")");
 
     // add subscription information
@@ -865,7 +865,7 @@ function showBooks($user){
 
 /* ----------------------------- SEND BOOK REQUEST EMAIL ----------------------------------*/
 
-function sendBookRequest($seller, $class, $bkid, $bk_author, $bk_title){
+function sendBookRequestEmail($seller, $class, $bkid, $bk_author, $bk_title){
 /* emails a seller regarding a request for a book. Email is sent to account email address, 
 if no preferred email address is set */
 
@@ -878,9 +878,16 @@ list ($seller, $trade) = split(":", $seller);
     	 return "Sorry, this seller has already been contacted in the last 4 weeks regarding this book.";
     }
 
-    $subj = "Book request: $bk_title";
-
-    $sql = "SELECT username, preferred_email, email, location FROM members WHERE member_id = " . $_SESSION['userid'];
+	$sql = "SELECT preferred_email, email FROM members WHERE member_id = " . $seller;
+	$result = mysql_fetch_array(mysql_query($sql));
+	
+	if (!empty($result[0])){
+		 $seller_email = $result[0]; //preferred email
+	} else {
+		 $seller_email = $result[1]; //default email
+	}
+	
+	$sql = "SELECT username, preferred_email, email, location FROM members WHERE member_id = " . $_SESSION['userid'];
 	$result = mysql_fetch_array(mysql_query($sql));
 	if (empty($result[1])){
 		 $useremail = $result[2];
@@ -889,19 +896,28 @@ list ($seller, $trade) = split(":", $seller);
 	}
 	$username = $result[0];
     $location = $result[3];
+    if (!empty($location)){
+        $location = "(" . $location . ") ";
+    }
+	
+	$to = $seller_email;
+	$subject = "CollegeBookEvolution Book Request";
 
-    $body = $username . " - " . $location. " is interested in your " . $class . " book: " . $bk_title . " by " . $bk_author . "\n";
+    $headers = "From: noreply@collegebookevolution.com\r\n";
+    $headers .= "MIME-Version: 1.0\r\n";
+    $headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
+    $headers .= "Reply-To: " . $useremail . "\r\n";
+
+  	$body = "<html><body><font size='2' face='Verdana'><b>" . $username . "</b> " . $location. "is interested in your " . $class . " book: <b>" . $bk_title . "</b> by " . $bk_author;
 	if ($trade != -1){
-		$body .= "This user also has books you are currently in need of: " . $trade;
+		$body .= "<br/>This user also has books you are currently in need of: " . $trade;
 	}
-  	$body .= "\n\nYou can respond to this user by replying to this message. Work it out!\n\nThanks, \nCollege Book Evolution.";
+  	$body .= "<br/><br/>Respond to this user by sending an E-mail to <a href='mailto:" . $useremail . "'>" . $useremail . "</a>.<br/><br/>Thanks, <br/>College Book Evolution." .
+  	"<p><font size='1'>Uncertain about how to respond? Check out our <a href='http://www.collegebookevolution.com/help/?ref=safety'>Communication & Safety Tips</a>." .
+    "<br/>If you do not wish to receive email at this address: <i>" . $seller_email . "</i>, you may set or change your preferred email under 'My Account' " .
+    "once you login to your account at <a href='http://www.collegebookevolution.com'>collegebookevolution.com</a></font></p></font></body></html>";
 
-    echo "seller: $seller<br/>";
-    echo "subj: $subj<br/>";
-    echo "body: $body<br/>";
-    $threadid = create_thread($seller, $subj, $body);
-
-    if ($threadid) {
+  	if (@mail($to, $subject, $body, $headers)) {
 			 // add record to member_contacts
 			 $sql = "INSERT INTO members_contacts(member_id, seller_id, book_id, contact_date) VALUES " .
 			 			"(" . $_SESSION['userid'] . ", " . $seller . ", " . $bkid . ", '" . date("Y-m-d") . "')";
@@ -910,7 +926,6 @@ list ($seller, $trade) = split(":", $seller);
     } else {
        return "Unable to send request to seller. Please try again later.";
     }
-
 }
 
 
@@ -1320,21 +1335,11 @@ function thread_visible($thread_id) {
 
 function create_thread($to, $subject, $message) {
     // create a new thread and return the thread id
-    //     $to      - member_id or an array of member_ids
-    //     $subject - the title of the message
-    //     $message - the contents of the message
     $subject = mysql_real_escape_string($subject);
-    $message = str_replace("\n", "<br/>", $message);
-    $message = mysql_real_escape_string($message);
-    mysql_query("insert into messages_threads (op, subject) values (" . $_SESSION['userid'] . ", '$subject')");
+    mysql_query("insert into messages_threads (op, subject) values (" . $_SESSION['userid'] . ", $subject)");
     $tid = mysql_insert_id();
-    if(!$tid) return $tid;
     mysql_query("insert into messages_access (thread_id, member_id) values ($tid, " . $_SESSION['userid'] . ")");
-    // get all the recipients
-    if(!is_array($to)) $to = array($to);
-    foreach($to as $recipient) {
-        mysql_query("insert into messages_access (thread_id, member_id) values ($tid, $recipient)");
-    }
+    // TODO: parse the To: field and grant access
     reply_to_thread($tid, $message);
     return $tid;
 }
