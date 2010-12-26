@@ -111,7 +111,7 @@ $pricequery = "";
     $pricequery = " AND ask_price <= " . $rng_max;
     }
 
-// ***************** THE BIG QUERY THAT MAKES EVERYTHING WORK *****************
+// THE BIG QUERY THAT MAKES EVERYTHING WORK
 if(!$outer or is_null($book['isbn'])) { // dont outer search if the isbn is null either
 $outer=0; // if we arent outer searching, make sure the rest of the page dont think we are
 /* this query dynamically creates a rownum inside the query, and looks for records between 2 rownums */
@@ -153,7 +153,6 @@ $sql .= " AND ask_price != -1.00 AND t.member_id != " . $_SESSION['userid'] . $p
 }
 
 $bookowners = mysql_query($sql);
-// ****************************** END BIG QUERY ******************************
 
 if (mysql_num_rows($bookowners) == 0){
 echo "<center><font color='red'>Sorry, no sellers have been found.";
@@ -193,7 +192,7 @@ $total = (int)mysql_result(mysql_query($tt), 0, 0);
 // CONTACT SELLER
 if (isset($_POST['member_sel'])) {
 $selected_seller = $_POST['selected_member'];
-$emailres = sendBookRequest($selected_seller, $class['class_name'] . " " . $class['class_number'], $bookid, $book['author'], $book['title']);
+$emailres = sendBookRequestEmail($selected_seller, $class['class_name'] . " " . $class['class_number'], $bookid, $book['author'], $book['title']);
 }
 
 echo "<td style='vertical-align: bottom;' >";
