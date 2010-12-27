@@ -896,9 +896,6 @@ list ($seller, $trade) = split(":", $seller);
 	}
   	$body .= "\n\nYou can respond to this user by replying to this message. Work it out!\n\nThanks, \nCollege Book Evolution.";
 
-    echo "seller: $seller<br/>";
-    echo "subj: $subj<br/>";
-    echo "body: $body<br/>";
     $threadid = create_thread($seller, $subj, $body);
 
     if ($threadid) {
@@ -924,7 +921,7 @@ function generate_coupon(){
         $random_id_length = COUPON_LENGTH; 
         
         //generate a random id encrypt it and store it in $rnd_id 
-        $rnd_id = crypt(uniqid(rand(),1)); 
+        $rnd_id = crypt(uniqid(rand(),1));
         
         //to remove any slashes that might have come 
         $rnd_id = strip_tags(stripslashes($rnd_id)); 
