@@ -175,7 +175,7 @@ if(isset($_POST['submit'])){
 <img border="0" src="//shield.sitelock.com/shield/collegebookevolution.com" alt='sitelock' id="sl_shield_image" style="cursor: pointer;"/>
 <script id="sl_shield" src="//shield.sitelock.com/sitelock.js"  type="text/javascript" language="javascript"></script>
 &nbsp;&nbsp;
-<a target='_blank' href='http://www.facebook.com/pages/Morgantown-WV/The-College-Book-Evolution/221502719391?ref=ts'>
+<a target='_blank' href='http://www.facebook.com/collegebookevolution'>
 <img src='images/facebook.png' border="0"/>
 </a>
 
