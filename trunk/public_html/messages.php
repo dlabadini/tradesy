@@ -99,6 +99,13 @@ CREATE TABLE  `cbe_db`.`messages_posts` (
 ?>
 
 <style>
+div.mail_main {
+  position: relative;
+  margin-left: 120px;
+  margin-top: -63px;
+  margin-bottom: 50px;
+}
+
 #navlist li {
   list-style-type:none;
   list-style-image:none;
@@ -110,11 +117,54 @@ li.selected {
 
 p#box-name {
   font-weight: bold;
+  font-size: larger;
+}
+
+ul#boxlist {
+  margin-top: -10px;
 }
 
 #boxlist li {
   list-style-type:none;
   list-style-image:none;
+  border-style: solid;
+  border-width: thin;
+  padding: 1px;
+  position: relative;
+  margin-top: -1px;
+  margin-left: -40px;
+}
+
+p#thread-subject {
+  font-size: larger;
+  font-weight: bold;
+}
+
+p#thread-members {
+  text-align: center;
+  margin-top: -10px;
+  margin-bottom: 0px;
+}
+
+span.thread-member {
+  color: darkblue;
+}
+
+span.post-poster {
+  font-weight: bold;
+}
+
+span.post-time {
+  font-style: italic;
+}
+
+span.item-poster {
+  font-weight: bold;
+}
+
+span.item-subject {
+  position: absolute;
+  padding-left: 80px;
 }
 </style>
 
@@ -143,6 +193,7 @@ if($_GET['nav'] == "thread") {
 <textarea name="data" rows=5 cols=80></textarea>
 <input type="hidden" name="action" value="reply"/>
 <input type="hidden" name="thread" value="<? echo $_GET['t'] ?>"/>
+<br/>
 <input type="submit" value="Reply" onclick="document.threadform.action.value='reply'"/>
         <?
         if(thread_visible($_GET['t'])) {
