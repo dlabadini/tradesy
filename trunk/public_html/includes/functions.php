@@ -1381,7 +1381,14 @@ function display_thread($thread_id) {
     $thread = mysql_fetch_array($thread);
     echo "<div id='thread-header'>";
     echo "<p id='thread-subject'>" . $thread['subject'] . "</p>";
-    echo "<p id='thread-members'>" . "</p>";
+    echo "<p id='thread-members'>";
+    $members = mysql_query("select member_id from messages_access where thread_id = $thread_id");
+    $num_mem = mysql_num_rows($members);
+    for($i = 0; $i < $num_mem; $i++) {
+        echo " <span class='thread-member'>". get_name(mysql_result($members, $i, 0)) ."</span> ";
+        if($i < $num_mem-1) echo "&bull;";
+    }
+    echo "</p>";
     echo "</div>";
     echo "<div id='thread-body'>";
     // display posts in thread
@@ -1421,12 +1428,12 @@ function show_box_item($thread_id) {
     $thread = "select * from messages_threads where thread_id = $thread_id";
     $thread = mysql_query($thread);
     $thread = mysql_fetch_array($thread);
+    echo "<a href='messages.php?nav=thread&t=$thread_id'>";
     echo "<li class='box-item'>";
     echo "<span class='item-poster'>" . get_name($thread['op']) . "</span>";
-    echo "<a href='messages.php?nav=thread&t=$thread_id'>";
     echo "<span class='item-subject'>" . $thread['subject'] . "</span>";
-    echo "</a>";
     echo "</li>";
+    echo "</a>";
 }
 
 function get_thread_subject($thread_id) {
