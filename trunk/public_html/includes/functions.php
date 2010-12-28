@@ -878,7 +878,7 @@ list ($seller, $trade) = split(":", $seller);
     	 return "Sorry, this seller has already been contacted in the last 4 weeks regarding this book.";
     }
 
-    $subj = "Book request: $bk_title";
+    $subj = "$bk_title";
 
     $sql = "SELECT username, preferred_email, email, location FROM members WHERE member_id = " . $_SESSION['userid'];
 	$result = mysql_fetch_array(mysql_query($sql));
@@ -890,11 +890,10 @@ list ($seller, $trade) = split(":", $seller);
 	$username = $result[0];
     $location = $result[3];
 
-    $body = $username . " - " . $location. " is interested in your " . $class . " book: " . $bk_title . " by " . $bk_author . "\n";
+    $body = "I am interested in your textbook: " . $bk_title . " by " . $bk_author .".";
 	if ($trade != -1){
-		$body .= "This user also has books you are currently in need of: " . $trade;
+		$body .= " In addition, a barter trade opportunity exists; I own the following textbook(s) you need: " . $trade . "<br><br>Thank you.";
 	}
-  	$body .= "\n\nYou can respond to this user by replying to this message. Work it out!\n\nThanks, \nCollege Book Evolution.";
 
     $threadid = create_thread($seller, $subj, $body);
 
