@@ -76,7 +76,7 @@ class Book{
   }
 
   public function ClassesAssignedTo($user){
-    /* 
+    /*
 	Purpose:
 		- Gets a list of all class this book has been assigned to
 	Parameters:
@@ -206,7 +206,7 @@ class User{
   }
 
   public function GetClasses(){
-    /* 
+    /*
 		Returns an array of UserClass instances representing classes this user
 		is currently enrolled in 
 	*/
@@ -310,7 +310,7 @@ function send_validation_code($who, $code)
 
 	$message = "<html><body><font size='2' face='Verdana'><p>" .
                 "<img src='http://www.collegebookevolution.com/images/page/full_logo.png' /><br />" .
-                "Welcome to College Book Evolution! <br/><br />Your validation code is: " . $code . 
+                "Welcome to College Book Evolution! <br/><br />Your validation code is: " . $code .
                 "</p><br/>Thanks,<br/>College Book Evolution</font>" .
                 "<br/><br /><br /><font size='1' face='Verdana'>Return to the registration page and enter this validation code to proceed with the " .
                 "registration process.</font></body></html>";
@@ -492,7 +492,7 @@ function user_login($username, $password)
 		// Now encrypt the data to be stored in the session
 		$userid = $user['member_id'];
 		$encrypted_id = md5($userid);
-		
+
 		//get account type
 		$sql = "SELECT name FROM account_types WHERE tid = (SELECT account_type FROM member_subscriptions WHERE member_id = " . $userid . " LIMIT 1)";
         $acctype = mysql_result(mysql_query($sql), 0, 0);
@@ -674,7 +674,7 @@ function rate_user($userid, $goodrate){
 		}
 	return mysql_query($query);
 	}
-	
+
 	
 function class_lock_due(){
 	$sql = "SELECT 1 FROM class_locks WHERE lock_date < '" . date("Y-m-j") . "' AND member_id = " . $_SESSION['userid'];
@@ -804,7 +804,7 @@ function showBooks($user){
 			 }else{
 			 $askprice = '$'.$row['ask_price'];
 		}		
-		echo "<td></td><td>" . 
+		echo "<td></td><td>" .
 				 "<table class='listbooks'>" .
 				 "<tr valign='top'><td width='100px' valign='top'><b>Book Title:</b></td><td><b>" . $row['title'] . "</b></td>" .
 				 '<td align="right" width="150px;"><a href="#top" onClick="editUserBook(\'' . $row['book_id'] . '\', \'' .
@@ -1340,7 +1340,7 @@ function reply_to_thread($thread_id, $message) {
     // post a reply to a thread and return the post id
     $thread_id = mysql_real_escape_string($thread_id);
     if(!thread_access($thread_id)) return 0;
-    $message = mysql_real_escape_string($message);
+    $message = strip_tags(mysql_real_escape_string($message));
     mysql_query("insert into messages_posts (thread_id, member_id, data) values ($thread_id, " . $_SESSION['userid'] . ", '$message')");
     $pid = mysql_insert_id();
     return $pid;
@@ -1416,9 +1416,9 @@ function display_post($post_id) {
     echo " at ";
     echo "<span class='post-time'>" . $post['post_date'] . "</span>";
     echo "</p>";
-    echo "<p class='post-content'>";
+    echo "<p class='post-content'><pre class='post-content'>";
     echo $post['data'];
-    echo "</p>";
+    echo "</pre></p>";
     echo "</div>";
     return 1;
 }
