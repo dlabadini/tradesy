@@ -168,11 +168,12 @@ class User{
 
   private $id;
   private $name;
+  private $profile_picture_url;
   private $school_id;
   private $email;
 
   public function __construct($id){
-	/* 
+	/*
 		Constructor
 		Parameters:
 			- $id: ID specified in the members table used to identify the user
@@ -183,6 +184,7 @@ class User{
       $minfo = mysql_fetch_array($res);
       $this->id = $minfo['member_id'];
       $this->name = $minfo['name'];
+      $this->name = $minfo['profile_picture_url'];
       $this->school_id = $minfo['school_id'];
       $this->email = $minfo['email'];
     }
@@ -227,6 +229,9 @@ class User{
   }
   public function getName(){
     return $this->name;
+  }
+  public function getProfilePicture(){
+    return $this->profile_picture_URL;
   }
   public function getSchoolID(){
     return $this->school_id;
@@ -858,16 +863,27 @@ function showBooks($user){
 	echo '<br><input type="checkbox" name="checker" value="yes" onClick="Check(document.booksform.check_list)"><b>Check/Uncheck All</b>';
 	echo "<br><br><input name='delete' type='button' value='Remove Book' onclick='removeBook(document.booksform.check_list, \"listbooks\")' />";
 	echo "</form>";
-}	
+}
 
+/* ----------------------------- USER PROFILE PICTURE ----------------------------------*/
+
+     function showProfilePicture($user){
+     /* shows profile picture */
+
+        $profimg = $row['picture_picture_url'];
+        if (empty($profimg)){
+        $profimg = "images/noimage.png";
+		}
+
+        echo "<a href='" . $profimg . "'><img src='" . $profimg . "' width='75px' height='90px'/></a>";
+        }
 
 
 
 /* ----------------------------- SEND BOOK REQUEST EMAIL ----------------------------------*/
 
 function sendBookRequest($seller, $class, $bkid, $bk_author, $bk_title){
-/* emails a seller regarding a request for a book. Email is sent to account email address, 
-if no preferred email address is set */
+/* messages a seller regarding a request for a book */
 
 list ($seller, $trade) = split(":", $seller);
 
@@ -892,7 +908,7 @@ list ($seller, $trade) = split(":", $seller);
 
     $body = "I am interested in your textbook: " . $bk_title . " by " . $bk_author .".";
 	if ($trade != -1){
-		$body .= " In addition, a barter trade opportunity exists; I own the following textbook(s) you need: " . $trade . "<br><br>Thank you.";
+		$body .= " In addition, a barter trade opportunity exists; I own the following textbook(s) you need: " . $trade . "\n\n" . "Thank you.";
 	}
 
     $threadid = create_thread($seller, $subj, $body);
