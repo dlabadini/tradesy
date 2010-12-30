@@ -106,15 +106,24 @@ div.mail_main {
   margin-bottom: 50px;
 }
 
+div.mail_nav {
+  width: 110px;
+}
+
+ul#navlist {
+  background-color: #FFFF99;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+  list-style-position: inside;
+}
+
 #navlist li {
   list-style-type:none;
   list-style-image:none;
+  width: 100%;
 }
-
-a.navitem {
-  background-color: #FFFF99;
-}
-
 
 li.selected {
   background-color: #D8DFEA;
