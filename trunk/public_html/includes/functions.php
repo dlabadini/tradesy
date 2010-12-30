@@ -183,6 +183,7 @@ class User{
       $minfo = mysql_fetch_array($res);
       $this->id = $minfo['member_id'];
       $this->name = $minfo['name'];
+      $this->pic = $minfo['profile_picture_url'];
       $this->school_id = $minfo['school_id'];
       $this->email = $minfo['email'];
     }
@@ -227,6 +228,9 @@ class User{
   }
   public function getName(){
     return $this->name;
+  }
+  public function getPic(){
+    return $this->pic;
   }
   public function getSchoolID(){
     return $this->school_id;
@@ -589,6 +593,27 @@ function get_name($userid) {
   return $name;
 }
 
+function get_pic($userid) {
+    // return the url for a user's profile pic
+    //   * returns 0 if no such user
+    //   * returns placeholder image if no pic set
+    $query = "select * from members where member_id = $userid";
+    $query = mysql_query($query);
+    if(!$query) return 0;
+    $pic = mysql_fetch_array($query);
+    $pic = $pic['profile_picture_url'];
+    if(empty($pic)) return "images/noimage.png";
+    return $pic;
+}
+
+function showProfilePicture($userid) {
+    $pic = get_pic($userid);
+    if(!$pic) {
+        return "No such user";
+    }
+    return "<img src='$pic' width='75px' height='90px'/>";
+}
+
 function add_class($userid, $classid){
 	$query = "INSERT INTO member_classes(member_id, class_id) VALUES ({$userid}, {$classid})";
 	return mysql_query($query);
@@ -608,7 +633,7 @@ function get_subscription_info($sub_id){
 	$sql = "SELECT * FROM subscriptions WHERE subscription_id = " . $sub_id . " LIMIT 1";
 	return mysql_fetch_array(mysql_query($sql));
 	}
-	
+
 	
 function get_bookid($userid, $classid){
 	$sql = "SELECT book_id FROM schools_classes WHERE class_id = {$classid} AND school_id = (SELECT school_id FROM members WHERE member_id = {$userid} LIMIT 1)";

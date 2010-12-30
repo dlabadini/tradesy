@@ -66,6 +66,7 @@ $errmsg = "<span id='notification'>Changes to your <b>Preferences</b> have been 
         $oldpsswd = $_POST['oldpsswd'];
         $newpsswd = $_POST['newpsswd'];
         $confnewpsswd = $_POST['confnewpsswd'];
+        $pic = $_POST['pic'];
 
         if (!empty($oldpsswd)){
         	 //check if new password matches confirmed password
@@ -126,6 +127,13 @@ $errmsg = "<span id='notification'>Changes to your <b>Preferences</b> have been 
             	 $update = $update . "password = '" . md5(md5($newpsswd).$userpsswd['salt']) . "'";
             	 }
 
+            if (!empty($pic)) {
+                 if ($update != "") {
+                        $update = $update . ", ";
+                        }
+                 $update = $update . "profile_picture_url = '$pic'";
+                 }
+
         		//update information in the database.
         		if (!empty($update)){
         			 $query = "UPDATE members SET " . $update . " WHERE member_id = " . $_SESSION['userid'];
@@ -184,8 +192,12 @@ echo "<a onclick='togglediv(\"changepsswd\");' href='javascript:;'>Password</a>"
 	"</td><td><div id='changepsswd' class='editinfo' style='display:none;'>Current Password:<br><input type='password' name='oldpsswd' />" .
 	"<br/>New Password:<br><input type='password' name='newpsswd' />" .
 	"<br/>Confirm New Password:<br><input type='password' name='confnewpsswd' /></div><br/>";
+echo "</td></tr>";
 
-echo "</td></tr></table>";
+echo "<tr><td valign='top'><a onclick='togglediv(\"pic\");' href='javascript:;'>Profile Picture:</a></td><td>" . showProfilePicture($_SESSION['userid']) .
+        "<br/><div class='editinfo' id='pic' style='display:none;'>Change To: <input type='text' maxlength=233 name='pic' /></div></td></tr>";
+
+echo "</table>";
 echo "<p><input type='submit' name='personal' value='Save Changes' /></p>";
 echo "</form></div>";
 
