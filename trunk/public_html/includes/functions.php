@@ -183,6 +183,7 @@ class User{
       $minfo = mysql_fetch_array($res);
       $this->id = $minfo['member_id'];
       $this->name = $minfo['name'];
+      $this->pic = $minfo['profile_picture_url'];
       $this->school_id = $minfo['school_id'];
       $this->email = $minfo['email'];
     }
@@ -227,6 +228,9 @@ class User{
   }
   public function getName(){
     return $this->name;
+  }
+  public function getPic(){
+    return $this->pic;
   }
   public function getSchoolID(){
     return $this->school_id;
@@ -589,6 +593,27 @@ function get_name($userid) {
   return $name;
 }
 
+function get_pic($userid) {
+    // return the url for a user's profile pic
+    //   * returns 0 if no such user
+    //   * returns placeholder image if no pic set
+    $query = "select * from members where member_id = $userid";
+    $query = mysql_query($query);
+    if(!$query) return 0;
+    $pic = mysql_fetch_array($query);
+    $pic = $pic['profile_picture_url'];
+    if(empty($pic)) return "images/noimage.png";
+    return $pic;
+}
+
+function showProfilePicture($userid) {
+    $pic = get_pic($userid);
+    if(!$pic) {
+        return "No such user";
+    }
+    return "<img src='$pic' width='75px' height='90px'/>";
+}
+
 function add_class($userid, $classid){
 	$query = "INSERT INTO member_classes(member_id, class_id) VALUES ({$userid}, {$classid})";
 	return mysql_query($query);
@@ -608,7 +633,7 @@ function get_subscription_info($sub_id){
 	$sql = "SELECT * FROM subscriptions WHERE subscription_id = " . $sub_id . " LIMIT 1";
 	return mysql_fetch_array(mysql_query($sql));
 	}
-	
+
 	
 function get_bookid($userid, $classid){
 	$sql = "SELECT book_id FROM schools_classes WHERE class_id = {$classid} AND school_id = (SELECT school_id FROM members WHERE member_id = {$userid} LIMIT 1)";
@@ -892,7 +917,7 @@ list ($seller, $trade) = split(":", $seller);
 
     $body = "I am interested in your textbook: " . $bk_title . " by " . $bk_author .".";
 	if ($trade != -1){
-		$body .= " In addition, a barter trade opportunity exists; I own the following textbook(s) you need: " . $trade . ".";
+		$body .= " In addition, a barter trade opportunity exists; I own the following textbook(s) you need: " . $trade . "<br><br>Thank you.";
 	}
 
     $threadid = create_thread($seller, $subj, $body);
@@ -1299,18 +1324,6 @@ function curPageURL() {
  return $pageURL;
 }
 
-// ============ PROFILE PICTURE FINCTIONS =============
-function profile_picture() {
-  $query = "select profile_picture_url from members where member_id = " . $_SESSION['userid'];
-  $query = mysql_query($query);
-  if(!$query){
-     $query = "images/noimage.png";
-		}
-  $name = mysql_result($query, 0, 0);
-		echo "<img src='" . $name . "' width='10%' height='10%'/></a>";
-}
-
-
 // ============ MESSAGING FUNCTIONS =============
 function thread_access($thread_id) {
     // check if the current user has access to a thread
@@ -1422,6 +1435,7 @@ function display_post($post_id) {
     }
     echo "<div class='post'>";
     echo "<p class='post-header'>";
+    echo "<img src='" . get_pic($_SESSION['userid']) . "' class='post-pic'/>";
     echo "<span class='post-poster'>" . get_name($post['member_id']) . "</span>";
     echo "  ";
        echo "<span class='post-time'>" . $post['post_date'] . "</span>";
@@ -1440,6 +1454,7 @@ function show_box_item($thread_id) {
     $thread = mysql_fetch_array($thread);
     echo "<a href='messages.php?nav=thread&t=$thread_id'>";
     echo "<li class='box-item'>";
+    echo "<img src='" . get_pic($_SESSION['userid']) . "' class='item-pic'/>";
     echo "<span class='item-poster'>" . get_name($thread['op']) . "</span>";
     echo "<span class='item-subject'>" . $thread['subject'] . "</span>";
     echo "</li>";
