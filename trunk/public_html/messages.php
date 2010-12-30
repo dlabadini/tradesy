@@ -93,7 +93,7 @@ CREATE TABLE  `cbe_db`.`messages_posts` (
         }
     }
 
-    $page_title = "CBE Classes | " . ucwords($_SESSION['fullname']);
+    $page_title = "Messaging | " . ucwords($_SESSION['fullname']);
     include 'layout/startlayout.php';
     nav_menu($_SESSION['username'], 'messages');
 ?>
@@ -111,8 +111,15 @@ div.mail_main {
   list-style-image:none;
 }
 
+a.navitem {
+  background-color: #FFFF99;
+}
+
+
 li.selected {
+  background-color: #D8DFEA;
   font-weight: bold;
+
 }
 
 p#box-name {
@@ -136,6 +143,8 @@ ul#boxlist {
 }
 
 p#thread-subject {
+  background-color:#b0c4de;
+  text-align: center;
   font-size: larger;
   font-weight: bold;
 }
@@ -150,12 +159,24 @@ span.thread-member {
   color: darkblue;
 }
 
+div.post {
+  border-top: 1px solid #DDD;
+  margin: 0px 0px 8px;
+  overflow: hidden;
+  padding: 8px 0px 0px;
+}
+
 span.post-poster {
   font-weight: bold;
+  color: darkblue;
 }
 
 span.post-time {
-  font-style: italic;
+    color: #777;
+    font-size: 11px;
+    text-indent: 5;
+    text-align: right;
+    margin-bottom: 4px;
 }
 
 pre.post-content {
@@ -183,11 +204,11 @@ span.item-subject {
 <?
 echo "<ul id='navlist'><li";
 if($_GET['nav'] == "inbox" or !isset($_GET['nav'])) echo " class='selected'";
-echo "><a href='messages.php?nav=inbox'>Inbox</a></li><li";
+echo "><a class='navitem' href='messages.php?nav=inbox'>Inbox</a></li><li";
 if($_GET['nav'] == "drafts") echo " class='selected'";
-echo "><a href='messages.php?nav=drafts'>Drafts</a></li><li";
+echo "><a class='navitem' href='messages.php?nav=drafts'>Drafts</a></li><li";
 if($_GET['nav'] == "trash") echo " class='selected'";
-echo "><a href='messages.php?nav=trash'>Trash</a></li></ul>";
+echo "><a class='navitem' href='messages.php?nav=trash'>Trash</a></li></ul>";
 ?>
 </div>
 
