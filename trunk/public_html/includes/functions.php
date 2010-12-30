@@ -892,7 +892,7 @@ list ($seller, $trade) = split(":", $seller);
 
     $body = "I am interested in your textbook: " . $bk_title . " by " . $bk_author .".";
 	if ($trade != -1){
-		$body .= " In addition, a barter trade opportunity exists; I own the following textbook(s) you need: " . $trade . ".";
+		$body .= " In addition, a barter trade opportunity exists; I own the following textbook(s) you need: " . $trade . "<br><br>Thank you.";
 	}
 
     $threadid = create_thread($seller, $subj, $body);
@@ -1298,18 +1298,6 @@ function curPageURL() {
  }
  return $pageURL;
 }
-
-// ============ PROFILE PICTURE FINCTIONS =============
-function profile_picture() {
-  $query = "select profile_picture_url from members where member_id = " . $_SESSION['userid'];
-  $query = mysql_query($query);
-  if(!$query){
-     $query = "images/noimage.png";
-		}
-  $name = mysql_result($query, 0, 0);
-		echo "<img src='" . $name . "' width='10%' height='10%'/></a>";
-}
-
 
 // ============ MESSAGING FUNCTIONS =============
 function thread_access($thread_id) {
