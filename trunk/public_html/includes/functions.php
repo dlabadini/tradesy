@@ -1435,6 +1435,7 @@ function display_post($post_id) {
     }
     echo "<div class='post'>";
     echo "<p class='post-header'>";
+    echo "<img src='" . get_pic($_SESSION['userid']) . "' class='post-pic'/>";
     echo "<span class='post-poster'>" . get_name($post['member_id']) . "</span>";
     echo "  ";
        echo "<span class='post-time'>" . $post['post_date'] . "</span>";
@@ -1453,6 +1454,7 @@ function show_box_item($thread_id) {
     $thread = mysql_fetch_array($thread);
     echo "<a href='messages.php?nav=thread&t=$thread_id'>";
     echo "<li class='box-item'>";
+    echo "<img src='" . get_pic($_SESSION['userid']) . "' class='item-pic'/>";
     echo "<span class='item-poster'>" . get_name($thread['op']) . "</span>";
     echo "<span class='item-subject'>" . $thread['subject'] . "</span>";
     echo "</li>";

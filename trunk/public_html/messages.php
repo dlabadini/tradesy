@@ -166,6 +166,13 @@ div.post {
   padding: 8px 0px 0px;
 }
 
+img.post-pic {
+  width: 75px;
+  height: 90px;
+  vertical-align: middle;
+}
+
+
 span.post-poster {
   font-weight: bold;
   color: darkblue;
@@ -188,12 +195,19 @@ pre.post-content {
   font-family:Arial, Helvetica, sans-serif;
 }
 
+img.item-pic {
+  width: 50px;
+  height: 50px;
+  vertical-align: middle;
+  margin-right: 5px;
+}
+
+
 span.item-poster {
   font-weight: bold;
 }
 
 span.item-subject {
-  position: absolute;
   padding-left: 80px;
 }
 </style>
