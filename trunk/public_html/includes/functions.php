@@ -1427,7 +1427,7 @@ function display_thread($thread_id) {
 function display_post($post_id) {
     // output html for a thread post
     $post_id = mysql_real_escape_string($post_id);
-    $post = mysql_query("select * from messages_posts where post_id = $post_id");
+    $post = mysql_query("select *, date_format(post_date, '%M %e, %Y %r') as formdate from messages_posts where post_id = $post_id");
     $post = mysql_fetch_array($post);
     if(!thread_access($post['thread_id'])) {
         echo "You do not have access to this thread.";
@@ -1438,7 +1438,7 @@ function display_post($post_id) {
     echo "<img src='" . get_pic($post['member_id']) . "' class='post-pic'/>";
     echo "<span class='post-poster'>" . get_name($post['member_id']) . "</span>";
     echo "  ";
-       echo "<span class='post-time'>" . $post['post_date'] . "</span>";
+       echo "<span class='post-time'>" . $post['formdate'] . "</span>";
     echo "</p>";
     echo "<p class='post-content'><pre class='post-content'>";
     echo $post['data'];
