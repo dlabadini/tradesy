@@ -174,9 +174,8 @@ span.post-poster {
 span.post-time {
     color: #777;
     font-size: 11px;
-    text-indent: 5;
-    text-align: right;
-    margin-bottom: 4px;
+    float: right;
+    padding:3px;
 }
 
 pre.post-content {
@@ -244,7 +243,11 @@ if($_GET['nav'] == "thread") {
 }
 if($_GET['nav'] == "trash")
     show_trash();
+    profile_picture();
 ?>
+
+
+
 </div>
 
 </div>
