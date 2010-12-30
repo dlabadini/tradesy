@@ -1409,11 +1409,10 @@ function display_post($post_id) {
         return 0;
     }
     echo "<div class='post'>";
-    echo "<hr/>";
     echo "<p class='post-header'>";
     echo "<span class='post-poster'>" . get_name($post['member_id']) . "</span>";
-    echo " at ";
-    echo "<span class='post-time'>" . $post['post_date'] . "</span>";
+    echo "  ";
+       echo "<span class='post-time'>" . $post['post_date'] . "</span>";
     echo "</p>";
     echo "<p class='post-content'><pre class='post-content'>";
     echo $post['data'];
