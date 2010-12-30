@@ -1,0 +1,338 @@
+
+<div align="right">
+<?php
+    $today1 = date("D, F j, Y, g:i a"); echo $today1;
+?>
+</div>
+
+<br />
+<?php include('daterange.php')?>
+ <br>
+<?php include('employee.php')?>
+<br />
+
+<br />
+
+<center>
+<font color="#0000FF">At the end of the week you must submit your hours and specify a category.
+<br />Simply complete the table below and submit.</font>
+</center>
+
+
+<br /><br />
+
+<form action="employee_form_action.php" method="post">
+  <center>
+    <select name="employee">
+	  <option value="Jin Kim">Jin Kim</option>
+	  <option value="Paul Megivern">Paul Megivern</option>
+	  <option value="Jennifer Weaver">Jennifer Weaver</option>
+	  <option value="Ashiah Upadhyaya">Ashish Upadhyaya</option>
+	  <option value="Tony John">Tony John</option>
+	</select>
+  </center>
+
+<br /><br />
+
+<body>
+
+ <table border="1" cellspacing="0" cellpadding="4" align="center" width="350">
+   <tr>
+     <td><b></b></td>
+     <td><b><center>S</center></b></td>
+     <td><b><center>M</center></b></td>
+     <td><b><center>T</center></b></td>
+     <td><b><center>W</center></b></td>
+     <td><b><center>R</center></b></td>
+     <td><b><center>F</center></b></td>
+     <td><b><center>S</center></b></td>
+   </tr>
+   <tr>
+     <td>   <select name="project">
+        	  <option value="eIV">eIV</option>
+        	  <option value="project1">Project 1</option>
+        	  <option value="project2">Project 2</option>
+              <option value="vacationtime">Vacation Time</option>
+              <option value="holidaytime">Holiday Time</option>
+        	  <option value="sicktime">Sick Time</option>
+        	</select>
+
+     </td>
+       <td>
+            <select name="sunday">
+              <option value="0">0</option>
+        	  <option value="1">1</option>
+        	  <option value="2">2</option>
+              <option value="3">3</option>
+        	  <option value="4">4</option>
+              <option value="5">5</option>
+        	  <option value="6">6</option>
+              <option value="7">7</option>
+        	  <option value="8">8</option>
+              <option value="9">9</option>
+        	  <option value="10">10</option>
+              <option value="11">11</option>
+        	  <option value="12">12</option>
+        	</select>
+        </td>
+     <td>
+            <select name="monday">
+        	  <option value="0">0</option>
+              <option value="1">1</option>
+        	  <option value="2">2</option>
+              <option value="3">3</option>
+        	  <option value="4">4</option>
+              <option value="5">5</option>
+        	  <option value="6">6</option>
+              <option value="7">7</option>
+        	  <option value="8">8</option>
+              <option value="9">9</option>
+        	  <option value="10">10</option>
+              <option value="11">11</option>
+        	  <option value="12">12</option>
+        	</select>
+     </td>
+     <td>
+          <select name="tuesday">
+              <option value="0">0</option>
+        	  <option value="1">1</option>
+        	  <option value="2">2</option>
+              <option value="3">3</option>
+        	  <option value="4">4</option>
+              <option value="5">5</option>
+        	  <option value="6">6</option>
+              <option value="7">7</option>
+        	  <option value="8">8</option>
+              <option value="9">9</option>
+        	  <option value="10">10</option>
+              <option value="11">11</option>
+        	  <option value="12">12</option>
+        	</select>
+     </td>
+     <td>
+          <select name="wednesday">
+              <option value="0">0</option>
+              <option value="1">1</option>
+        	  <option value="2">2</option>
+              <option value="3">3</option>
+        	  <option value="4">4</option>
+              <option value="5">5</option>
+        	  <option value="6">6</option>
+              <option value="7">7</option>
+        	  <option value="8">8</option>
+              <option value="9">9</option>
+        	  <option value="10">10</option>
+              <option value="11">11</option>
+        	  <option value="12">12</option>
+        	</select>
+     </td>
+     <td>
+           <select name="thursday">
+              <option value="0">0</option>
+              <option value="1">1</option>
+        	  <option value="2">2</option>
+              <option value="3">3</option>
+        	  <option value="4">4</option>
+              <option value="5">5</option>
+        	  <option value="6">6</option>
+              <option value="7">7</option>
+        	  <option value="8">8</option>
+              <option value="9">9</option>
+        	  <option value="10">10</option>
+              <option value="11">11</option>
+        	  <option value="12">12</option>
+        	</select>
+     </td>
+     <td>
+           <select name="friday">
+              <option value="0">0</option>
+        	  <option value="1">1</option>
+        	  <option value="2">2</option>
+              <option value="3">3</option>
+        	  <option value="4">4</option>
+              <option value="5">5</option>
+        	  <option value="6">6</option>
+              <option value="7">7</option>
+        	  <option value="8">8</option>
+              <option value="9">9</option>
+        	  <option value="10">10</option>
+              <option value="11">11</option>
+        	  <option value="12">12</option>
+        	</select>
+     </td>
+        <td>
+           <select name="saturday">
+              <option value="0">0</option>
+        	  <option value="1">1</option>
+        	  <option value="2">2</option>
+              <option value="3">3</option>
+        	  <option value="4">4</option>
+              <option value="5">5</option>
+        	  <option value="6">6</option>
+              <option value="7">7</option>
+        	  <option value="8">8</option>
+              <option value="9">9</option>
+        	  <option value="10">10</option>
+              <option value="11">11</option>
+        	  <option value="12">12</option>
+        	</select>
+     </td>
+   </tr>
+    <tr>
+     <td>   <select name="project2">
+        	  <option value="eIV">eIV</option>
+        	  <option value="project1">Project 1</option>
+        	  <option value="project2">Project 2</option>
+              <option value="vacationtime">Vacation Time</option>
+        	  <option value="holidaytime">Holiday Time</option>
+              <option value="sicktime">Sick Time</option>
+
+        	</select>
+
+     </td>
+       <td>
+            <select name="sunday2">
+        	   <option value="0">0</option>
+               <option value="1">1</option>
+        	  <option value="2">2</option>
+              <option value="3">3</option>
+        	  <option value="4">4</option>
+              <option value="5">5</option>
+        	  <option value="6">6</option>
+              <option value="7">7</option>
+        	  <option value="8">8</option>
+              <option value="9">9</option>
+        	  <option value="10">10</option>
+              <option value="11">11</option>
+        	  <option value="12">12</option>
+        	</select>
+        </td>
+     <td>
+            <select name="monday2">
+        	  <option value="0">0</option>
+               <option value="1">1</option>
+        	  <option value="2">2</option>
+              <option value="3">3</option>
+        	  <option value="4">4</option>
+              <option value="5">5</option>
+        	  <option value="6">6</option>
+              <option value="7">7</option>
+        	  <option value="8">8</option>
+              <option value="9">9</option>
+        	  <option value="10">10</option>
+              <option value="11">11</option>
+        	  <option value="12">12</option>
+        	</select>
+     </td>
+     <td>
+          <select name="tuesday2">
+        	   <option value="0">0</option>
+               <option value="1">1</option>
+        	  <option value="2">2</option>
+              <option value="3">3</option>
+        	  <option value="4">4</option>
+              <option value="5">5</option>
+        	  <option value="6">6</option>
+              <option value="7">7</option>
+        	  <option value="8">8</option>
+              <option value="9">9</option>
+        	  <option value="10">10</option>
+              <option value="11">11</option>
+        	  <option value="12">12</option>
+        	</select>
+     </td>
+     <td>
+          <select name="wednesday2">
+        	   <option value="0">0</option>
+               <option value="1">1</option>
+        	  <option value="2">2</option>
+              <option value="3">3</option>
+        	  <option value="4">4</option>
+              <option value="5">5</option>
+        	  <option value="6">6</option>
+              <option value="7">7</option>
+        	  <option value="8">8</option>
+              <option value="9">9</option>
+        	  <option value="10">10</option>
+              <option value="11">11</option>
+        	  <option value="12">12</option>
+        	</select>
+     </td>
+     <td>
+           <select name="thursday2">
+        	   <option value="0">0</option>
+               <option value="1">1</option>
+        	  <option value="2">2</option>
+              <option value="3">3</option>
+        	  <option value="4">4</option>
+              <option value="5">5</option>
+        	  <option value="6">6</option>
+              <option value="7">7</option>
+        	  <option value="8">8</option>
+              <option value="9">9</option>
+        	  <option value="10">10</option>
+              <option value="11">11</option>
+        	  <option value="12">12</option>
+        	</select>
+     </td>
+     <td>
+           <select name="friday2">
+        	   <option value="0">0</option>
+               <option value="1">1</option>
+        	  <option value="2">2</option>
+              <option value="3">3</option>
+        	  <option value="4">4</option>
+              <option value="5">5</option>
+        	  <option value="6">6</option>
+              <option value="7">7</option>
+        	  <option value="8">8</option>
+              <option value="9">9</option>
+        	  <option value="10">10</option>
+              <option value="11">11</option>
+        	  <option value="12">12</option>
+        	</select>
+     </td>
+        <td>
+           <select name="saturday2">
+        	   <option value="0">0</option>
+               <option value="1">1</option>
+        	  <option value="2">2</option>
+              <option value="3">3</option>
+        	  <option value="4">4</option>
+              <option value="5">5</option>
+        	  <option value="6">6</option>
+              <option value="7">7</option>
+        	  <option value="8">8</option>
+              <option value="9">9</option>
+        	  <option value="10">10</option>
+              <option value="11">11</option>
+        	  <option value="12">12</option>
+        	</select>
+     </td>
+   </tr>
+ </table>
+
+ <br/>
+
+ <table align="center">
+<tr>
+  <td><textarea input type="text" name="comments" rows="5" cols="40">
+  Type your comments and updates here.</textarea></td>
+</tr>
+ </table>
+
+</body>
+<br />
+
+<div align="right">
+    <input type="submit" />
+</div>
+
+
+</form>
+
+
+
+
+
+

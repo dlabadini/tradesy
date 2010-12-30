@@ -1,0 +1,296 @@
+div#page{
+    width:900px;
+    min-height:600px;
+    margin: auto;
+    border: 0px solid #000;
+    display:block;
+    margin-top:20px;
+}
+
+
+#page_content{
+    float:left;
+    width:600px;
+    height:100%;
+}
+
+#page_content .content{
+  width:590px;
+  margin:5px;
+}
+
+.nav_menu{
+  position:relative;
+  width:580px;
+  height:20px;
+}
+
+.nav_menu a:link, a:visited{
+    text-decoration: none;
+    color: #4F4F4F;
+}
+
+.nav_menu a:hover{
+  text-decoration: underline;
+}
+
+a:link, a:visited{
+    text-decoration: none;
+    color: #4F4F4F;
+}
+
+a:hover{
+    text-decoration: underline;
+}
+
+
+
+.main_font{
+    font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-size: 11px;
+}
+
+#left_sidebar{
+    position:relative;
+    float:left;
+    width:150px;
+    height:100%;
+    border: 0px solid #000;
+}
+
+#left_sidebar .main_logo{
+    position:relative;
+    width:100%;
+    height:200px;
+}
+
+#left_sidebar .gallery_menu{
+    float:left;
+    width:100%;
+    min-height:400px;
+    font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;   /*'Lucida Console', Monaco, monospace;*/
+    font-size: 11px;
+}
+
+.gallery_menu a:link, .gallery_menu a:visited{
+  text-decoration: none;
+  color: #252525;
+  outline: none;
+}
+
+
+.gallery_menu a:hover{
+    color: red;
+    text-decoration: none;
+}
+
+.category ul{
+    padding: 0;
+}
+
+
+.description{
+    position:relative;
+    margin:5px;
+    width:100%;
+    height:80px;
+}
+
+.desc_div{
+    height:110px;
+    margin: 5px;
+    padding-left: 42px;
+    padding-right: 40px;
+}
+
+.thumbnails_frame{
+    min-height:500px;
+    height:100%;
+    z-index: 0;
+    padding:20px;
+}
+
+.minithumb{
+  position: relative;
+  float: left;
+  width:40px;
+  height: 40px;
+  padding-right: 4px;
+  cursor: pointer;
+}
+
+
+#thumbnail{
+    display:block;
+    float:left;
+    width:100px;
+    height:100px;
+    padding:3px;
+    border: 1px solid #fff;
+    cursor: pointer;
+}
+
+
+#thumbnail .image{
+    position: absolute;
+    z-index: 0;
+    border: 0px;
+    margin: 0px;
+}
+
+.mouseout{
+  opacity:1;
+  filter:alpha(opacity=100);
+}
+
+.mouseover{
+  opacity:0.5;
+  filter:alpha(opacity=50);
+}
+
+
+
+#thumbnail .soldout{
+    position: absolute;
+    display:block;
+    background-color: #FF0033;
+    color: #fff;
+    z-index: 1;
+    font-family: Verdana;
+    font-size:9px;
+    padding:2px;
+}
+
+#thumbnail .incart{
+    position: absolute;
+    display:block;
+    background-color: #336666;
+    color: #fff;
+    z-index: 1;
+    font-family: Verdana;
+    font-size:9px;
+    padding:2px;
+}
+
+.image_control{
+    position:absolute;
+    width:100px;
+    height:30px;
+    top:500px;
+}
+
+img{
+  border: none;
+}
+
+
+#right_sidebar{
+    position:relative;
+    float:left;
+    width:150px;
+    height:600px;
+    border: 0px solid #000;
+}
+
+#right_sidebar .item_info{
+    position:relative;
+    padding-top: 20px;
+}
+
+#right_sidebar .content{
+    width:140px;
+    margin:5px;
+}
+
+#right_sidebar .divspace{
+  margin-top:30px;
+}
+
+
+#right_sidebar .minithumbs_content{
+  position: relative;
+  padding-top: 40px;
+}
+
+.big_img{
+  position: absolute;
+  z-index: 2;
+  width:600px;
+  height:500px;
+  margin-top: 0px;
+  margin-left: 0px;
+  background-color: #fff;
+  cursor: pointer;
+}
+
+.item_price{
+  font-family: 'Trebuchet MS', Helvetica, sans-serif;
+  font-size: 30px;
+  font-weight: bold;
+}
+
+.old_price{
+    color: red;
+    font-size: 20px;
+    text-decoration: line-through;
+}
+
+div#cart_item_desc{
+  width:400px;
+  height:100px;
+  float:left;
+  border-top: 1px solid #E9E9E9;
+  margin-top: 10px;
+  padding:3px;
+}
+
+div#cart_item_desc .item_name{
+  font-weight: bold;
+  font-size:12px;
+  float: left;
+}
+
+
+.cart_btns{
+  border: 1px solid #E7E7E7; /*#B8B8B8;*/
+  text-decoration:none;
+  padding:2px;
+  visibility: visible;
+}
+
+.item_desc_btns{
+  position: relative;
+  text-align: right;
+  bottom:0px;
+}
+
+input.btn {
+  color: #000;
+  font: regular 84% verdana;
+  background-color:#EAEAEA;
+  border:1px solid;
+  border-color: #BCBCBC;
+  padding:2px;
+}
+
+input.btnhov {
+    background-color: #EFF5FB;
+    cursor: pointer;
+    border-color: #A9D0F5;
+}
+
+.footer{
+    bottom: 0;
+    padding-top: 20px;
+}
+
+.ads_and_logos{
+    position:relative;
+    margin-left: auto;
+    margin-right: auto;
+    width:500px;
+}
+
+.badnews{
+   color: red;
+}
