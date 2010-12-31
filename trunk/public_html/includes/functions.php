@@ -709,7 +709,25 @@ function class_lock_due(){
 	}
  return false;
 }
-	
+
+function send_user_email($userid, $subject, $body) {
+    // get recipient's email address
+  	$sql = "SELECT preferred_email, email FROM members WHERE member_id = " . $userid;
+	$result = mysql_fetch_array(mysql_query($sql));
+	if (!empty($result[0])){
+		 $recipient = $result[0]; //preferred email
+	} else {
+		 $recipient = $result[1]; //default email
+	}
+    // set the email headers
+    $headers = "From: noreply@collegebookevolution.com\r\n";
+    $headers .= "MIME-Version: 1.0\r\n";
+    $headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
+    // send the email
+    if (@mail($recipient, $subject, $body, $headers)) return 1;
+    return 0;
+}
+
 /* ----------------------------- SHOW CLASSES ----------------------------------*/
 
 function showClasses(){
@@ -1353,21 +1371,40 @@ function create_thread($to, $subject, $message) {
     mysql_query("insert into messages_access (thread_id, member_id) values ($tid, " . $_SESSION['userid'] . ")");
     // get all the recipients
     if(!is_array($to)) $to = array($to);
-    foreach($to as $recipient) {
+    foreach($to as $recipient)
         mysql_query("insert into messages_access (thread_id, member_id) values ($tid, $recipient)");
-    }
     reply_to_thread($tid, $message);
     return $tid;
 }
 
 function reply_to_thread($thread_id, $message) {
-    // post a reply to a thread and return the post id
+    // post a reply to a thread, sending notification emails and returning the post id
     $thread_id = mysql_real_escape_string($thread_id);
     if(!thread_access($thread_id)) return 0;
     $message = strip_tags(mysql_real_escape_string($message));
     mysql_query("insert into messages_posts (thread_id, member_id, data) values ($thread_id, " . $_SESSION['userid'] . ", '$message')");
     $pid = mysql_insert_id();
+    if($pid) send_reply_notifications($pid);
     return $pid;
+}
+
+function send_reply_notifications($postid) {
+    // notify members of a thread that the thread has been updated. we must
+    // specify the post so that the poster doesn't get emailed
+    $post = mysql_fetch_array(mysql_query("select thread_id, member_id from messages_posts where post_id = $postid"));
+    $thread = mysql_fetch_array(mysql_query("select * from messages_threads where thread_id = " . $post['thread_id']));
+    $subject = "Someone replied to your message, \"" . $thread['subject'] . "\" on College Book Evolution";
+    $body = "<html><body>Hi there,<br/>";
+    $body .= "Someone has posted a reply in your thread on College Book Evolution</br>";
+    $body .= "titled \"" . $thread['subject'] . "\"<br/>";
+    $body .= "<br/>";
+    $body .= "To respond, log on to <a href='http://www.collegebookevolution.com'>";
+    $body .= "College Book Evolution</a><br/>and go to the messages tab.<br/>";
+    $body .= "<br/>";
+    $body .= "Thanks!<br/>";
+    $body .= "College Book Evolution Staff</body></html>";
+    $r = mysql_query("select * from messages_access where thread_id = $thread_id and member_id not " . $post['member_id'] . " and hidden = 0");
+    while($access = mysql_fetch_array($r)) send_user_email($access['member_id'], $subject, $body);
 }
 
 function hide_thread($thread_id) {
