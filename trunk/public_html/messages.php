@@ -38,11 +38,14 @@ CREATE TABLE  `cbe_db`.`messages_posts` (
 
     // first handle any POST situations
     if(isset($_POST['action'])) {
-        /*if($_POST['action'] == "create") {
-            // check the list of memberids
-
+        if($_POST['action'] == "compose") {
             // convert the memberids into an array
-            $threadid = create_thread($to, $subj, $message);
+            $to = explode(";", $_POST['to']);
+            // check the list of memberids
+            foreach($to as $key => $value)
+                if(!user_exists($value))
+                    unset($to[$key]); // for now just remove invalid ones
+            $threadid = create_thread($to, $_POST['subject'], $_POST['body']);
             if(!$threadid) {
                 echo "Error creating message";
             } else {
@@ -50,7 +53,7 @@ CREATE TABLE  `cbe_db`.`messages_posts` (
                 echo "Message posted!";
             }
             exit;
-        }*/
+        }
         if($_POST['action'] == "reply") {
             $postid = reply_to_thread($_POST['thread'], $_POST['data']);
             if(!$postid) {
@@ -89,6 +92,11 @@ CREATE TABLE  `cbe_db`.`messages_posts` (
                 echo "<meta http-equiv='refresh' content='0;messages.php?nav=trash&msg=Thread%20deleted'>";
                 echo "Thread deleted!";
             }
+            exit;
+        }
+        if($_POST['action'] == "cancel") {
+            echo "<meta http-equiv='refresh' content='0;messages.php?nav=inbox'>";
+            echo "Thread deleted!";
             exit;
         }
     }
@@ -226,17 +234,36 @@ span.item-subject {
 <div class="mail_nav">
 <?
 echo "<ul id='navlist'><li";
+if($_GET['nav'] == "compose") echo " class='selected'";
+echo "><a class='navitem' href='messages.php?nav=compose'>Compose</a></li><li";
 if($_GET['nav'] == "inbox" or !isset($_GET['nav'])) echo " class='selected'";
 echo "><a class='navitem' href='messages.php?nav=inbox'>Inbox</a></li><li";
 if($_GET['nav'] == "drafts") echo " class='selected'";
 echo "><a class='navitem' href='messages.php?nav=drafts'>Drafts</a></li><li";
 if($_GET['nav'] == "trash") echo " class='selected'";
-echo "><a class='navitem' href='messages.php?nav=trash'>Trash</a></li></ul>";
+echo "><a class='navitem' href='messages.php?nav=trash'>Trash</a></li>";
+echo "</ul>";
 ?>
 </div>
 
 <div class="mail_main">
 <?
+if($_GET['nav'] == "compose") {
+    ?>
+<p id='box-name'>Inbox</p>
+<form name="compose" action="messages.php" method="POST">
+<input type="hidden" name="action" value="compose"/>
+<label for="to">To:</label>
+<input type="text" name="to" id="to"/><br/>
+<label for="subject">Subject:</label>
+<input type="text" name="subject" id="subject"/><br/>
+<label for="body">Message:</label>
+<textarea name="body" id="body"></textarea><br/>
+<input type="submit" name="submit" value="Send"/>
+<input type="submit" value="Cancel" onclick="document.compose.action.value='cancel'"/>
+</form>
+    <?
+}
 if($_GET['nav'] == "inbox" or !isset($_GET['nav']))
     show_inbox();
 if($_GET['nav'] == "thread") {
