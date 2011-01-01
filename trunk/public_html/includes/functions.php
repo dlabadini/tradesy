@@ -568,7 +568,12 @@ function addDate($date, $num){
 				 return $newdate;
 				 }
 
-				 
+function user_exists($userid) {
+    // check for a valid member id
+    $q = mysql_query("select 1 from members where member_id = $userid");
+    return ($q and mysql_num_rows($q) > 0);
+}
+
 function account_exists($email){
 	 // check for unique username
 	 $query = "select count(*) from members where email='" . $email . "'";
