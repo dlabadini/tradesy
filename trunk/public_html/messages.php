@@ -96,7 +96,39 @@ CREATE TABLE  `cbe_db`.`messages_posts` (
         }
         if($_POST['action'] == "cancel") {
             echo "<meta http-equiv='refresh' content='0;messages.php?nav=inbox'>";
-            echo "Thread deleted!";
+            exit;
+        }
+        if($_POST['action'] == "trashthreads") {
+            foreach($_POST as $key => $value) {
+                if(substr($key, 0, 4) == 'sel_') {
+                    $tid = substr($key, 4);
+                    hide_thread($tid);
+                }
+            }
+            echo "<meta http-equiv='refresh' content='0;messages.php?nav=inbox&msg=Threads%20trashed'>";
+            echo "Threads hidden!";
+            exit;
+        }
+        if($_POST['action'] == "showthreads") {
+            foreach($_POST as $key => $value) {
+                if(substr($key, 0, 4) == 'sel_') {
+                    $tid = substr($key, 4);
+                    unhide_thread($tid);
+                }
+            }
+            echo "<meta http-equiv='refresh' content='0;messages.php?nav=trash&msg=Threads%20unhidden'>";
+            echo "Threads unhidden!";
+            exit;
+        }
+        if($_POST['action'] == "delthreads") {
+            foreach($_POST as $key => $value) {
+                if(substr($key, 0, 4) == 'sel_') {
+                    $tid = substr($key, 4);
+                    delete_thread($tid);
+                }
+            }
+            echo "<meta http-equiv='refresh' content='0;messages.php?nav=trash&msg=Threads%20deleted'>";
+            echo "Threads deleted!";
             exit;
         }
     }
@@ -250,7 +282,7 @@ echo "</ul>";
 <?
 if($_GET['nav'] == "compose") {
     ?>
-<p id='box-name'>Inbox</p>
+<p id='box-name'>Compose</p>
 <form name="compose" action="messages.php" method="POST">
 <input type="hidden" name="action" value="compose"/>
 <label for="to">To:</label>
@@ -264,8 +296,17 @@ if($_GET['nav'] == "compose") {
 </form>
     <?
 }
-if($_GET['nav'] == "inbox" or !isset($_GET['nav']))
+if($_GET['nav'] == "inbox" or !isset($_GET['nav'])) {
+    ?>
+<form name="trashform" action="messages.php" method="POST">
+<input type="hidden" name="action" value="trashthreads"/>
+    <?
     show_inbox();
+    ?>
+<input type="submit" value="Trash"/>
+</form>
+    <?
+}
 if($_GET['nav'] == "thread") {
     if(display_thread($_GET['t'])) {
         ?>
@@ -292,8 +333,18 @@ if($_GET['nav'] == "thread") {
         <?
     }
 }
-if($_GET['nav'] == "trash")
+if($_GET['nav'] == "trash") {
+    ?>
+<form name="delform" action="messages.php" method="POST">
+<input type="hidden" name="action" value="delthreads"/>
+    <?
     show_trash();
+    ?>
+<input type="submit" value="Unhide" onclick="document.delform.action.value='showthreads'"/>
+<input type="submit" value="Delete" onclick="document.delform.action.value='delthreads'"/>
+</form>
+    <?
+}
 ?>
 </div>
 
