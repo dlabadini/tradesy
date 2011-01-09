@@ -1497,6 +1497,7 @@ function show_box_item($thread_id) {
     $thread = mysql_fetch_array($thread);
     echo "<a href='messages.php?nav=thread&t=$thread_id'>";
     echo "<li class='box-item'>";
+    echo "<input type='checkbox' name='sel_$thread_id'/>";
     echo "<img src='" . get_pic($thread['op']) . "' class='item-pic'/>";
     echo "<span class='item-poster'>" . get_name($thread['op']) . "</span>";
     echo "<span class='item-subject'>" . $thread['subject'] . "</span>";
