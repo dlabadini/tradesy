@@ -142,7 +142,7 @@ CREATE TABLE  `cbe_db`.`messages_posts` (
 div.mail_main {
   position: relative;
   margin-left: 120px;
-  margin-top: -63px;
+  margin-top: -48px;
   margin-bottom: 50px;
 }
 
@@ -266,12 +266,12 @@ span.item-subject {
 <div class="mail_nav">
 <?
 echo "<ul id='navlist'><li";
-if($_GET['nav'] == "compose") echo " class='selected'";
-echo "><a class='navitem' href='messages.php?nav=compose'>Compose</a></li><li";
+//if($_GET['nav'] == "compose") echo " class='selected'";
+//echo "><a class='navitem' href='messages.php?nav=compose'>Compose</a></li><li";
 if($_GET['nav'] == "inbox" or !isset($_GET['nav'])) echo " class='selected'";
 echo "><a class='navitem' href='messages.php?nav=inbox'>Inbox</a></li><li";
-if($_GET['nav'] == "drafts") echo " class='selected'";
-echo "><a class='navitem' href='messages.php?nav=drafts'>Drafts</a></li><li";
+//if($_GET['nav'] == "drafts") echo " class='selected'";
+//echo "><a class='navitem' href='messages.php?nav=drafts'>Drafts</a></li><li";
 if($_GET['nav'] == "trash") echo " class='selected'";
 echo "><a class='navitem' href='messages.php?nav=trash'>Trash</a></li>";
 echo "</ul>";
