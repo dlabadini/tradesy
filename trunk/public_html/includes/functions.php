@@ -1409,7 +1409,7 @@ function send_reply_notifications($postid) {
     $body .= "Thanks!<br/>";
     $body .= "College Book Evolution Staff</body></html>";
     $r = mysql_query("select * from messages_access o where thread_id = $thread_id and member_id not " . $post['member_id'] . " and hidden = 0 and (select new_message_notification from members_prefs where member_id = o.member_id)");
-    while($access = mysql_fetch_array($r))
+    while($r && $access = mysql_fetch_array($r))
         send_user_email($access['member_id'], $subject, $body);
 }
 
