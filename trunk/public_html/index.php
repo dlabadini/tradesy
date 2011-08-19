@@ -167,17 +167,7 @@ if(isset($_POST['submit'])){
   </tr>
 </table>  <br/>
 
-<a href='http://twitter.com/cbevolution' target='_blank'>
-<img src='images/twitter.png' border="0"/>
-</a>
-&nbsp;&nbsp;
-<!-- site lock logo -->
-<img border="0" src="//shield.sitelock.com/shield/collegebookevolution.com" alt='sitelock' id="sl_shield_image" style="cursor: pointer;"/>
-<script id="sl_shield" src="//shield.sitelock.com/sitelock.js"  type="text/javascript" language="javascript"></script>
-&nbsp;&nbsp;
-<a target='_blank' href='http://www.facebook.com/collegebookevolution'>
-<img src='images/facebook.png' border="0"/>
-</a>
+
 
 </p>
 </div>
@@ -189,7 +179,12 @@ if(isset($_POST['submit'])){
       <h3 class="offscreen">Footer</h3>
        <div align="center">
       <ul class="footer-nav">
-          <li class="first">&copy; CollegeBookEvolution.com, LLC. </li>
+          <li class="first">&copy; CollegeBookEvolution.com, LLC.<br/><br/>
+          <a href='http://twitter.com/cbevolution' target='_blank'>
+          <img src='images/twitter.png' border="0"/></a>
+          <a target='_blank' href='http://www.facebook.com/collegebookevolution'>
+          <img src='images/facebook.png' border="0"/>
+          </a></li>
 
           <li><a href='/about'>About Us</a></li>
           <li><a href='/about/?ref=contact'>Contact</a></li>
