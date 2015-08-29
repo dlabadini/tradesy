@@ -1,0 +1,66 @@
+ <script type="text/javascript" src="scripts/wufoo.js"></script>
+
+ <li id="foli7" 		class="date leftHalf     ">
+	<label class="desc" id="title7" for="Field7">
+		Start Date
+			</label>
+	<span>
+		<input id="Field7-1" 			name="Field7-1" 			type="text" 			class="field text" 			value="" 			size="2" 			maxlength="2" 			tabindex="9" 						/>
+		<label for="Field7-1">MM</label>
+	</span>
+	<span class="symbol">/</span>
+	<span>
+		<input id="Field7-2" 			name="Field7-2" 			type="text" 			class="field text" 			value="" 			size="2" 			maxlength="2" 			tabindex="10" 						/>
+		<label for="Field7-2">DD</label>
+	</span>
+	<span class="symbol">/</span>
+	<span>
+	 	<input id="Field7" 			name="Field7" 			type="text" 			class="field text" 			value="" 			size="4" 			maxlength="4" 			tabindex="11" 						/>
+		<label for="Field7">YYYY</label>
+	</span>
+	<span id="cal7">
+		<img id="pick7" class="datepicker" src="images/calendar.png" alt="Pick a date." />
+	</span>
+		<script type="text/javascript">
+	Calendar.setup({
+	inputField	 : "Field7",
+	displayArea  : "cal7",
+	button		 : "pick7",
+	ifFormat	 : "%B %e, %Y",
+	onSelect	 : selectDateOnForm
+	});
+	</script>
+	</li>
+
+
+<li id="foli6" 		class="date rightHalf     ">
+	<label class="desc" id="title6" for="Field6">
+		End Date
+			</label>
+	<span>
+		<input id="Field6-1" 			name="Field6-1" 			type="text" 			class="field text" 			value="" 			size="2" 			maxlength="2" 			tabindex="12" 						/>
+		<label for="Field6-1">MM</label>
+	</span>
+	<span class="symbol">/</span>
+	<span>
+		<input id="Field6-2" 			name="Field6-2" 			type="text" 			class="field text" 			value="" 			size="2" 			maxlength="2" 			tabindex="13" 						/>
+		<label for="Field6-2">DD</label>
+	</span>
+	<span class="symbol">/</span>
+	<span>
+	 	<input id="Field6" 			name="Field6" 			type="text" 			class="field text" 			value="" 			size="4" 			maxlength="4" 			tabindex="14" 						/>
+		<label for="Field6">YYYY</label>
+	</span>
+	<span id="cal6">
+		<img id="pick6" class="datepicker" src="images/calendar.png" alt="Pick a date." />
+	</span>
+		<script type="text/javascript">
+	Calendar.setup({
+	inputField	 : "Field6",
+	displayArea  : "cal6",
+	button		 : "pick6",
+	ifFormat	 : "%B %e, %Y",
+	onSelect	 : selectDateOnForm
+	});
+	</script>
+	</li>

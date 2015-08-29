@@ -1,0 +1,202 @@
+#header{
+	position:absolute;
+	width:100%;
+	border:none; color:white; 
+	left: 0px; 
+	top: 0px; 
+	height: 50px;
+}
+
+#main_logo{
+	position:relative;
+	top:5px;
+	left: 5px;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+	background-image: url(../images/bg_strip.gif);
+	background-repeat: repeat-x;
+	background-color:#3b99f3;
+}
+
+.cornerImg { position:absolute; top: 0px; left: 0px; z-index: 0; }
+
+.nav{
+	position:relative;
+	color:white;
+	background-position:center top;
+	text-align:bottom left;
+	height:40px;
+}
+
+.content, .shadow {
+    position: relative;
+    bottom: 4px;
+    right: 4px;
+    height:auto;
+}
+
+.container{
+	display: block;
+	position:relative; 
+	margin:0px auto;
+	width:900px;
+	top:100px;
+}
+
+.page_info{
+	padding:1em;
+    background-color:white;
+    border-style:solid;
+    border-color:#0099CC;
+    border-left-width:thin;
+    border-right-width:thin;
+    border-top-width:thin;
+	background-position:center;
+	/*min-height:400px;*/
+	text-align:left;
+	background-repeat:repeat-y;
+ 
+}
+
+.main_font{
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:0.8em;
+}
+
+.textbox {
+	width: 200px;
+}
+
+
+.footer{
+	background-position:center;
+	background-repeat:none;
+	height:0px;
+}
+
+ul.fancylists { list-style-image: url(../images/arrow.png); }
+
+span#subscript{
+	font-size:0.85em; 
+	color:gray;
+	}
+	
+span#notification{
+	background-color:#FFFF66;
+	}
+
+span#error{
+    background-color:#FCE8E8;
+}
+
+	
+.editinfo{
+	background-color:#E0ECF8;
+	}
+	
+div.list li{
+	margin-top: 1em;
+	}
+	
+div.hrline{
+	border-top: 1px solid #E8E8E8;
+	}
+
+/* TABLES */
+table.classbook {
+    border:0px;
+    padding:3px;
+    background-color:#F5FBEF;
+    width:800px;
+}
+
+table.listbooks {
+    border:0px;
+    padding:3px;
+    background-color:#F5FBEF;
+    width:740px;
+    WORD-BREAK:BREAK-ALL;
+}
+
+table.editbook {
+  border:0px;
+  padding:3px;
+  background-color:#EFEFFB;
+  width:850px;
+  margin-left: 10px;
+  border: 1px solid #CCCCCC;
+}
+
+table.blueform{
+	font: 11px/24px "Lucida Grande", "Trebuchet MS", Arial, Helvetica, sans-serif;
+	color: #5A698B;
+	}
+
+.resultsTable{
+    border-collapse: collapse;
+}
+
+.resultsTable tr.altrow{
+    background-color: #F5FBEF;
+    color: #000000;
+}
+
+/* END OF TABLES */
+
+.twitter{
+    width:300px;
+    float:right;
+    margin-right:0px;
+    display:block;
+    overflow:hidden;
+}
+
+/* LINKS */
+.linkonblack { text-decoration: none; color:white; }
+.linkonwhite { text-decoration: none; color:black; }
+
+A:link {text-decoration: none;}
+A:visited {text-decoration: none;}
+A:active {text-decoration: none}
+A:hover {text-decoration:underline;}
+
+.list A:link, .list A:visited{
+      color:#3366FF;
+}
+
+img{
+  border: none;
+}
+
+div#listclasses{
+  margin-left: 40px;
+}
+
+div#add_class, div#add_credits, div#add_book{
+  background-color: #F5FBEF;
+  border: 1px solid #E3F6CE;
+  padding: 3px;
+}
+
+.class_books{
+  display: none;
+  margin-left:30px;
+  background-color:#EFF5FB;
+  padding-left: 5px;
+  color: #003333;
+  width: 100%;
+}
+
+.class_books h3{
+  color:#336699;
+}
+
+
+
+
+
+
+

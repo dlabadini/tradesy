@@ -1,0 +1,14 @@
+.uiButton,
+a.uiButtonMedium{*padding:3px 6px 4px}
+.uiButton:hover{text-decoration:none}
+.uiButton:active,
+.uiButton .img{vertical-align:top}
+.uiButtonMedium .img{margin-top:2px;*margin-top:1px;*margin-bottom:-2px}
+.uiButtonConfirm{background-color:#FF3300;background-position:0 -48px;border-color:;color:#fff}
+.uiButtonConfirm:active{background:#4f6aa3;border-bottom-color:#29447e}
+.uiButtonConfirm.uiButtonDisabled,
+.uiButtonConfirm.uiButtonDisabled:active{background:#FF3300;border-bottom-color:#29447e}
+.uiButtonSpecial .uiButtonText,
+.uiButtonConfirm .uiButtonText,
+.uiButtonSpecial input,
+.uiButtonConfirm input{color:#fff}
