@@ -76,7 +76,7 @@ class Book{
   }
 
   public function ClassesAssignedTo($user){
-    /* 
+    /*
 	Purpose:
 		- Gets a list of all class this book has been assigned to
 	Parameters:
@@ -183,6 +183,7 @@ class User{
       $minfo = mysql_fetch_array($res);
       $this->id = $minfo['member_id'];
       $this->name = $minfo['name'];
+      $this->pic = $minfo['profile_picture_url'];
       $this->school_id = $minfo['school_id'];
       $this->email = $minfo['email'];
     }
@@ -206,7 +207,7 @@ class User{
   }
 
   public function GetClasses(){
-    /* 
+    /*
 		Returns an array of UserClass instances representing classes this user
 		is currently enrolled in 
 	*/
@@ -227,6 +228,9 @@ class User{
   }
   public function getName(){
     return $this->name;
+  }
+  public function getPic(){
+    return $this->pic;
   }
   public function getSchoolID(){
     return $this->school_id;
@@ -310,7 +314,7 @@ function send_validation_code($who, $code)
 
 	$message = "<html><body><font size='2' face='Verdana'><p>" .
                 "<img src='http://www.collegebookevolution.com/images/page/full_logo.png' /><br />" .
-                "Welcome to College Book Evolution! <br/><br />Your validation code is: " . $code . 
+                "Welcome to College Book Evolution! <br/><br />Your validation code is: " . $code .
                 "</p><br/>Thanks,<br/>College Book Evolution</font>" .
                 "<br/><br /><br /><font size='1' face='Verdana'>Return to the registration page and enter this validation code to proceed with the " .
                 "registration process.</font></body></html>";
@@ -444,7 +448,7 @@ function setup_user_account($valcode, $name, $username, $psswd, $schstate, $schn
     mysql_query($sql) or die("ERROR 120: Unable to activate account. Please contact us with the code: (120" . $member_id . ")");
 
     // add credits information
-    $sql = "INSERT INTO members_credits (member_id, bought, used, total_spent) values ($member_id, 0, 0, 0)";
+    $sql = "INSERT INTO members_credits (member_id, bought, used, total_spent) values ($member_id, 1, 0, 0)";
     mysql_query($sql) or die("ERROR 123: Unable to activate account. Please contact us with the code: (123" . $member_id . ")");
 
     // add subscription information
@@ -492,7 +496,7 @@ function user_login($username, $password)
 		// Now encrypt the data to be stored in the session
 		$userid = $user['member_id'];
 		$encrypted_id = md5($userid);
-		
+
 		//get account type
 		$sql = "SELECT name FROM account_types WHERE tid = (SELECT account_type FROM member_subscriptions WHERE member_id = " . $userid . " LIMIT 1)";
         $acctype = mysql_result(mysql_query($sql), 0, 0);
@@ -564,7 +568,12 @@ function addDate($date, $num){
 				 return $newdate;
 				 }
 
-				 
+function user_exists($userid) {
+    // check for a valid member id
+    $q = mysql_query("select 1 from members where member_id = $userid");
+    return ($q and mysql_num_rows($q) > 0);
+}
+
 function account_exists($email){
 	 // check for unique username
 	 $query = "select count(*) from members where email='" . $email . "'";
@@ -584,9 +593,30 @@ function account_exists($email){
 function get_name($userid) {
   $query = "select name from members where member_id = $userid";
   $query = mysql_query($query);
+  if(!$query) return "No such user";
   $name = mysql_result($query, 0, 0);
-  if($name) return name;
-  return "No such user";
+  return $name;
+}
+
+function get_pic($userid) {
+    // return the url for a user's profile pic
+    //   * returns 0 if no such user
+    //   * returns placeholder image if no pic set
+    $query = "select * from members where member_id = $userid";
+    $query = mysql_query($query);
+    if(!$query) return 0;
+    $pic = mysql_fetch_array($query);
+    $pic = $pic['profile_picture_url'];
+    if(empty($pic)) return "images/noimage.png";
+    return $pic;
+}
+
+function showProfilePicture($userid) {
+    $pic = get_pic($userid);
+    if(!$pic) {
+        return "No such user";
+    }
+    return "<img src='$pic' width='75px' height='90px'/>";
 }
 
 function add_class($userid, $classid){
@@ -608,7 +638,7 @@ function get_subscription_info($sub_id){
 	$sql = "SELECT * FROM subscriptions WHERE subscription_id = " . $sub_id . " LIMIT 1";
 	return mysql_fetch_array(mysql_query($sql));
 	}
-	
+
 	
 function get_bookid($userid, $classid){
 	$sql = "SELECT book_id FROM schools_classes WHERE class_id = {$classid} AND school_id = (SELECT school_id FROM members WHERE member_id = {$userid} LIMIT 1)";
@@ -674,7 +704,7 @@ function rate_user($userid, $goodrate){
 		}
 	return mysql_query($query);
 	}
-	
+
 	
 function class_lock_due(){
 	$sql = "SELECT 1 FROM class_locks WHERE lock_date < '" . date("Y-m-j") . "' AND member_id = " . $_SESSION['userid'];
@@ -684,7 +714,25 @@ function class_lock_due(){
 	}
  return false;
 }
-	
+
+function send_user_email($userid, $subject, $body) {
+    // get recipient's email address
+  	$sql = "SELECT preferred_email, email FROM members WHERE member_id = " . $userid;
+	$result = mysql_fetch_array(mysql_query($sql));
+	if (!empty($result[0])){
+		 $recipient = $result[0]; //preferred email
+	} else {
+		 $recipient = $result[1]; //default email
+	}
+    // set the email headers
+    $headers = "From: noreply@collegebookevolution.com\r\n";
+    $headers .= "MIME-Version: 1.0\r\n";
+    $headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
+    // send the email
+    if (@mail($recipient, $subject, $body, $headers)) return 1;
+    return 0;
+}
+
 /* ----------------------------- SHOW CLASSES ----------------------------------*/
 
 function showClasses(){
@@ -804,7 +852,7 @@ function showBooks($user){
 			 }else{
 			 $askprice = '$'.$row['ask_price'];
 		}		
-		echo "<td></td><td>" . 
+		echo "<td></td><td>" .
 				 "<table class='listbooks'>" .
 				 "<tr valign='top'><td width='100px' valign='top'><b>Book Title:</b></td><td><b>" . $row['title'] . "</b></td>" .
 				 '<td align="right" width="150px;"><a href="#top" onClick="editUserBook(\'' . $row['book_id'] . '\', \'' .
@@ -865,7 +913,7 @@ function showBooks($user){
 
 /* ----------------------------- SEND BOOK REQUEST EMAIL ----------------------------------*/
 
-function sendBookRequestEmail($seller, $class, $bkid, $bk_author, $bk_title){
+function sendBookRequest($seller, $class, $bkid, $bk_author, $bk_title){
 /* emails a seller regarding a request for a book. Email is sent to account email address, 
 if no preferred email address is set */
 
@@ -878,16 +926,9 @@ list ($seller, $trade) = split(":", $seller);
     	 return "Sorry, this seller has already been contacted in the last 4 weeks regarding this book.";
     }
 
-	$sql = "SELECT preferred_email, email FROM members WHERE member_id = " . $seller;
-	$result = mysql_fetch_array(mysql_query($sql));
-	
-	if (!empty($result[0])){
-		 $seller_email = $result[0]; //preferred email
-	} else {
-		 $seller_email = $result[1]; //default email
-	}
-	
-	$sql = "SELECT username, preferred_email, email, location FROM members WHERE member_id = " . $_SESSION['userid'];
+    $subj = "$bk_title";
+
+    $sql = "SELECT username, preferred_email, email, location FROM members WHERE member_id = " . $_SESSION['userid'];
 	$result = mysql_fetch_array(mysql_query($sql));
 	if (empty($result[1])){
 		 $useremail = $result[2];
@@ -896,28 +937,15 @@ list ($seller, $trade) = split(":", $seller);
 	}
 	$username = $result[0];
     $location = $result[3];
-    if (!empty($location)){
-        $location = "(" . $location . ") ";
-    }
-	
-	$to = $seller_email;
-	$subject = "CollegeBookEvolution Book Request";
 
-    $headers = "From: noreply@collegebookevolution.com\r\n";
-    $headers .= "MIME-Version: 1.0\r\n";
-    $headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
-    $headers .= "Reply-To: " . $useremail . "\r\n";
-
-  	$body = "<html><body><font size='2' face='Verdana'><b>" . $username . "</b> " . $location. "is interested in your " . $class . " book: <b>" . $bk_title . "</b> by " . $bk_author;
+    $body = "I am interested in your textbook: " . $bk_title . " by " . $bk_author .".";
 	if ($trade != -1){
-		$body .= "<br/>This user also has books you are currently in need of: " . $trade;
+		$body .= " In addition, a barter trade opportunity exists; I own the following textbook(s) you need: " . $trade . "<br><br>Thank you.";
 	}
-  	$body .= "<br/><br/>Respond to this user by sending an E-mail to <a href='mailto:" . $useremail . "'>" . $useremail . "</a>.<br/><br/>Thanks, <br/>College Book Evolution." .
-  	"<p><font size='1'>Uncertain about how to respond? Check out our <a href='http://www.collegebookevolution.com/help/?ref=safety'>Communication & Safety Tips</a>." .
-    "<br/>If you do not wish to receive email at this address: <i>" . $seller_email . "</i>, you may set or change your preferred email under 'My Account' " .
-    "once you login to your account at <a href='http://www.collegebookevolution.com'>collegebookevolution.com</a></font></p></font></body></html>";
 
-  	if (@mail($to, $subject, $body, $headers)) {
+    $threadid = create_thread($seller, $subj, $body);
+
+    if ($threadid) {
 			 // add record to member_contacts
 			 $sql = "INSERT INTO members_contacts(member_id, seller_id, book_id, contact_date) VALUES " .
 			 			"(" . $_SESSION['userid'] . ", " . $seller . ", " . $bkid . ", '" . date("Y-m-d") . "')";
@@ -926,6 +954,7 @@ list ($seller, $trade) = split(":", $seller);
     } else {
        return "Unable to send request to seller. Please try again later.";
     }
+
 }
 
 
@@ -939,7 +968,7 @@ function generate_coupon(){
         $random_id_length = COUPON_LENGTH; 
         
         //generate a random id encrypt it and store it in $rnd_id 
-        $rnd_id = crypt(uniqid(rand(),1)); 
+        $rnd_id = crypt(uniqid(rand(),1));
         
         //to remove any slashes that might have come 
         $rnd_id = strip_tags(stripslashes($rnd_id)); 
@@ -1080,9 +1109,9 @@ function nav_menu($loginid, $page){
            if ($page == 'classes'){ echo 'style="color:blue;"';} else { echo 'class="linkonwhite"';}
            echo '>Classes</a> | <a href="books.php"';
            if ($page == 'books'){ echo 'style="color:blue;"';} else { echo 'class="linkonwhite"'; }
-           echo '>Books</a> | <a href="chat.php"';
-//           if ($page == 'messages'){ echo 'style="color:blue;"';} else { echo 'class="linkonwhite"'; }
-//           echo '>Messages</a> | <a href="chat.php"';
+           echo '>Books</a> | <a href="messages.php"';
+           if ($page == 'messages'){ echo 'style="color:blue;"';} else { echo 'class="linkonwhite"'; }
+           echo '>Messages</a> | <a href="chat.php"';
            if ($page == 'chat'){ echo 'style="color:blue;"';} else { echo 'class="linkonwhite"'; }
            echo '>Chat</a> | <a href="findbook.php"';
            if ($page == 'search'){ echo 'style="color:blue;"';} else { echo 'class="linkonwhite"'; }
@@ -1322,43 +1351,89 @@ function curPageURL() {
 function thread_access($thread_id) {
     // check if the current user has access to a thread
     $thread_id = mysql_real_escape_string($thread_id);
-    $r = mysql_query("select * from messages_access where thread_id = $thread_id and member_id = " . $_SESSION['userid'] . ")");
-    if($r) return 1;
-    return 0;
+    $r = mysql_query("select * from messages_access where thread_id = $thread_id and member_id = " . $_SESSION['userid']);
+    return ($r and mysql_num_rows($r) > 0);
 }
 
 function thread_visible($thread_id) {
-    // check if the current user has not deleted a thread
+    // check if the current user has not trashed a thread
     $thread_id = mysql_real_escape_string($thread_id);
-    $r = mysql_query("select * from messages_access where thread_id = $thread_id and member_id = " . $_SESSION['userid'] . " and hidden = 0)");
-    if($r) return 1;
-    return 0;
+    $r = mysql_query("select * from messages_access where thread_id = $thread_id and member_id = " . $_SESSION['userid'] . " and hidden = 0");
+    return ($r and mysql_num_rows($r) > 0);
 }
 
 function create_thread($to, $subject, $message) {
     // create a new thread and return the thread id
+    //     $to      - member_id or an array of member_ids
+    //     $subject - the title of the message
+    //     $message - the contents of the message
     $subject = mysql_real_escape_string($subject);
-    mysql_query("insert into messages_threads (op, subject) values (" . $_SESSION['userid'] . ", $subject)");
+    $message = str_replace("\n", "<br/>", $message);
+    $message = mysql_real_escape_string($message);
+    mysql_query("insert into messages_threads (op, subject) values (" . $_SESSION['userid'] . ", '$subject')");
     $tid = mysql_insert_id();
+    if(!$tid) return $tid;
+    mysql_query("insert into messages_access (thread_id, member_id) values ($tid, " . $_SESSION['userid'] . ")");
+    // get all the recipients
+    if(!is_array($to)) $to = array($to);
+    foreach($to as $recipient)
+        mysql_query("insert into messages_access (thread_id, member_id) values ($tid, $recipient)");
     reply_to_thread($tid, $message);
     return $tid;
 }
 
 function reply_to_thread($thread_id, $message) {
-    // post a reply to a thread and return the post id
+    // post a reply to a thread, sending notification emails and returning the post id
     $thread_id = mysql_real_escape_string($thread_id);
-    if(!thread_access($thread_id)) return -1;
-    $message = mysql_real_escape_string($message);
-    mysql_query("insert into messages_posts (thread_id, member_id, data) values ($thread_id, " . $_SESSION['userid'] . ", $message)");
+    if(!thread_access($thread_id)) return 0;
+    $message = strip_tags(mysql_real_escape_string($message));
+    mysql_query("insert into messages_posts (thread_id, member_id, data) values ($thread_id, " . $_SESSION['userid'] . ", '$message')");
     $pid = mysql_insert_id();
+    if($pid) send_reply_notifications($pid);
     return $pid;
 }
 
+function send_reply_notifications($postid) {
+    // notify members of a thread that the thread has been updated. we must
+    // specify the post so that the poster doesn't get emailed
+    $post = mysql_fetch_array(mysql_query("select thread_id, member_id from messages_posts where post_id = $postid"));
+    $thread = mysql_fetch_array(mysql_query("select * from messages_threads where thread_id = " . $post['thread_id']));
+    $subject = "Someone replied to your message, \"" . $thread['subject'] . "\" on College Book Evolution";
+    $body = "<html><body>Hi there,<br/>";
+    $body .= "Someone has posted a reply in your thread on College Book Evolution</br>";
+    $body .= "titled \"" . $thread['subject'] . "\"<br/>";
+    $body .= "<br/>";
+    $body .= "To respond, log on to <a href='http://www.collegebookevolution.com'>";
+    $body .= "College Book Evolution</a><br/>and go to the messages tab.<br/>";
+    $body .= "<br/>";
+    $body .= "Thanks!<br/>";
+    $body .= "College Book Evolution Staff</body></html>";
+    $r = mysql_query("select * from messages_access o where thread_id = $thread_id and member_id not " . $post['member_id'] . " and hidden = 0 and (select new_message_notification from members_prefs where member_id = o.member_id)");
+    while($r && $access = mysql_fetch_array($r))
+        send_user_email($access['member_id'], $subject, $body);
+}
+
 function hide_thread($thread_id) {
-    // "delete" a thread, removing it from a user's inbox/outbox
+    // "trash" a thread, removing it from a user's inbox/outbox
     $thread_id = mysql_real_escape_string($thread_id);
-    if(!thread_access($thread_id)) return -1;
+    if(!thread_access($thread_id)) return 0;
+    mysql_query("update messages_access set hidden = 1 where thread_id = $thread_id and member_id = " . $_SESSION['userid']);
+    return 1;
+}
+
+function unhide_thread($thread_id) {
+    // "untrash" a thread, returning it to a user's inbox/outbox
+    $thread_id = mysql_real_escape_string($thread_id);
+    if(!thread_access($thread_id)) return 0;
     mysql_query("update messages_access set hidden = 0 where thread_id = $thread_id and member_id = " . $_SESSION['userid']);
+    return 1;
+}
+
+function delete_thread($thread_id) {
+    // "delete" a thread, removing a user's access to it
+    $thread_id = mysql_real_escape_string($thread_id);
+    if(!thread_access($thread_id)) return 0;
+    mysql_query("delete from messages_access where thread_id = $thread_id and member_id = " . $_SESSION['userid']);
     return 1;
 }
 
@@ -1367,11 +1442,20 @@ function display_thread($thread_id) {
     $thread_id = mysql_real_escape_string($thread_id);
     if(!thread_access($thread_id)) {
         echo "You do not have access to this thread.";
-        return -1;
+        return 0;
     }
+    $thread = mysql_query("select * from messages_threads where thread_id = $thread_id");
+    $thread = mysql_fetch_array($thread);
     echo "<div id='thread-header'>";
-    echo "<p id='thread-subject'>" . "</p>";
-    echo "<p id='thread-members'>" . "</p>";
+    echo "<p id='thread-subject'>" . $thread['subject'] . "</p>";
+    echo "<p id='thread-members'>";
+    $members = mysql_query("select member_id from messages_access where thread_id = $thread_id");
+    $num_mem = mysql_num_rows($members);
+    for($i = 0; $i < $num_mem; $i++) {
+        echo " <span class='thread-member'>". get_name(mysql_result($members, $i, 0)) ."</span> ";
+        if($i < $num_mem-1) echo "&bull;";
+    }
+    echo "</p>";
     echo "</div>";
     echo "<div id='thread-body'>";
     // display posts in thread
@@ -1380,35 +1464,55 @@ function display_thread($thread_id) {
     while($post = mysql_fetch_array($posts))
         display_post($post['post_id']);
     echo "</div>";
+    return 1;
 }
 
 function display_post($post_id) {
     // output html for a thread post
     $post_id = mysql_real_escape_string($post_id);
-    $post = mysql_query("select *, from_unixtime(postdate) as nicedate from messages_posts where post_id = $post_id");
+    $post = mysql_query("select *, date_format(post_date, '%M %e, %Y %r') as formdate from messages_posts where post_id = $post_id");
     $post = mysql_fetch_array($post);
     if(!thread_access($post['thread_id'])) {
         echo "You do not have access to this thread.";
-        return -1;
+        return 0;
     }
     echo "<div class='post'>";
-    echo "<hr/>";
-    echo "<p id='post-header'>";
-    echo "<span id='post-poster'>" . get_name($post['member_id']) . "</span>";
-    echo " at ";
-    echo "<span id='post-time'>" . $post['nicedate'] . "</span>";
+    echo "<p class='post-header'>";
+    echo "<img src='" . get_pic($post['member_id']) . "' class='post-pic'/>";
+    echo "<span class='post-poster'>" . get_name($post['member_id']) . "</span>";
+    echo "  ";
+       echo "<span class='post-time'>" . $post['formdate'] . "</span>";
     echo "</p>";
-    echo "<p id='post-content'>";
+    echo "<p class='post-content'><pre class='post-content'>";
     echo $post['data'];
-    echo "</p>";
+    echo "</pre></p>";
     echo "</div>";
+    return 1;
 }
 
-function show_box_item($item_type, $item_id) {
+function show_box_item($thread_id) {
     // output html for an entry in one of the user's folders, e.g. inbox
-    // $item_type is "thread" or "post"
-    // $item_id is a thread or a post id
+    $thread = "select * from messages_threads where thread_id = $thread_id";
+    $thread = mysql_query($thread);
+    $thread = mysql_fetch_array($thread);
+    echo "<a href='messages.php?nav=thread&t=$thread_id'>";
+    echo "<li class='box-item'>";
+    echo "<input type='checkbox' name='sel_$thread_id'/>";
+    echo "<img src='" . get_pic($thread['op']) . "' class='item-pic'/>";
+    echo "<span class='item-poster'>" . get_name($thread['op']) . "</span>";
+    echo "<span class='item-subject'>" . $thread['subject'] . "</span>";
+    echo "</li>";
+    echo "</a>";
+}
 
+function get_thread_subject($thread_id) {
+    // return the title of a given thread
+    if(!thread_access($thread_id)) {
+        return "You do not have access to this thread.";
+    }
+    $s = "select subject from messages_threads where thread_id = $thread_id";
+    $s = mysql_query($s);
+    return mysql_result($s, 0, 0);
 }
 
 function show_inbox() {
@@ -1416,15 +1520,27 @@ function show_inbox() {
     // this is all threads the user has access to that aren't hidden
     $inbox = "select thread_id, member_id from messages_access where member_id = " . $_SESSION['userid'] . " and hidden = 0";
     $inbox = mysql_query($inbox);
-
-}
-
-function show_outbox() {
-    // output html for user's outbox list
-    // this is all posts a user has made
+    echo "<p id='box-name'>Inbox</p>";
+    echo "<ul id='boxlist'>";
+    while($thread = mysql_fetch_array($inbox))
+        show_box_item($thread['thread_id']);
+    echo "</ul>";
 }
 
 function show_drafts() {
     // output html for user's drafts list
 }
+
+function show_trash() {
+    // output html for user's trash list
+    // this is all threads the user has access to that are hidden
+    $trash = "select thread_id, member_id from messages_access where member_id = " . $_SESSION['userid'] . " and hidden = 1";
+    $trash = mysql_query($trash);
+    echo "<p id='box-name'>Trash</p>";
+    echo "<ul id='boxlist'>";
+    while($thread = mysql_fetch_array($trash))
+        show_box_item($thread['thread_id']);
+    echo "</ul>";
+}
+
 ?>

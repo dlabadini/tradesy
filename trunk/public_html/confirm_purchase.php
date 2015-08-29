@@ -63,10 +63,9 @@ if (!$fp) {
             }
         // check the payment_status is Completed
         // check that txn_id has not been previously processed
-        $trans = mysql_query("select transaction_id from members_transactions where transaction_id=$tx_token");
-        $trow = mysql_fetch_array($trans);
-        echo $trow['transaction_id'] . '<br/>';
-        if($trow['transaction_id'] == $tx_token) {
+        $trans = mysql_query("select transaction_id from members_transactions where transaction_id='$tx_token'");
+        echo $tx_token . '<br/>';		
+        if(!mysql_num_rows($trans)) {
           $tinsert = mysql_query("insert into members_transactions (member_id, transaction_id, gross, fee, date) values ('" . $_SESSION['userid'] . "', '$tx_token', '" . $keyarray['mc_gross'] . "', '" . $keyarray['mc_fee'] . "', '" . date("Y-m-d H:i:s") . "')");
           if(!$tinsert) {
             echo "error: " . mysql_error();

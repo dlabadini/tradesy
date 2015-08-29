@@ -37,6 +37,11 @@ Function Calls:
 	
 	
 *************************************************************************************************
+
+To implement new message notifications, execute the following SQL:
+ALTER TABLE  `members_prefs` ADD  `new_message_notification` BOOL NULL DEFAULT  '1' AFTER  `auto_search_notification`;
+UPDATE members_prefs SET new_message_notification = 1;
+
 */
 
 
@@ -47,12 +52,17 @@ $errmsg = ""; // error message to be displayed if any errors are encountered.
 
 if (isset($_POST['prefs'])){
   // save user preferences
-  $action = 1;
+  $as_action = 1; // auto search
+  $nm_action = 1; // new message
   if (empty($_POST['auto_search'])){
     //user has unsubscribed from auto_search notifications
-    $action = "NULL";
+    $as_action = "NULL";
   }
-  $sql = "UPDATE members_prefs SET auto_search_notification = $action WHERE member_id = " . $_SESSION['userid'];
+  if (empty($_POST['new_message'])){
+    // user has unsubscribed from new_message notifications
+    $nm_action = "NULL";
+  }
+  $sql = "UPDATE members_prefs SET auto_search_notification = $as_action, new_message_notification = $nm_action WHERE member_id = " . $_SESSION['userid'];
   mysql_query($sql);
 
 $errmsg = "<span id='notification'>Changes to your <b>Preferences</b> have been applied.</span>";
@@ -66,6 +76,7 @@ $errmsg = "<span id='notification'>Changes to your <b>Preferences</b> have been 
         $oldpsswd = $_POST['oldpsswd'];
         $newpsswd = $_POST['newpsswd'];
         $confnewpsswd = $_POST['confnewpsswd'];
+        $pic = $_POST['pic'];
 
         if (!empty($oldpsswd)){
         	 //check if new password matches confirmed password
@@ -126,6 +137,13 @@ $errmsg = "<span id='notification'>Changes to your <b>Preferences</b> have been 
             	 $update = $update . "password = '" . md5(md5($newpsswd).$userpsswd['salt']) . "'";
             	 }
 
+            if (!empty($pic)) {
+                 if ($update != "") {
+                        $update = $update . ", ";
+                        }
+                 $update = $update . "profile_picture_url = '$pic'";
+                 }
+
         		//update information in the database.
         		if (!empty($update)){
         			 $query = "UPDATE members SET " . $update . " WHERE member_id = " . $_SESSION['userid'];
@@ -184,8 +202,12 @@ echo "<a onclick='togglediv(\"changepsswd\");' href='javascript:;'>Password</a>"
 	"</td><td><div id='changepsswd' class='editinfo' style='display:none;'>Current Password:<br><input type='password' name='oldpsswd' />" .
 	"<br/>New Password:<br><input type='password' name='newpsswd' />" .
 	"<br/>Confirm New Password:<br><input type='password' name='confnewpsswd' /></div><br/>";
+echo "</td></tr>";
 
-echo "</td></tr></table>";
+echo "<tr><td valign='top'><a onclick='togglediv(\"pic\");' href='javascript:;'>Profile Picture:</a></td><td>" . showProfilePicture($_SESSION['userid']) .
+        "<br/><div class='editinfo' id='pic' style='display:none;'>Change To: <input type='text' maxlength=233 name='pic' /></div></td></tr>";
+
+echo "</table>";
 echo "<p><input type='submit' name='personal' value='Save Changes' /></p>";
 echo "</form></div>";
 
@@ -202,15 +224,17 @@ echo "<tr><td><a href='add_credits.php'>Add credits</a></td></tr>";
 echo "</table></div>";
 
 //Preferences
-$checked = "";
+$auto_search_checked = "";
+$new_message_checked = "";
 echo "<h2>Preferences</h2>";
 echo "<div style='margin-left:40px;'>";
 echo "<form method=\"post\" action=\"{$_SERVER['php_self']}\">";
-$sql = "SELECT auto_search_notification FROM members_prefs WHERE member_id = " . $_SESSION['userid'];
-if (mysql_result(mysql_query($sql), 0, 0) == 1){
-    $checked = "checked";
-  }
-echo "<input type='checkbox' name='auto_search' $checked />Subscribe to Auto-Search Notifications (<a href='help/?ref=faqs#autosearch'>What's this?</a>)";
+$sql = "SELECT * FROM members_prefs WHERE member_id = " . $_SESSION['userid'];
+$prefs = mysql_fetch_array(mysql_query($sql));
+if ($prefs['auto_search_notification'] == 1) $auto_search_checked = "checked";
+if ($prefs['new_message_notification'] == 1) $new_message_checked = "checked";
+echo "<input type='checkbox' name='auto_search' $auto_search_checked />Subscribe to Auto-Search Notifications (<a href='help/?ref=faqs#autosearch'>What's this?</a>)<br/>";
+echo "<input type='checkbox' name='new_message' $new_message_checked />Subscribe to New Message Notifications (<a href='help/?ref=faqs#newmessage'>What's this?</a>)";
 echo "<p><input type='submit' name='prefs' value='Save Changes' /></p>";
 echo "</form></div>";
 ?>
